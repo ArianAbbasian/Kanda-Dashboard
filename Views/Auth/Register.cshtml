@@ -1,0 +1,81 @@
+﻿@model Login.Models.User
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>ثبت‌نام</title>
+
+    <link rel="stylesheet" href="~/css/fonts.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/responsive.css" />
+</head>
+<body>
+    <div class="container">
+        <div class="split-layout">
+            <div class="split-left">
+                <img src="~/assets/images/global.png" alt="iran" />
+            </div>
+
+            <div class="split-right">
+                <div class="auth-wrapper">
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <a asp-controller="Auth" asp-action="Login" class="auth-logo">
+                                ساخت حساب کاربری جدید !
+                            </a>
+                        </div>
+
+                        <form asp-controller="Auth" asp-action="Register" method="post"
+                              style="width:100%;display:flex;flex-direction:column;align-items:center;direction:rtl;">
+
+                            <div class="form-group">
+                                <input asp-for="FirstName" class="form-control" placeholder="نام" />
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="LastName" class="form-control" placeholder="نام خانوادگی" />
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="Username" class="form-control" placeholder="نام کاربری" />
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="Password" type="password" class="form-control" placeholder="کلمه عبور" />
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="Email" class="form-control" placeholder="ایمیل" />
+                            </div>
+
+                            <div class="form-group">
+                                <input asp-for="Phone" class="form-control" placeholder="شماره تماس" />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                ثبت نام
+                            </button>
+                        </form>
+
+                        <div class="register-section" style="direction: rtl">
+                            <div class="divider-with-text">
+                                <div class="divider-line"></div>
+                                <span class="divider-text">آیا حساب کاربری دارید ؟</span>
+                                <div class="divider-line"></div>
+                            </div>
+
+                            <a asp-controller="Auth" asp-action="Login" class="btn reg-btn">
+                                وارد شوید
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
