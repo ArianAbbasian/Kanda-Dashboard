@@ -1,113 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  height: 100%;
-  font-family: "IRANYekan", sans-serif;
-}
-
-.split-layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-.split-left {
-  width: 50%;
-  background-color: #6a50d1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.split-left img {
-  width: 100%;
-}
-
-.split-right {
-  width: 50%;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.auth-wrapper {
-  width: 100%;
-  max-width: 400px;
-}
-
-.auth-card {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.auth-header {
-  direction: rtl;
-}
-
-.auth-logo {
-  text-decoration: none;
-  color: #000;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.main-title {
-  font-size: 4.5rem;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.main-subtitle {
-  font-size: 1.8rem;
-  color: #6b7280;
-  text-align: center;
-  margin-bottom: 40px;
-  font-weight: 400;
-}
-
-.form-group {
-  width: 100%;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  direction: rtl;
-}
-
-#loginForm {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-control {
-  padding: 10px 0;
-  border: none;
-  border-bottom: 2px solid #c2c2c2;
-  font-size: 1rem;
-  font-family: inherit;
-  background-color: transparent;
-  border-radius: 0;
-}
-
-.form-control::placeholder {
-  color: #9ca3af;
-}
-
-.form-control:focus {
-  outline: none;
-  border-bottom-color: #6a50d1;
-  box-shadow: none;
-}
-
+﻿
 .btn {
   width: 50%;
   padding: 14px;
@@ -123,93 +14,34 @@ body {
   transition: 0.4s;
 }
 
-.reg-btn {
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 1rem;
-  opacity: 0.3;
+/* ===== دکمه‌های عملیات ===== */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    justify-content: flex-end !important;
 }
 
-.reg-btn:hover {
-  opacity: 1;
+.act-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #2c3e50, #1a2632);
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(44, 62, 80, 0.2);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
 }
 
-.btn:hover:not(:disabled) {
-  background-color: #5a40c1;
-}
+    .act-btn:hover {
+        background: linear-gradient(135deg, #34495e, #2c3e50);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(44, 62, 80, 0.3);
+    }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
-.alert {
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.alert-success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
-}
-
-.alert-error {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
-}
-
-.validation-message {
-  font-size: 0.875rem;
-  margin-top: 6px;
-}
-
-.validation-error {
-  color: #ef4444;
-}
-
-.text-center {
-  text-align: center;
-  margin-top: 60px;
-  width: 100%;
-}
-
-.register-section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-}
-
-.divider-with-text {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.divider-line {
-  flex-grow: 1;
-  height: 1px;
-  background-color: #b7b8bc;
-}
-
-.divider-text {
-  padding: 0 15px;
-  color: #6b7280;
-  font-size: 1rem;
-  white-space: nowrap;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.split-right {
-  overflow-x: hidden;
-}

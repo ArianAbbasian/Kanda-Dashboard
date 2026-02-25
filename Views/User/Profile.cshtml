@@ -1,36 +1,81 @@
-﻿@model Login.Models.User
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "پروفایل کاربری";
+}
+@section Scripts {
+    <script src="~/js/profile.js"></script>
+}
 
-<div class="profile-main-content">
-    <h1 class="profile-main-title">اطلاعات کاربری</h1>
+@model Login.Models.User
 
-    <div class="profile-info-list">
-        <div class="profile-info-item">
-            <span class="profile-info-label">نام:</span>
-            <span class="profile-info-value">@Model.FirstName</span>
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پروفایل کاربری - سیستم احراز هویت</title>
+
+    <link rel="stylesheet" href="~/css/fonts.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/profile.css" />
+    <link rel="stylesheet" href="~/css/responsive.css" />
+</head>
+<body>
+    <div class="profile-split-layout">
+       <div class="profile-main-content">
+            
+
+            <div class="profile-info-list">
+
+                <h1 class="profile-main-title">اطلاعات کاربری</h1>
+
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام:</span>
+                    <span class="profile-info-value">@Model.FirstName</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام خانوادگی:</span>
+                    <span class="profile-info-value">@Model.LastName</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام کاربری:</span>
+                    <span class="profile-info-value">@Model.Username</span>
+                </div>
+
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">ایمیل:</span>
+                    <span class="profile-info-value">@Model.Email</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">شماره تماس:</span>
+                    <span class="profile-info-value">@Model.Phone</span>
+                </div>
+            </div>
+
+            
+
+            <div class="action-buttons">
+                <a asp-controller="User" asp-action="AdminPanel" class="act-btn">مشاهده لیست کاربران</a>
+            </div>
+
+
+          
         </div>
 
-        <div class="profile-info-item">
-            <span class="profile-info-label">نام خانوادگی:</span>
-            <span class="profile-info-value">@Model.LastName</span>
-        </div>
-
-        <div class="profile-info-item">
-            <span class="profile-info-label">نام کاربری:</span>
-            <span class="profile-info-value">@Model.Username</span>
-        </div>
-
-        <div class="profile-info-item">
-            <span class="profile-info-label">ایمیل:</span>
-            <span class="profile-info-value">@Model.Email</span>
-        </div>
-
-        <div class="profile-info-item">
-            <span class="profile-info-label">شماره تماس:</span>
-            <span class="profile-info-value">@Model.Phone</span>
-        </div>
+        
     </div>
 
-    <a asp-controller="User" asp-action="Logout" class="logout-icon-btn">
-        خروج
-    </a>
-</div>
+    
+</body>
+</html>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+

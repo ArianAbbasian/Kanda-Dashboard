@@ -2,12 +2,8 @@
 using Login.Models;
 using Login.Data;
 
-
-
-
 public class AuthController : Controller
 {
-    private static List<User> users = new List<User>();
 
     public IActionResult Login()
     {
@@ -17,7 +13,7 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Login(string username, string password)
     {
-        var user = users.FirstOrDefault(u =>
+        var user = FakeDatabase.Users.FirstOrDefault(u =>
             u.Username == username && u.Password == password);
 
         if (user == null)
@@ -27,10 +23,8 @@ public class AuthController : Controller
         }
 
         HttpContext.Session.SetString("Username", user.Username);
-
         return RedirectToAction("Profile", "User");
     }
-
     public IActionResult Register()
     {
         return View();
@@ -39,7 +33,21 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Register(User user)
     {
-        users.Add(user);
+        if (!ModelState.IsValid)
+        {
+            return View(user);
+        }
+
+        if (FakeDatabase.Users.Any(u => u.Username == user.Username))
+        {
+            ModelState.AddModelError("Username", "این نام کاربری قبلاً ثبت شده است");
+            return View(user);
+        }
+
+        int newId = FakeDatabase.Users.Any() ? FakeDatabase.Users.Max(u => u.Id) + 1 : 1;
+        user.Id = newId;
+
+        FakeDatabase.Users.Add(user);
         return RedirectToAction("Login");
     }
 }

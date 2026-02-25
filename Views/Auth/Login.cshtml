@@ -1,20 +1,16 @@
-﻿<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
-    <title>ورود به سیستم</title>
+﻿@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "ورود به سیستم";
+}
 
-    <link rel="stylesheet" href="~/css/fonts.css" />
-    <link rel="stylesheet" href="~/css/main.css" />
-    <link rel="stylesheet" href="~/css/responsive.css" />
-</head>
-<body>
+@section Scripts {
+    <script src="~/js/login.js"></script>
+}
+
     <div class="container">
         <div class="split-layout">
             <div class="split-left">
-                <img src="~/assets/images/iran.png" alt="iran" />
+                <img src="~/images/iran.png" alt="iran" />
             </div>
 
             <div class="split-right">
@@ -24,33 +20,49 @@
 
                     <div class="auth-card">
 
-                        @if (ViewBag.Error != null)
+                       
+
+                        @if (TempData["Error"] != null)
                         {
                             <div class="alert alert-error">
-                                @ViewBag.Error
+                                @TempData["Error"]
                             </div>
                         }
 
-                        <form asp-controller="Auth" asp-action="Login" method="post">
-
+                        <form id="loginForm" asp-controller="Auth" asp-action="Login" method="post" style="text-align: center">
                             <div class="form-group">
                                 <input name="username"
                                        class="form-control"
+                                       id="username"
                                        placeholder="نام کاربری"
                                        required />
+                                <div class="validation-message validation-error hidden"
+                                     id="usernameError">
+                                    نام کاربری باید حداقل ۳ کاراکتر باشد
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <input name="password"
                                        type="password"
                                        class="form-control"
+                                       id="password"
                                        placeholder="رمز عبور"
                                        required />
+                                <div class="validation-message validation-error hidden"
+                                     id="passwordError">
+                                    رمز عبور باید حداقل ۶ کاراکتر باشد
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-primary">
                                 ورود به سامانه
                             </button>
+                            <div class="validation-message validation-error hidden"
+                                 id="FormError">
+                                نام کاربری / رمز عبور اشتباه است
+                            </div>
+
                         </form>
 
                         <div class="register-section">
@@ -60,7 +72,7 @@
                                 <div class="divider-line"></div>
                             </div>
 
-                            <a asp-controller="Auth" asp-action="Register" class="btn reg-btn">
+                            <a asp-controller="Auth" asp-action="Register" class="reg-btn">
                                 ساخت حساب کاربری
                             </a>
                         </div>
@@ -70,6 +82,3 @@
             </div>
         </div>
     </div>
-
-</body>
-</html>

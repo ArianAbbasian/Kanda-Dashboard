@@ -136,7 +136,10 @@
   .split-right {
     height: 75vh;
     padding: 15px 10px !important;
-  }
+  } 
+  .auth-header {
+    margin-top: 2rem;
+   }
 
   .auth-card {
     width: 100%;
@@ -191,15 +194,10 @@
     font-size: 2rem;
   }
 
-  .form-control {
+/*  .form-control {
     font-size: 1.1rem;
     padding: 15px 0;
-  }
-
-  .btn {
-    font-size: 1.4rem;
-    padding: 16px;
-  }
+  }*/
 }
 
 

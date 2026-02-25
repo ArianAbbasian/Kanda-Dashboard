@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var username = HttpContextAccessor.HttpContext?.Session.GetString("Username") ?? "کاربر";
+    var currentUrl = Context.Request.Path.ToString().ToLower();
+}
+
+<aside class="sidebar" id="sidebar">
+    <!-- هدر سایدبار -->
+    <div class="sidebar-header">
+        <a href="" class="sidebar-logo">
+            <span class="sidebar-logo-icon">🚀</span>
+            <span class="sidebar-logo-text">کندا ایده</span>
+        </a>
+        <div class="sidebar-subtitle">پنل مدیریت کاربران</div>
+    </div>
+
+    <!-- منوی اصلی -->
+    <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+            <a href="/User/Profile" class="sidebar-menu-link @(currentUrl.Contains("/user/profile") ? "active" : "")">
+                <span class="sidebar-menu-icon">👤</span>
+                <span class="sidebar-menu-text">اطلاعات کاربری</span>
+            </a>
+        </li>
+
+        <li class="sidebar-menu-item">
+            <a href="/User/AdminPanel" class="sidebar-menu-link @(currentUrl.Contains("/user/adminpanel") ? "active" : "")">
+                <span class="sidebar-menu-icon">📋</span>
+                <span class="sidebar-menu-text">لیست کاربران</span>
+                @if (currentUrl.Contains("/user/adminpanel"))
+                {
+                    <span class="sidebar-badge">مدیریت</span>
+                }
+            </a>
+        </li>
+
+        @* <li class="sidebar-menu-item">
+            <a href="#" class="sidebar-menu-link">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span class="sidebar-menu-text">تنظیمات</span>
+                <span class="sidebar-badge">به‌زودی</span>
+            </a>
+        </li> *@
+    </ul>
+
+    <!-- فوتر سایدبار با اطلاعات کاربر -->
+    <div class="sidebar-footer">
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-avatar">
+                @(username.Length > 0 ? username[0].ToString() : "👤")
+            </div>
+            <div class="sidebar-user-details">
+                <div class="sidebar-user-name">@username</div>
+                <div class="sidebar-user-role">کاربر عادی</div>
+            </div>
+        </div>
+
+        <!-- دکمه خروج سریع -->
+        <a href="/User/Logout" class="logout-quick-btn" title="خروج از حساب">
+            <span class="logout-icon">🚪</span>
+        </a>
+    </div>
+</aside>
