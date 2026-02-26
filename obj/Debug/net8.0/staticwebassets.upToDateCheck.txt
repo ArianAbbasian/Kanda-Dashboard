@@ -14,10 +14,11 @@ wwwroot\fonts\iranyekanwebmedium.woff
 wwwroot\fonts\iranyekanwebregular.woff
 wwwroot\images\global.png
 wwwroot\images\iran.png
-wwwroot\js\adminPanel.js
-wwwroot\js\login.js
-wwwroot\js\pagination.js
-wwwroot\js\register.js
+wwwroot\js\core\pagination.js
+wwwroot\js\core\province-city.js
+wwwroot\js\pages\adminPanel.js
+wwwroot\js\pages\login.js
+wwwroot\js\pages\register.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -75,3 +76,9 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\js\core\confirm-modal.js
+wwwroot\js\core\toast.js
+wwwroot\js\features\charts.js
+wwwroot\js\features\filter.js
+wwwroot\js\features\tabs.js
+wwwroot\js\features\user-crud.js
