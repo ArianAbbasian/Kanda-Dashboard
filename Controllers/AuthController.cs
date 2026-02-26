@@ -23,6 +23,9 @@ public class AuthController : Controller
         }
 
         HttpContext.Session.SetString("Username", user.Username);
+        HttpContext.Session.SetString("ShowWelcome", "true");
+        HttpContext.Session.SetString("WelcomeName", user.FirstName ?? user.Username);
+
         return RedirectToAction("Profile", "User");
     }
     public IActionResult Register()
@@ -50,4 +53,6 @@ public class AuthController : Controller
         FakeDatabase.Users.Add(user);
         return RedirectToAction("Login");
     }
+
+
 }
