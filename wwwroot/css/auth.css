@@ -188,9 +188,7 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     background: var(--primary-gradient);
-    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
     text-decoration: none;
     position: relative;
     padding-bottom: 10px;

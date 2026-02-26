@@ -14,13 +14,13 @@ body {
 }
 
 /* ===== لایه‌بندی اصلی ===== */
-.profile-split-layout {
+/*.profile-split-layout {
     display: flex;
     width: 100vw;
     margin: 0;
     padding: 0;
     flex-direction: column-reverse;
-}
+}*/
 
 /* ===== محتوای اصلی پروفایل ===== */
 .profile-main-content {
@@ -30,7 +30,6 @@ body {
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     height: calc(100vh - 150px);
     order: 1;
     justify-content: space-between;
@@ -309,5 +308,73 @@ body {
 
     .profile-main-content {
         height: calc(100vh - 110px);
+    }
+}
+/* ===== اصلاحات برای هماهنگی با سایدبار ===== */
+.profile-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-main-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 30px;
+    margin: 0;
+    background-color: #f8fafc;
+    min-height: calc(100vh - 60px);
+}
+
+/* اطمینان از عدم اسکرول افقی */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+/* اصلاح دکمه */
+.action-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.act-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #2c3e50, #1a2632);
+    color: white;
+    text-decoration: none;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .act-btn:hover {
+        background: linear-gradient(135deg, #34495e, #2c3e50);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+    }
+
+/* ریسپانسیو برای موبایل */
+@media (max-width: 768px) {
+    .profile-main-content {
+        padding: 20px 15px;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .act-btn {
+        width: 100%;
+        text-align: center;
+        white-space: normal;
     }
 }
