@@ -13,57 +13,117 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">☰</button>
     <div class="app-container">
         @await Html.PartialAsync("_Sidebar")
-
         <main class="main-content" id="mainContent">
             @RenderBody()
         </main>
-
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        <div class="sidebar-toggle" id="sidebarToggle">☰</div>
     </div>
 
-    <!-- جاوااسکریپت سایدبار -->
+    <script src="~/lib/jquery/dist//jquery.min.js"></script>
+    <script src="~/js/core/confirm-modal.js"></script>
+
+
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobileToggle = document.getElementById('mobileMenuToggle');
 
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', function() {
-                    if (window.innerWidth > 768) {
-                        sidebar.classList.toggle('collapsed');
-                        localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            if (!sidebar || !sidebarToggle) return;
+
+           
+            function updateMobileToggle() {
+                if (window.innerWidth <= 768) {
+                    if (sidebar.classList.contains('mobile-open')) {
+                        mobileToggle.style.display = 'none';
                     } else {
-                        sidebar.classList.toggle('mobile-open');
-                        if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
+                        mobileToggle.style.display = 'block';
                     }
+                } else {
+                    mobileToggle.style.display = 'none'; 
+                }
+            }
+
+            
+            sidebarToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth > 768) {
+                   
+                    sidebar.classList.toggle('collapsed');
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                } else {
+                    
+                    sidebar.classList.toggle('mobile-open');
+                    if (sidebar.classList.contains('mobile-open')) {
+                        sidebarOverlay.classList.add('active');
+                        mobileToggle.style.display = 'none';
+                    } else {
+                        sidebarOverlay.classList.remove('active');
+                        mobileToggle.style.display = 'block';
+                    }
+                }
+            });
+
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    sidebar.classList.add('mobile-open');
+                    sidebarOverlay.classList.add('active');
+                    mobileToggle.style.display = 'none';
                 });
             }
 
-            const savedState = localStorage.getItem('sidebarCollapsed');
-            if (savedState === 'true' && window.innerWidth > 768 && sidebar) {
-                sidebar.classList.add('collapsed');
-            }
-
+            
             if (sidebarOverlay) {
                 sidebarOverlay.addEventListener('click', function() {
                     sidebar.classList.remove('mobile-open');
                     sidebarOverlay.classList.remove('active');
+                    if (mobileToggle) mobileToggle.style.display = 'block';
                 });
             }
 
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && sidebarOverlay) {
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
                     sidebarOverlay.classList.remove('active');
+                    if (mobileToggle) mobileToggle.style.display = 'block';
                 }
             });
+
+           
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    
+                    sidebarOverlay.classList.remove('active');
+                    sidebar.classList.remove('mobile-open');
+                    if (mobileToggle) mobileToggle.style.display = 'none';
+                } else {
+                    
+                    if (!sidebar.classList.contains('mobile-open')) {
+                        if (mobileToggle) mobileToggle.style.display = 'block';
+                    } else {
+                        if (mobileToggle) mobileToggle.style.display = 'none';
+                    }
+                }
+            });
+
+            
+            updateMobileToggle();
+
+            
+            const saved = localStorage.getItem('sidebarCollapsed');
+            if (saved === 'true' && window.innerWidth > 768) {
+                sidebar.classList.add('collapsed');
+            }
         });
     </script>
 
-    <!-- اسکریپت تبدیل اعداد -->
     <script>
         function toPersianNumber(num) {
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -78,7 +138,7 @@
                         btn.textContent = toPersianNumber(text);
                     }
                 });
-            }, 1);
+            }, 5);
         });
     </script>
 

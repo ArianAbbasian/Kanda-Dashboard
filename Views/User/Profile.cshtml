@@ -2,9 +2,6 @@
     Layout = "_Layout";
     ViewData["Title"] = "پروفایل کاربری";
 }
-@section Scripts {
-    <script src="~/js/profile.js"></script>
-}
 
 @model Login.Models.User
 
@@ -22,8 +19,8 @@
 </head>
 <body>
     <div class="profile-split-layout">
-       <div class="profile-main-content">
-            
+        <div class="profile-main-content">
+
 
             <div class="profile-info-list">
 
@@ -57,25 +54,27 @@
                 </div>
             </div>
 
-            
+
 
             <div class="action-buttons">
                 <a asp-controller="User" asp-action="AdminPanel" class="act-btn">مشاهده لیست کاربران</a>
             </div>
 
 
-          
+
         </div>
 
-        
+
     </div>
 
-    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 </body>
 </html>
 
 
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 
