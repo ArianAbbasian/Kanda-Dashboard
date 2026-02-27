@@ -35,5 +35,8 @@ namespace Login.Models
 
         public int? ProvinceId { get; set; } 
         public int? CityId { get; set; }
+        public double? Lon { get; set; } 
+        public double? Lat { get; set; }
+        public string UserType { get; set; }  // value: "user", "admin", "special", "plus"
     }
 }
