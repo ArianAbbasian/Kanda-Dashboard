@@ -28,6 +28,7 @@ public class AuthController : Controller
 
         return RedirectToAction("Profile", "User");
     }
+
     public IActionResult Register()
     {
         return View();
@@ -36,23 +37,62 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Register(User user)
     {
+        bool isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+        // بررسی اعتبارسنجی
         if (!ModelState.IsValid)
         {
+            if (isAjax)
+            {
+                // استخراج تمام خطاها (شامل خطاهای کلی)
+                var errors = new Dictionary<string, List<string>>();
+
+                // خطاهای مربوط به فیلدها
+                foreach (var state in ModelState)
+                {
+                    if (state.Value.Errors.Any())
+                    {
+                        errors[state.Key] = state.Value.Errors.Select(e => e.ErrorMessage).ToList();
+                    }
+                }
+
+                // اگر خطای کلی (بدون کلید) وجود دارد، یک خطای عمومی اضافه کن
+                if (!errors.Any() && !ModelState.IsValid)
+                {
+                    errors["General"] = new List<string> { "خطا در ثبت اطلاعات. لطفاً دوباره تلاش کنید." };
+                }
+
+                return Json(new { success = false, errors });
+            }
             return View(user);
         }
 
+        // بررسی تکراری نبودن نام کاربری
         if (FakeDatabase.Users.Any(u => u.Username == user.Username))
         {
             ModelState.AddModelError("Username", "این نام کاربری قبلاً ثبت شده است");
+            if (isAjax)
+            {
+                var errors = new Dictionary<string, List<string>>
+                {
+                    ["Username"] = new List<string> { "این نام کاربری قبلاً ثبت شده است" }
+                };
+                return Json(new { success = false, errors });
+            }
             return View(user);
         }
 
+        // تخصیص ID جدید
         int newId = FakeDatabase.Users.Any() ? FakeDatabase.Users.Max(u => u.Id) + 1 : 1;
         user.Id = newId;
+        user.UserType = "user"; // مقدار پیش‌فرض
 
         FakeDatabase.Users.Add(user);
+
+        if (isAjax)
+        {
+            return Json(new { success = true, redirectUrl = Url.Action("Login") });
+        }
         return RedirectToAction("Login");
     }
-
-
 }

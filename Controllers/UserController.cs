@@ -95,6 +95,7 @@ public class UserController : Controller
                 user.Phone,
                 user.ProvinceId,
                 user.CityId,
+                user.UserType,
                 ProvinceName = province?.Name,
                 CityName = city?.Name
             }
@@ -115,6 +116,7 @@ public class UserController : Controller
         user.Phone = updatedUser.Phone;
         user.ProvinceId = updatedUser.ProvinceId;
         user.CityId = updatedUser.CityId;
+        user.UserType = updatedUser.UserType;
 
         if (!string.IsNullOrWhiteSpace(updatedUser.Password))
             user.Password = updatedUser.Password;
@@ -165,99 +167,147 @@ public class UserController : Controller
     }
 
     [HttpGet]
-public IActionResult GetFilteredUsers(string name = "", string username = "", string email = "", int? provinceId = null, int? cityId = null, int page = 1, int pageSize = 5)
-{
-    try
+    public IActionResult GetFilteredUsers(string name = "", string username = "", string email = "", string userType = "", int? provinceId = null, int? cityId = null, int page = 1, int pageSize = 5)
     {
-        var allUsers = FakeDatabase.Users.ToList();
-        var filteredUsers = allUsers.AsEnumerable();
-
-        // اعمال فیلترها
-        if (!string.IsNullOrEmpty(name))
+        try
         {
-            filteredUsers = filteredUsers.Where(u =>
-                (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.Contains(name, StringComparison.OrdinalIgnoreCase)) ||
-                (!string.IsNullOrEmpty(u.LastName) && u.LastName.Contains(name, StringComparison.OrdinalIgnoreCase)));
-        }
+            Console.WriteLine($"=== دریافت درخواست با userType: '{userType}' ===");
 
-        if (!string.IsNullOrEmpty(username))
-        {
-            filteredUsers = filteredUsers.Where(u =>
-                !string.IsNullOrEmpty(u.Username) &&
-                u.Username.Contains(username, StringComparison.OrdinalIgnoreCase));
-        }
+            var allUsers = FakeDatabase.Users.ToList();
+            var filteredUsers = allUsers.AsEnumerable();
 
-        if (!string.IsNullOrEmpty(email))
-        {
-            filteredUsers = filteredUsers.Where(u =>
-                !string.IsNullOrEmpty(u.Email) &&
-                u.Email.Contains(email, StringComparison.OrdinalIgnoreCase));
-        }
-
-        if (provinceId.HasValue && provinceId.Value > 0)
-        {
-            filteredUsers = filteredUsers.Where(u => u.ProvinceId == provinceId.Value);
-        }
-
-        if (cityId.HasValue && cityId.Value > 0)
-        {
-            filteredUsers = filteredUsers.Where(u => u.CityId == cityId.Value);
-        }
-
-        var filteredList = filteredUsers.ToList();
-        var totalFilteredUsers = filteredList.Count;  // <--- این مهم است
-        var totalPages = (int)Math.Ceiling((double)totalFilteredUsers / pageSize);
-
-        var users = filteredList
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .Select(u =>
+            // اعمال فیلترها
+            if (!string.IsNullOrEmpty(name))
             {
-                var province = FakeDatabase.Provinces.FirstOrDefault(p => p.Id == u.ProvinceId);
-                var city = FakeDatabase.Cities.FirstOrDefault(c => c.Id == u.CityId);
+                filteredUsers = filteredUsers.Where(u =>
+                    (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.Contains(name, StringComparison.OrdinalIgnoreCase)) ||
+                    (!string.IsNullOrEmpty(u.LastName) && u.LastName.Contains(name, StringComparison.OrdinalIgnoreCase)));
+            }
 
-                return new
+            if (!string.IsNullOrEmpty(username))
+            {
+                filteredUsers = filteredUsers.Where(u =>
+                    !string.IsNullOrEmpty(u.Username) &&
+                    u.Username.Contains(username, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                filteredUsers = filteredUsers.Where(u =>
+                    !string.IsNullOrEmpty(u.Email) &&
+                    u.Email.Contains(email, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // ===== فیلتر نوع کاربر (تصحیح شده) =====
+            if (!string.IsNullOrEmpty(userType))
+            {
+                Console.WriteLine($"🎯 اعمال فیلتر userType: '{userType}'");
+
+                // اینجا رو چک کن ببین چند کاربر از این نوع داریم
+                var usersOfThisType = allUsers.Where(u =>
+                    !string.IsNullOrEmpty(u.UserType) &&
+                    u.UserType.Equals(userType, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                Console.WriteLine($"📊 تعداد کاربران با نوع '{userType}': {usersOfThisType.Count}");
+
+                filteredUsers = filteredUsers.Where(u =>
+                    !string.IsNullOrEmpty(u.UserType) &&
+                    u.UserType.Equals(userType, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (provinceId.HasValue && provinceId.Value > 0)
+            {
+                filteredUsers = filteredUsers.Where(u => u.ProvinceId == provinceId.Value);
+            }
+
+            if (cityId.HasValue && cityId.Value > 0)
+            {
+                filteredUsers = filteredUsers.Where(u => u.CityId == cityId.Value);
+            }
+
+            var filteredList = filteredUsers.ToList();
+            var totalFilteredUsers = filteredList.Count;
+            var totalPages = (int)Math.Ceiling((double)totalFilteredUsers / pageSize);
+
+            Console.WriteLine($"✅ تعداد کل کاربران بعد از فیلتر: {totalFilteredUsers}");
+
+            var users = filteredList
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u =>
+                {
+                    var province = FakeDatabase.Provinces.FirstOrDefault(p => p.Id == u.ProvinceId);
+                    var city = FakeDatabase.Cities.FirstOrDefault(c => c.Id == u.CityId);
+
+                    return new
+                    {
+                        u.Id,
+                        u.FirstName,
+                        u.LastName,
+                        u.Username,
+                        Email = u.Email ?? "---",
+                        u.Phone,
+                        u.ProvinceId,
+                        u.CityId,
+                        u.Lon,
+                        u.Lat,
+                        u.UserType,
+                        ProvinceName = province?.Name ?? "---",
+                        CityName = city?.Name ?? "---"
+                    };
+                })
+                .ToList();
+
+            return Json(new
+            {
+                users,
+                totalPages,
+                currentPage = page,
+                totalFilteredUsers
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ خطا: {ex.Message}");
+            return Json(new { error = ex.Message });
+        }
+    }
+
+    [HttpGet]
+    public IActionResult GetAllUsers()
+    {
+        try
+        {
+            var users = FakeDatabase.Users
+                .Select(u => new
                 {
                     u.Id,
                     u.FirstName,
                     u.LastName,
                     u.Username,
-                    Email = u.Email ?? "---",
+                    u.Email,
                     u.Phone,
                     u.ProvinceId,
                     u.CityId,
-                    ProvinceName = province?.Name ?? "---",
-                    CityName = city?.Name ?? "---"
-                };
-            })
-            .ToList();
+                    u.UserType,
+                    u.Lat,
+                    u.Lon,
+                    // دریافت نام استان
+                    ProvinceName = u.ProvinceId.HasValue
+                        ? FakeDatabase.Provinces.FirstOrDefault(p => p.Id == u.ProvinceId)?.Name
+                        : null,
+                    // دریافت نام شهر
+                    CityName = u.CityId.HasValue
+                        ? FakeDatabase.Cities.FirstOrDefault(c => c.Id == u.CityId)?.Name
+                        : null
+                })
+                .ToList();
 
-        return Json(new
+            return Json(users);
+        }
+        catch (Exception ex)
         {
-            users,
-            totalPages,
-            currentPage = page,
-            totalFilteredUsers 
-        });
-    }
-    catch (Exception ex)
-    {
-        return Json(new { error = ex.Message });
-    }
-}
-
-    private string GetProvinceColor(int provinceId)
-    {
-        var colors = new[]
-        {
-        "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7",
-        "#DDA0DD", "#98D8C8", "#F7DC6F", "#BB8FCE", "#85C1E2",
-        "#F8C471", "#B03A2E", "#1E8449", "#7D3C98", "#F39C12",
-        "#16A085", "#C0392B", "#8E44AD", "#2980B9", "#27AE60",
-        "#D35400", "#2C3E50", "#7F8C8D", "#BDC3C7", "#95A5A6"
-    };
-
-        // انتخاب رنگ براساس Id استان (برای اینکه هر استان یه رنگ ثابت داشته باشه)
-        return colors[provinceId % colors.Length];
+            return Json(new { error = ex.Message });
+        }
     }
 }
