@@ -18,6 +18,10 @@
                 if (tabId === 'info-tab' && typeof loadCharts === 'function') {
                     loadCharts();
                 }
+
+                if (tabId === 'map-tab' && typeof loadMap === 'function') {
+                    loadMap();
+                }
             }
         });
     });
@@ -25,6 +29,11 @@
     if (document.getElementById('info-tab')?.classList.contains('active')) {
         if (typeof loadCharts === 'function') {
             loadCharts();
+        }
+    }
+    if (document.getElementById('map-tab')?.classList.contains('active')) {
+        if (typeof loadMap === 'function') {
+            loadMap();
         }
     }
 }

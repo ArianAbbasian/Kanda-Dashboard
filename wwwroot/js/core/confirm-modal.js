@@ -147,14 +147,14 @@ function showConfirmModal(options) {
     initConfirmModalStyles();
 
     return new Promise((resolve) => {
-        // ایجاد المان‌ها به صورت مستقیم
+        
         const overlay = document.createElement('div');
         overlay.className = 'confirm-modal-overlay';
 
         const modal = document.createElement('div');
         modal.className = 'confirm-modal';
 
-        // هدر مودال
+        
         const header = document.createElement('div');
         header.className = 'confirm-modal-header';
 
@@ -179,7 +179,7 @@ function showConfirmModal(options) {
         header.appendChild(title);
         header.appendChild(message);
 
-        // دکمه‌ها
+        
         const actions = document.createElement('div');
         actions.className = 'confirm-modal-actions';
 
@@ -194,15 +194,14 @@ function showConfirmModal(options) {
         actions.appendChild(cancelBtn);
         actions.appendChild(confirmBtn);
 
-        // مونتاژ مودال
+        
         modal.appendChild(header);
         modal.appendChild(actions);
         overlay.appendChild(modal);
 
-        // اضافه کردن به DOM
+      
         document.body.appendChild(overlay);
 
-        // event listenerها
         cancelBtn.addEventListener('click', () => {
             if (document.body.contains(overlay)) {
                 document.body.removeChild(overlay);
@@ -217,7 +216,7 @@ function showConfirmModal(options) {
             resolve(true);
         });
 
-        // بستن با کلیک روی overlay
+        
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
                 if (document.body.contains(overlay)) {
@@ -227,7 +226,7 @@ function showConfirmModal(options) {
             }
         });
 
-        // بستن با Escape
+        
         const escHandler = (e) => {
             if (e.key === 'Escape') {
                 if (document.body.contains(overlay)) {

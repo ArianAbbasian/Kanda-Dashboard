@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="~/css/fonts.css" />
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/css/profile.css" />
-    <link rel="stylesheet" href="~/css/responsive.css" />
 </head>
 <body>
     <div class="profile-split-layout">
@@ -44,6 +43,32 @@
 
 
                 <div class="profile-info-item">
+                    <span class="profile-info-label">نوع کاربر:</span>
+                    <span class="profile-info-value">
+                        @{
+                            string userTypeText = "کاربر عادی";
+                            switch (Model.UserType)
+                            {
+                                case "admin":
+                                    userTypeText = "مدیر";
+                                    break;
+                                case "special":
+                                    userTypeText = "کاربر ویژه";
+                                    break;
+                                case "plus":
+                                    userTypeText = "کاربر پلاس";
+                                    break;
+                                default:
+                                    userTypeText = "کاربر عادی";
+                                    break;
+                            }
+                        }
+                        @userTypeText
+                    </span>
+                </div>
+
+
+                <div class="profile-info-item">
                     <span class="profile-info-label">ایمیل:</span>
                     <span class="profile-info-value">@Model.Email</span>
                 </div>
@@ -52,6 +77,8 @@
                     <span class="profile-info-label">شماره تماس:</span>
                     <span class="profile-info-value">@Model.Phone</span>
                 </div>
+
+
             </div>
 
 

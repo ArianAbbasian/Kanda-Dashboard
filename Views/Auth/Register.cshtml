@@ -5,13 +5,6 @@
     ViewData["Title"] = "ثبت‌نام";
 }
 
-@section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/js/pages/register.js"></script>
-}
-
 <div class="container">
     <div class="split-layout">
         <div class="split-left">
@@ -27,7 +20,6 @@
                         </a>
                     </div>
 
-                    <!-- نمایش خطاهای کلی -->
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display: none;"></div>
 
                     <form id="registerForm" asp-controller="Auth" asp-action="Register" method="post">
@@ -61,21 +53,31 @@
                             <span asp-validation-for="Phone" class="text-danger"></span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            ثبت نام
-                        </button>
+                        <!-- استان و شهر -->
+                        <div class="form-group">
+                            <label for="ProvinceId">استان</label>
+                            <select id="ProvinceId" name="ProvinceId" class="form-control">
+                                <option value="">-- انتخاب استان --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="CityId">شهر</label>
+                            <select id="CityId" name="CityId" class="form-control" disabled>
+                                <option value="">-- ابتدا استان را انتخاب کنید --</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">ثبت نام</button>
                     </form>
 
                     <div class="register-section">
                         <div class="divider-with-text">
                             <div class="divider-line"></div>
-                            <span class="divider-text">آیا حساب کاربری دارید ؟</span>
+                            <span class="divider-text">آیا حساب کاربری دارید؟</span>
                             <div class="divider-line"></div>
                         </div>
-
-                        <a asp-controller="Auth" asp-action="Login" class="btn reg-btn">
-                            وارد شوید
-                        </a>
+                        <a asp-controller="Auth" asp-action="Login" class="btn reg-btn">وارد شوید</a>
                     </div>
                 </div>
             </div>
@@ -83,3 +85,10 @@
     </div>
 </div>
 
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/core/province-city.js"></script>
+    <script src="~/js/pages/register.js"></script>
+}

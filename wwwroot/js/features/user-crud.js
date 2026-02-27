@@ -73,6 +73,12 @@ async function openEditModal(user) {
 
     document.getElementById('editProvince').innerHTML = '<option value="">-- انتخاب استان --</option>';
     document.getElementById('editCity').innerHTML = '<option value="">-- ابتدا استان را انتخاب کنید --</option>';
+    const userTypeSelect = document.getElementById('editUserType');
+    if (userTypeSelect) {
+        const userType = user.userType || user.UserType || 'user';
+        console.log('User type for modal:', userType); // برای دیباگ
+        userTypeSelect.value = userType;
+    }
 
     // Filling Inputs 
     document.getElementById('editUserId').value = user.id;
@@ -101,6 +107,7 @@ async function submitEditForm(event) {
     const formData = new FormData(event.target);
     const provinceSelect = document.getElementById('editProvince');
     const citySelect = document.getElementById('editCity');
+    const userTypeSelect = document.getElementById('editUserType');
 
     const userNewData = {
         Id: parseInt(formData.get('Id')),
@@ -111,7 +118,8 @@ async function submitEditForm(event) {
         Phone: formData.get('Phone'),
         Password: formData.get('Password'),
         ProvinceId: provinceSelect.value ? parseInt(provinceSelect.value) : null,
-        CityId: citySelect.value ? parseInt(citySelect.value) : null
+        CityId: citySelect.value ? parseInt(citySelect.value) : null,
+        UserType: userTypeSelect.value
     };
 
     const confirmed = await confirm.warning('آیا از ذخیره تغییرات اطمینان دارید؟', 'ویرایش اطلاعات');

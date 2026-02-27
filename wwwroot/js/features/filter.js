@@ -2,6 +2,7 @@
     name: '',
     username: '',
     email: '',
+    userType: '',
     provinceId: '',
     cityId: ''
 };
@@ -11,6 +12,7 @@ function getFilterValues() {
         name: document.getElementById('filterName')?.value || '',
         username: document.getElementById('filterUsername')?.value || '',
         email: document.getElementById('filterEmail')?.value || '',
+        userType: document.getElementById('filterUserType')?.value || '',
         provinceId: document.getElementById('filterProvince')?.value || '',
         cityId: document.getElementById('filterCity')?.value || ''
     };
@@ -20,21 +22,22 @@ function updateFilterState() {
     window.filterState = getFilterValues();
     return window.filterState;
 }
-
+    
 function applyFilters(callback) {
     const filters = updateFilterState();
 
-
     if (typeof updatePieChart === 'function') updatePieChart();
     if (typeof updateBarChart === 'function') updateBarChart();
-
-
+    if (typeof loadMap === 'function') loadMap();
+    if (typeof UpdateAdminUsersPieChart === 'function') UpdateAdminUsersPieChart();
+    
     if (callback) callback(1, filters);
 }
 
 function resetFilters(callback) {
     document.getElementById('filterName').value = '';
     document.getElementById('filterUsername').value = '';
+    document.getElementById('filterUserType').value = '';
 
     const provinceSelect = document.getElementById('filterProvince');
     provinceSelect.value = '';
@@ -47,6 +50,7 @@ function resetFilters(callback) {
         name: '',
         username: '',
         email: '',
+        userType: '',
         provinceId: '',
         cityId: ''
     };
@@ -54,6 +58,8 @@ function resetFilters(callback) {
 
     if (typeof updatePieChart === 'function') updatePieChart();
     if (typeof updateBarChart === 'function') updateBarChart();
+    if (typeof loadMap === 'function') loadMap();
+    if (typeof UpdateAdminUsersPieChart === 'function') UpdateAdminUsersPieChart();
 
     if (callback) callback(1, {});
 }
@@ -90,7 +96,9 @@ function buildFilteredUrl(baseUrl, page, pageSize) {
     if (f.name) url += `&name=${encodeURIComponent(f.name)}`;
     if (f.username) url += `&username=${encodeURIComponent(f.username)}`;
     if (f.email) url += `&email=${encodeURIComponent(f.email)}`;
+    if (f.userType) url += `&userType=${encodeURIComponent(f.userType)}`;
     if (f.provinceId) url += `&provinceId=${f.provinceId}`;
     if (f.cityId) url += `&cityId=${f.cityId}`;
+    console.log('URLLLLLL',url);
     return url;
 }

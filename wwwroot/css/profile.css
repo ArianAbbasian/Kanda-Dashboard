@@ -13,21 +13,10 @@ body {
     background-color: #f5f7fa;
 }
 
-/* ===== لایه‌بندی اصلی ===== */
-/*.profile-split-layout {
-    display: flex;
-    width: 100vw;
-    margin: 0;
-    padding: 0;
-    flex-direction: column-reverse;
-}*/
-
-/* ===== محتوای اصلی پروفایل ===== */
 .profile-main-content {
     flex: 1;
     background-color: #f8fafc;
     color: #1e293b;
-    padding: 30px 20px;
     display: flex;
     flex-direction: column;
     height: calc(100vh - 150px);
@@ -35,18 +24,16 @@ body {
     justify-content: space-between;
 }
 
-/* ===== عنوان صفحه ===== */
 .profile-main-title {
     font-size: 2.2rem;
     font-weight: 600;
-/*    margin-bottom: 40px;*/
     line-height: 1.3;
     color: #0f172a;
     position: relative;
     padding-bottom: 15px;
+    margin-bottom : 1rem;
 }
-
-    .profile-main-title::after {
+.profile-main-title::after {
         content: '';
         position: absolute;
         bottom: 0;
@@ -56,9 +43,7 @@ body {
         height: 4px;
         background: linear-gradient(90deg, #4a6572, #2c3e50);
         border-radius: 2px;
-    }
-
-/* ===== لیست اطلاعات ===== */
+}
 .profile-info-list {
     display: flex;
     flex-direction: column;
@@ -67,8 +52,6 @@ body {
     margin: 0 auto;
     gap: 15px;
 }
-
-/* ===== آیتم‌های اطلاعات ===== */
 .profile-info-item {
     display: flex;
     align-items: center;
@@ -87,7 +70,7 @@ body {
         transform: translateY(-2px);
     }
 
-/* ===== برچسب اطلاعات ===== */
+
 .profile-info-label {
     font-weight: 600;
     color: #64748b;
@@ -96,7 +79,7 @@ body {
     letter-spacing: 0.3px;
 }
 
-/* ===== مقدار اطلاعات ===== */
+
 .profile-info-value {
     color: #0f172a;
     font-weight: 500;
@@ -108,12 +91,12 @@ body {
     padding-right: 15px;
     border-right: 2px solid #e2e8f0;
 }
-/* ===== کلاس‌های کمکی ===== */
+
 .hidden {
     display: none !important;
 }
 
-/* ===== هشدار موفقیت ===== */
+
 .alert-success {
     background-color: #d1fae5;
     color: #065f46;
@@ -138,7 +121,6 @@ body {
     }
 }
 
-/* ===== ریسپانسیو برای تبلت و دسکتاپ ===== */
 @media (min-width: 768px) {
     .profile-split-layout {
         flex-direction: row;
@@ -220,7 +202,6 @@ body {
     }
 }
 
-/* ===== موبایل ===== */
 @media (max-width: 767px) {
     .profile-info-item {
         flex-direction: column;
@@ -310,7 +291,6 @@ body {
         height: calc(100vh - 110px);
     }
 }
-/* ===== اصلاحات برای هماهنگی با سایدبار ===== */
 .profile-container {
     width: 100%;
     max-width: 100%;
@@ -321,20 +301,17 @@ body {
 .profile-main-content {
     width: 100%;
     max-width: 100%;
-    padding: 30px;
     margin: 0;
     background-color: #f8fafc;
     min-height: calc(100vh - 60px);
 }
 
-/* اطمینان از عدم اسکرول افقی */
 html, body {
     overflow-x: hidden;
     width: 100%;
     position: relative;
 }
 
-/* اصلاح دکمه */
 .action-buttons {
     margin-top: 30px;
     display: flex;
@@ -362,7 +339,6 @@ html, body {
         box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
     }
 
-/* ریسپانسیو برای موبایل */
 @media (max-width: 768px) {
     .profile-main-content {
         padding: 20px 15px;

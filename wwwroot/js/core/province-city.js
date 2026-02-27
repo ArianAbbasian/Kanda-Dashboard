@@ -1,4 +1,4 @@
-﻿// Global Function for Provinces and Cities !!!
+﻿// Global Function for Provinces and Cities !!! (Specially For Drop Down Lists <SELECT>)
 
 // Provinces Func =>
 

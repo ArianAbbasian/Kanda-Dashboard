@@ -11,20 +11,20 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لیست کاربران</title>
+    <title>پنل مدیریت</title>
 
     <link rel="stylesheet" href="~/css/fonts.css" />
     <link rel="stylesheet" href="~/css/main.css" />
     <link rel="stylesheet" href="~/css/profile.css" />
     <link rel="stylesheet" href="~/css/AdminPanel.css" />
-    <link rel="stylesheet" href="~/css/responsive.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" />
 </head>
 <body>
     
         <div class="profile-main-content">
             <input type="hidden" id="currentUsername" value="@ViewBag.CurrentUsername" />
             <div class="admin-panel-header">
-            <h1 class="profile-main-title">لیست کاربران</h1>
+            <h1 class="profile-main-title">پنل مدیریت</h1>
 
             <div class="filter-section">
                 <div class="filter-row">
@@ -44,8 +44,18 @@
                                placeholder="نام کاربری..." />
                     </div>
 
+                    <div class="filter-group">
+                        <label for="filterUserType">نوع کاربر</label>
+                        <select id="filterUserType" class="filter-select">
+                            <option value="">همه نوع‌ها</option>
+                            <option value="user">کاربر عادی</option>
+                            <option value="admin">مدیر</option>
+                            <option value="special">کاربر ویژه</option>
+                            <option value="plus">کاربر پلاس</option>
+                        </select>
+                    </div>
+
                 </div>
-                @* Filters Section  *@
 
                 <div class="filter-row">
                     <div class="filter-group">
@@ -87,6 +97,10 @@
                         <span class="tab-icon">📈</span>
                         <span class="tab-text">نمودار ها </span>
                     </button>
+                    <button class="tab-btn" data-tab="map-tab">
+                        <span class="tab-icon">📌</span>
+                        <span class="tab-text"> نقشه </span>
+                    </button>
                 </div>
 
                 <div class="tabs-content">
@@ -104,6 +118,7 @@
                                         <th>شماره تماس</th>
                                         <th>استان</th>
                                         <th>شهر</th>
+                                        <th>نوع کاربر</th>
                                         <th>عملیات</th>
                                     </tr>
                                 </thead>
@@ -121,7 +136,7 @@
                     <div class="tab-pane" id="info-tab">
                         <div class="charts-container">
                              <div class="charts-row">
-                                <<!-- کارت نمودار پای -->
+                                <!-- Pie Charts -->
                                 <div class="chart-card" id="pieChartCard">
                                     <h3 class="chart-title">📊 توزیع کاربران بر اساس استان</h3>
                                     <div class="chart-wrapper">
@@ -141,7 +156,7 @@
                             </div>
 
                             <div class="charts-row">
-                                <!-- کارت نمودار میله‌ای -->
+                                <!-- Line Chart -->
                                 <div class="chart-card full-width" id="barChartCard">
                                     <h3 class="chart-title">📊 توزیع کاربران در شهرها/استان‌ها</h3>
                                     <div class="chart-wrapper">
@@ -154,6 +169,15 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Third Tab (Map) -->
+                    <div class="tab-pane" id="map-tab">
+                        <div class="map-container">
+                            <div id="map"></div>
+                            <div id="mapOverLayer"></div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -203,7 +227,7 @@
                         <input type="password" id="editPassword" name="Password" class="form-control" placeholder="اگر نمی‌خواهید تغییر دهید، خالی بگذارید" />
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="editProvince">استان</label>
                         <select id="editProvince" class="form-control" required>
                             <option value="">-- انتخاب استان --</option>
@@ -217,11 +241,21 @@
                         </select>
                     </div>
 
+                    <!-- Dropdown نوع کاربر -->
+                    <div class="form-group">
+                        <label for="editUserType">نوع کاربر</label>
+                        <select id="editUserType" name="UserType" class="form-control" required>
+                            <option value="user">کاربر عادی</option>
+                            <option value="admin">مدیر</option>
+                            <option value="special">کاربر ویژه</option>
+                            <option value="plus">کاربر پلاس</option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn-primary full-width">ذخیره تغییرات</button>
                 </form>
             </div>
         </div>
-
     </div>
 
     @section Scripts {
@@ -230,10 +264,12 @@
         <script src="~/js/core/province-city.js"></script>
         <script src="~/js/core/toast.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
 
         <!-- Features -->
+        <script src="~/js/features/map.js"></script>
+        <script src="~/js/features/charts.js"></script>
         <script src="~/js/features/filter.js"></script> 
-        <script src="~/js/features/charts.js"></script>   
         <script src="~/js/features/user-crud.js"></script>
         <script src="~/js/features/tabs.js"></script>
 

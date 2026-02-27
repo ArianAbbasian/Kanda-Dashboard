@@ -90,7 +90,7 @@ body {
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 0 5px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -353,4 +353,81 @@ body {
     .mobile-menu-toggle {
         display: none !important;
     }
+}
+/* ===== استایل نوع کاربر در سایدبار ===== */
+.sidebar-user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.sidebar-user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #ecf0f1;
+}
+
+.sidebar-user-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: fit-content;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    /* رنگ‌های مختلف برای نوع کاربر */
+    .sidebar-user-role.user-type-admin {
+        background-color: rgba(220, 38, 38, 0.15);
+        color: #fecaca;
+        border-color: rgba(220, 38, 38, 0.3);
+    }
+
+    .sidebar-user-role.user-type-special {
+        background-color: rgba(217, 119, 6, 0.15);
+        color: #fed7aa;
+        border-color: rgba(217, 119, 6, 0.3);
+    }
+
+    .sidebar-user-role.user-type-plus {
+        background-color: rgba(79, 70, 229, 0.15);
+        color: #c7d2fe;
+        border-color: rgba(79, 70, 229, 0.3);
+    }
+
+    .sidebar-user-role.user-type-normal {
+        background-color: rgba(5, 150, 105, 0.15);
+        color: #a7f3d0;
+        border-color: rgba(5, 150, 105, 0.3);
+    }
+
+.user-type-icon {
+    font-size: 0.85rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+.user-type-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+}
+
+/* حالت کلاپس سایدبار */
+.sidebar.collapsed .sidebar-user-role {
+    display: none;
+}
+
+/* حالت هاور */
+.sidebar-user-role:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
 }

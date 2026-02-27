@@ -7,12 +7,14 @@ const pageSize = 5;
 async function loadUsers(page, customFilters = null) {
     try {
         const filters = customFilters || (window.filterState || {});
+       
 
         let url = `${apiUrl}?page=${page}&pageSize=${pageSize}`;
 
         if (filters.name) url += `&name=${encodeURIComponent(filters.name)}`;
         if (filters.username) url += `&username=${encodeURIComponent(filters.username)}`;
         if (filters.email) url += `&email=${encodeURIComponent(filters.email)}`;
+        if (filters.userType) url += `&userType=${encodeURIComponent(filters.userType)}`;
         if (filters.provinceId) url += `&provinceId=${filters.provinceId}`;
         if (filters.cityId) url += `&cityId=${filters.cityId}`;
 
@@ -32,7 +34,7 @@ async function loadUsers(page, customFilters = null) {
             toast.info('هیچ کاربری با این مشخصات یافت نشد', 'نتیجه جستجو');
 
             const tbody = document.getElementById('tableBody');
-            if (tbody) tbody.innerHTML = '<tr><td colspan="9" class="empty-state">هیچ کاربری یافت نشد</td></tr>';
+            if (tbody) tbody.innerHTML = '<tr><td colspan="10" class="empty-state">هیچ کاربری یافت نشد</td></tr>';
 
             const pagination = document.getElementById('pagination');
             if (pagination) pagination.style.display = 'none';
@@ -63,12 +65,12 @@ function renderTable(users, page) {
         const rowNumber = (page - 1) * pageSize + index + 1;
         const isSelf = (user.username === currentUsername);
 
-
         const userEmail = user.email || user.Email || '---';
         const userPhone = user.phone || user.Phone || '---';
         const firstName = user.firstName || user.FirstName || '---';
         const lastName = user.lastName || user.LastName || '---';
         const username = user.username || user.Username || '---';
+        const userType = user.userType || user.UserType || 'user';
 
         const deleteButton = isSelf
             ? '<button class="table-btn delete-btn" disabled style="opacity:0.5; cursor:not-allowed;" title="نمی‌توانید خود را حذف کنید">❌</button>'
@@ -77,6 +79,30 @@ function renderTable(users, page) {
 
         const provinceName = user.provinceName || user.ProvinceName || '---';
         const cityName = user.cityName || user.CityName || '---';
+
+        let userTypeText = '';
+        let userTypeClass = '';
+
+        switch (userType) {
+            case 'admin':
+                userTypeText = 'مدیر';
+                userTypeClass = 'user-type-admin';
+                break;
+            case 'special':
+                userTypeText = 'ویژه';
+                userTypeClass = 'user-type-special';
+                break;
+            case 'plus':
+                userTypeText = 'پلاس';
+                userTypeClass = 'user-type-plus';
+                break;
+            case 'user':
+                userTypeText = 'عادی';
+                userTypeClass = 'user-type-normal';
+                break;
+            default:
+                userTypeText = 'غیرمجاز';
+        }
 
         const row = `<tr data-user-id="${user.id}">
             <td>${rowNumber}</td>
@@ -87,6 +113,7 @@ function renderTable(users, page) {
             <td>${userPhone}</td>
             <td>${provinceName}</td>
             <td>${cityName}</td>
+            <td><span class="user-type-badge ${userTypeClass}">${userTypeText}</span></td>
             <td>
                 ${editButton}
                 ${deleteButton}
