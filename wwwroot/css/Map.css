@@ -1,0 +1,21 @@
+﻿.ol-zoom-in, .ol-zoom-out {
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
+    margin-right: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    font-size: larger;
+    border-radius: 15%;
+    cursor: pointer;
+    transition: 0.3s
+}
+
+.ol-zoom-in:hover, .ol-zoom-out:hover{
+    background: #2980b9;
+}
+
+.ol-rotate-reset{
+    display: none;
+}
