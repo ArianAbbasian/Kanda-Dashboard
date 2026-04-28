@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./wwwroot/js/scripts/Chart.min.js"></script>
+    <script src="./wwwroot/js/scripts/charts.js"></script>
+    <title>Document</title>
+    <style>
+        .chartContainer {
+            width: 500px;
+            height: 500px;
+        }
+
+        html,
+        body,
+        #map {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            font-family: sans-serif;
+        }
+        body{
+            background-color: beige;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="width: 500px;">
+        <canvas id="myChart" width="200" height="150"></canvas>
+
+    </div>
+    <script src="./wwwroot/js/scripts/Chart.min.js"></script>
+    <script src="./wwwroot/js/scripts/charts.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
+        
+        switch (key) {
+            case value:
+                
+                break;
+        
+            default:
+                break;
+        }
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["تهران", 'اصفهان', 'همدان', 'کرج', 'هرمزگان', 'مشهد', 'ماکو', 'تبریز', 'ساری'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [12, 19, 3, 7, 9, 14, 3, 6, 20],
+                    borderWidth: 1,
+                    backgroundColor: ['red', 'blue', 'purple', 'lime', 'orange', 'brown', 'pink', 'black', 'yellow']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    title: {
+                        display: true,
+                        text: 'میانگین بارندگی شهر ها'
+                    },
+
+                },
+
+
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>

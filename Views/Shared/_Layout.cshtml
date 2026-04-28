@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - پنل مدیریت</title>
+
+    <link rel="stylesheet" href="~/css/fonts.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/sidebar.css" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="منو">☰</button>
+    <div class="app-container">
+        @await Html.PartialAsync("_Sidebar")
+        <main class="main-content" id="mainContent">
+            @RenderBody()
+        </main>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    </div>
+
+    <script src="~/lib/jquery/dist//jquery.min.js"></script>
+    <script src="~/js/core/confirm-modal.js"></script>
+
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+
+            if (!sidebar || !sidebarToggle) return;
+
+           
+            function updateMobileToggle() {
+                if (window.innerWidth <= 768) {
+                    if (sidebar.classList.contains('mobile-open')) {
+                        mobileToggle.style.display = 'none';
+                    } else {
+                        mobileToggle.style.display = 'block';
+                    }
+                } else {
+                    mobileToggle.style.display = 'none'; 
+                }
+            }
+
+            
+            sidebarToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (window.innerWidth > 768) {
+                   
+                    sidebar.classList.toggle('collapsed');
+                    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+                } else {
+                    
+                    sidebar.classList.toggle('mobile-open');
+                    if (sidebar.classList.contains('mobile-open')) {
+                        sidebarOverlay.classList.add('active');
+                        mobileToggle.style.display = 'none';
+                    } else {
+                        sidebarOverlay.classList.remove('active');
+                        mobileToggle.style.display = 'block';
+                    }
+                }
+            });
+
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', function() {
+                    sidebar.classList.add('mobile-open');
+                    sidebarOverlay.classList.add('active');
+                    mobileToggle.style.display = 'none';
+                });
+            }
+
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('mobile-open');
+                    sidebarOverlay.classList.remove('active');
+                    if (mobileToggle) mobileToggle.style.display = 'block';
+                });
+            }
+
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                    sidebarOverlay.classList.remove('active');
+                    if (mobileToggle) mobileToggle.style.display = 'block';
+                }
+            });
+
+           
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    
+                    sidebarOverlay.classList.remove('active');
+                    sidebar.classList.remove('mobile-open');
+                    if (mobileToggle) mobileToggle.style.display = 'none';
+                } else {
+                    
+                    if (!sidebar.classList.contains('mobile-open')) {
+                        if (mobileToggle) mobileToggle.style.display = 'block';
+                    } else {
+                        if (mobileToggle) mobileToggle.style.display = 'none';
+                    }
+                }
+            });
+
+            
+            updateMobileToggle();
+
+            
+            const saved = localStorage.getItem('sidebarCollapsed');
+            if (saved === 'true' && window.innerWidth > 768) {
+                sidebar.classList.add('collapsed');
+            }
+        });
+    </script>
+
+    <script>
+        function toPersianNumber(num) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return num.toString().replace(/\d/g, x => persianDigits[parseInt(x)]);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setInterval(function() {
+                document.querySelectorAll('.page-btn, .pagination button, #pagination button').forEach(btn => {
+                    const text = btn.textContent;
+                    if (/^\d+$/.test(text)) {
+                        btn.textContent = toPersianNumber(text);
+                    }
+                });
+            }, 5);
+        });
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
