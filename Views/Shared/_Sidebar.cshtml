@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var username = HttpContextAccessor.HttpContext?.Session.GetString("Username") ?? "کاربر";
+    var currentUrl = Context.Request.Path.ToString().ToLower();
+
+    // دریافت نوع کاربر از دیتابیس
+    var user = string.IsNullOrEmpty(username) ? null :
+        Login.Data.FakeDatabase.Users.FirstOrDefault(u => u.Username == username);
+
+    string userTypeText = "کاربر عادی";
+    string userTypeClass = "user-type-normal";
+    string userTypeIcon = "👤";
+
+    if (user != null)
+    {
+        switch (user.UserType)
+        {
+            case "admin":
+                userTypeText = "مدیر";
+                userTypeClass = "user-type-admin";
+                userTypeIcon = "👑";
+                break;
+            case "special":
+                userTypeText = "کاربر ویژه";
+                userTypeClass = "user-type-special";
+                userTypeIcon = "⭐";
+                break;
+            case "plus":
+                userTypeText = "کاربر پلاس";
+                userTypeClass = "user-type-plus";
+                userTypeIcon = "💎";
+                break;
+        }
+    }
+}
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3 class="sidebar-logo">
+            <span class="sidebar-logo-icon">🚀</span>
+            <span class="sidebar-logo-text">کندا ایده</span>
+        </h3>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="باز و بسته کردن منو">☰</button>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li class="sidebar-menu-item">
+            <a href="/User/AdminPanel" class="sidebar-menu-link @(currentUrl.Contains("/user/adminpanel") ? "active" : "")">
+                <span class="sidebar-menu-icon">📋</span>
+                <span class="sidebar-menu-text">پنل مدیریت</span>
+            </a>
+        </li>
+        <li class="sidebar-menu-item">
+            <a href="/User/Profile" class="sidebar-menu-link @(currentUrl.Contains("/user/profile") ? "active" : "")">
+                <span class="sidebar-menu-icon">👤</span>
+                <span class="sidebar-menu-text">اطلاعات کاربری</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user-info">
+            <div class="sidebar-user-avatar">@(username[0])</div>
+            <div class="sidebar-user-details">
+                <div class="sidebar-user-name">@username</div>
+                <div class="sidebar-user-role @userTypeClass">
+                    <span class="user-type-icon">@userTypeIcon</span>
+                    <span class="user-type-text">@userTypeText</span>
+                </div>
+            </div>
+        </div>
+        <button class="logout-quick-btn" title="خروج از حساب">
+            <span class="logout-icon">🚪</span>
+        </button>
+    </div>
+</aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutBtn = document.querySelector('.logout-quick-btn');
+        if (!logoutBtn) return;
+
+        logoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            if (typeof confirm !== 'undefined' && confirm.danger) {
+                const confirmed = await confirm.warning('آیا می‌خواهید از حساب کاربری خود خارج شوید؟', 'خروج از حساب');
+                if (confirmed) {
+                    window.location.href = '/User/Logout';
+                }
+            } else {
+                if (confirm('آیا می‌خواهید از حساب خود خارج شوید؟')) {
+                    window.location.href = '/User/Logout';
+                }
+            }
+        });
+    });
+</script>

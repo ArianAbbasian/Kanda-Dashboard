@@ -1,0 +1,14 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## VS Code / Rider
+.vscode/
+.idea/
+
+## Node / npm (if you had any)
+node_modules/

@@ -1,0 +1,107 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "پروفایل کاربری";
+}
+
+@model Login.Models.User
+
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پروفایل کاربری - سیستم احراز هویت</title>
+
+    <link rel="stylesheet" href="~/css/fonts.css" />
+    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="~/css/profile.css" />
+</head>
+<body>
+    <div class="profile-split-layout">
+        <div class="profile-main-content">
+
+
+            <div class="profile-info-list">
+
+                <h1 class="profile-main-title">اطلاعات کاربری</h1>
+
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام:</span>
+                    <span class="profile-info-value">@Model.FirstName</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام خانوادگی:</span>
+                    <span class="profile-info-value">@Model.LastName</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نام کاربری:</span>
+                    <span class="profile-info-value">@Model.Username</span>
+                </div>
+
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">نوع کاربر:</span>
+                    <span class="profile-info-value">
+                        @{
+                            string userTypeText = "کاربر عادی";
+                            switch (Model.UserType)
+                            {
+                                case "admin":
+                                    userTypeText = "مدیر";
+                                    break;
+                                case "special":
+                                    userTypeText = "کاربر ویژه";
+                                    break;
+                                case "plus":
+                                    userTypeText = "کاربر پلاس";
+                                    break;
+                                default:
+                                    userTypeText = "کاربر عادی";
+                                    break;
+                            }
+                        }
+                        @userTypeText
+                    </span>
+                </div>
+
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">ایمیل:</span>
+                    <span class="profile-info-value">@Model.Email</span>
+                </div>
+
+                <div class="profile-info-item">
+                    <span class="profile-info-label">شماره تماس:</span>
+                    <span class="profile-info-value">@Model.Phone</span>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="action-buttons">
+                <a asp-controller="User" asp-action="AdminPanel" class="act-btn">مشاهده لیست کاربران</a>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+

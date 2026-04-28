@@ -1,0 +1,94 @@
+﻿@model Login.Models.User
+
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "ثبت‌نام";
+}
+
+<div class="container">
+    <div class="split-layout">
+        <div class="split-left">
+            <img src="~/images/global.png" alt="iran" />
+        </div>
+
+        <div class="split-right">
+            <div class="auth-wrapper">
+                <div class="auth-card">
+                    <div class="auth-header">
+                        <a asp-controller="Auth" asp-action="Login" class="auth-logo">
+                            ساخت حساب کاربری جدید
+                        </a>
+                    </div>
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display: none;"></div>
+
+                    <form id="registerForm" asp-controller="Auth" asp-action="Register" method="post">
+                        <div class="form-group">
+                            <input asp-for="FirstName" class="form-control" placeholder="نام" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="LastName" class="form-control" placeholder="نام خانوادگی" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="Username" class="form-control" placeholder="نام کاربری" />
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="کلمه عبور" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="Email" class="form-control" placeholder="ایمیل" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="Phone" class="form-control" placeholder="شماره تماس" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+
+                        <!-- استان و شهر -->
+                        <div class="form-group">
+                            <label for="ProvinceId">استان</label>
+                            <select id="ProvinceId" name="ProvinceId" class="form-control">
+                                <option value="">-- انتخاب استان --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="CityId">شهر</label>
+                            <select id="CityId" name="CityId" class="form-control" disabled>
+                                <option value="">-- ابتدا استان را انتخاب کنید --</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">ثبت نام</button>
+                    </form>
+
+                    <div class="register-section">
+                        <div class="divider-with-text">
+                            <div class="divider-line"></div>
+                            <span class="divider-text">آیا حساب کاربری دارید؟</span>
+                            <div class="divider-line"></div>
+                        </div>
+                        <a asp-controller="Auth" asp-action="Login" class="btn reg-btn">وارد شوید</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/core/province-city.js"></script>
+    <script src="~/js/pages/register.js"></script>
+}
