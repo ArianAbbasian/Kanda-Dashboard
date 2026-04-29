@@ -8,7 +8,6 @@ let provinceChartsActive = false;
 let provinceChartInstances = [];
 let provinceOverlays = [];           
 let provinceCenters = null;          
-
 const originalMarkerStyle = new ol.style.Style({
     image: new ol.style.Icon({
         src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
@@ -16,7 +15,7 @@ const originalMarkerStyle = new ol.style.Style({
     }),
 });
 
-// ==================== getting Locations From Server ====================
+// ==================== Getting Provinces Locations ==================== ✅
 async function loadProvinceCenters() {
     if (provinceCenters) return provinceCenters;
     try {
@@ -30,7 +29,7 @@ async function loadProvinceCenters() {
             }
         });
         provinceCenters = centers;
-     
+        console.log(provinceCenters);
         return centers;
     } catch (error) {
         console.error('❌ خطا در دریافت مختصات استان‌ها:', error);
@@ -38,19 +37,18 @@ async function loadProvinceCenters() {
     }
 }
 
-// ==================== Getting Fillterd Users ====================
+// ==================== Getting Fillterd Users ==================== ✅
 async function fetchMapUsers() {
     const data = await getFilteredUsers(1, 1000);
     return data.users || [];
 }
 
-// ==================== User PoPuo Information ====================
+// ==================== User PoPup Information ==================== ✅
 function showUserInfoPopup(user, pixel) {
     const popup = document.getElementById('custom-map-popup');
     if (!popup) return;
-
+    if (!user) return;
     let userTypeString;
-
     switch (user.userType) {
         case 'plus':
             userTypeString = 'پلاس';
@@ -65,8 +63,9 @@ function showUserInfoPopup(user, pixel) {
             userTypeString = 'عادی';
             break;
     }
+    
 
-    console.log('UserType (Switch)=>', userTypeString);
+    //console.log('UserType (Switch)=>', userTypeString);
 
     popup.querySelector('.map-popup-title').innerText = `${user.firstName} ${user.lastName}`;
     popup.querySelector('.map-popup-text').innerHTML = `
@@ -77,7 +76,7 @@ function showUserInfoPopup(user, pixel) {
     `;
     if (pixel) {
         const offsetX = 135;
-        const offsetY = 500;
+        const offsetY = 450;
 
         popup.style.left = `${pixel[0] + offsetX}px`;
         popup.style.top = `${pixel[1] + offsetY}px`;
@@ -148,10 +147,11 @@ async function updateProvinceCharts() {
         const type = u.userType || 'user';
         provinceGroups[province][type] = (provinceGroups[province][type] || 0) + 1;
     });
-
+    console.log('provinceGroups =>' ,provinceGroups);
     for (const [province, counts] of Object.entries(provinceGroups)) {
         const center = centers[province];
         if (!center) continue;
+        
 
         // Making Canvass For Charts
         const canvas = document.createElement('canvas');
@@ -159,9 +159,6 @@ async function updateProvinceCharts() {
         canvas.height = 100;
         canvas.style.width = '80px';
         canvas.style.height = '80px';
-        canvas.style.borderRadius = '20%';
-        canvas.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-        canvas.style.backgroundColor = 'white';
         canvas.style.pointerEvents = 'none';
 
         // Preparing Datas
@@ -179,7 +176,6 @@ async function updateProvinceCharts() {
         const chart = new Chart(canvas, {
             type: 'pie',
             data: {
-                labels: labels,
                 datasets: [{
                     data: dataValues,
                     backgroundColor: colors,
@@ -221,14 +217,14 @@ async function updateProvinceCharts() {
     }
 }
 
-// ==================== Charts Refresh(If they are Active) ====================
+// ==================== Charts Refresh(If they are Active) ==================== ✅
 window.refreshProvinceChartsIfActive = function () {
     if (provinceChartsActive && map) {
         updateProvinceCharts();
     }
 };
 
-// ==================== Setping Draw Tool ====================
+// ==================== Setuping Draw Tool ====================
 function setupDrawing() {
     const drawBtn = document.getElementById('drawPolygonBtn');
     const clearBtn = document.getElementById('clearPolygonBtn');
@@ -265,7 +261,7 @@ function setupDrawing() {
     clearBtn.addEventListener('click', window.clearPolygonFilter);
 }
 
-// ==================== Initilazing Map ====================
+// ==================== Initilazing Map ==================== ✅
 function initMap() {
     if (mapInitialized) return;
     mapInitialized = true;
@@ -295,26 +291,28 @@ function initMap() {
         // فعلا بخاطر نبود دسترسی به اینترنت OSM هارو از TileMap نمیگیریم
         layers: [
             drawnPolygonLayer,
-            vectorLayer
+            vectorLayer,
+
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([51.45, 35.75]),
-            zoom: 6
+            zoom: 6,
+            minZoom: 5,
+            maxZoom: 18
         })
     });
 
-    map.on('singleclick', function (evt) {
-        const feature = map.forEachFeatureAtPixel(evt.pixel, feat => feat);
-        console.log('evt => ', evt);
-        if (feature && feature.get('user')) {
-            showUserInfoPopup(feature.get('user'), evt.pixel);
-        } else {
-            const popup = document.getElementById('custom-map-popup');
-            if (popup) {
-                popup.style.display = 'none';
-            }
-        }
+    map.on("singleclick", function (e) {
+        map.forEachFeatureAtPixel(e.pixel, function (feature) {
+            showUserInfoPopup(feature.values_.user , e.pixel);
+            console.log("You clicked:", feature.values_.user);
+        });
     });
+    map.on("pointermove", function (e) {
+        const hit = map.hasFeatureAtPixel(e.pixel);
+        map.getTargetElement().style.cursor = hit ? "pointer" : "";
+    });
+    
 
     setupDrawing();
     loadMapUsers();
@@ -327,7 +325,7 @@ function initMap() {
     initPopupEvents();
 }
 
-// ==================== Loading Markers ====================
+// ====================  Markers ====================
 async function loadMapUsers() {
     try {
         const users = await fetchMapUsers();
@@ -344,7 +342,7 @@ async function loadMapUsers() {
                 vectorSource.addFeature(marker);
             }
         });
-
+        // For finding and zoom on a single User
         if (users.length > 0) {
             const extent = vectorSource.getExtent();
             if (extent.every(isFinite)) {
@@ -352,12 +350,13 @@ async function loadMapUsers() {
                     const singleUser = users.find(u => u.lat && u.lon);
                     if (singleUser) {
                         map.getView().setCenter(ol.proj.fromLonLat([singleUser.lon, singleUser.lat]));
-                        map.getView().setZoom(10);
+                        map.getView().setZoom(7);
                     }
                 } else {
                     map.getView().fit(extent, { padding: [50, 50, 50, 50], duration: 500, maxZoom: 15 });
                 }
             }
+
         }
     } catch (error) {
         console.error('خطا در بارگذاری مارکرها:', error);
