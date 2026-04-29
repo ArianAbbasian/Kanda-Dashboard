@@ -1267,3 +1267,15 @@ h2 {
         background: #e67e22;
     }
 
+.map-info {
+    position: relative;
+}
+
+
+.info {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    top: -130px;
+    border-radius: 20%;
+}

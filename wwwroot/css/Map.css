@@ -9,7 +9,8 @@
     font-size: larger;
     border-radius: 15%;
     cursor: pointer;
-    transition: 0.3s
+    transition: 0.3s;
+    z-index: 100;
 }
 
 .ol-zoom-in:hover, .ol-zoom-out:hover{
