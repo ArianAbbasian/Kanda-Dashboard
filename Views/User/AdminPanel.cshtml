@@ -13,11 +13,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>پنل مدیریت</title>
 
-    <link rel="stylesheet" href="~/css/fonts.css" />
-    <link rel="stylesheet" href="~/css/main.css" />
-    <link rel="stylesheet" href="~/css/profile.css" />
-    <link rel="stylesheet" href="~/css/AdminPanel.css" />
-    <link rel="stylesheet" href="~/css/Map.css"/>
+    <link rel="stylesheet" href="~/css/Fonts/fonts.css" />
+    <link rel="stylesheet" href="~/css/Main/main.css" />
+    @* ----------------------------------- Admin Panel ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/AdminPanel.css" />
+    @* ----------------------------------- InfoCard ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/InfoCard/InfoCard.css" />
+    @* ----------------------------------- FilterBox ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/FilterBox/FilterBox.css" />
+    <link rel="stylesheet" href="~/css/AdminPanel/FilterBox/Responsive.css" />
+    @* ----------------------------------- Tabs ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/Tabs/Tabs.css" />
+    @* ----------------------------------- Table ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/Table/Table.css" />
+    <link rel="stylesheet" href="~/css/AdminPanel/Table/Pagination.css" />
+    <link rel="stylesheet" href="~/css/AdminPanel/Table/EditModal.css" />
+    <link rel="stylesheet" href="~/css/AdminPanel/Table/Responsive.css" />
+    @* ----------------------------------- Charts ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/Charts/Charts.css" />
+    @* ----------------------------------- Map ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/Map/Map.css" />
+
+
     @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" /> *@
 </head>
 <body>
@@ -175,9 +192,10 @@
                     <!-- Third Tab (Map) -->
                     <div class="tab-pane" id="map-tab">
                         <div class="map-toolbar">
-                            <button id="drawPolygonBtn" class="map-btn map-btn1">✎ رسم چندضلعی</button>
-                            <button id="provinceChartsBtn" class="map-btn">📊 نمایش نمودار استان‌ها</button>
-                            <button id="clearPolygonBtn" class="map-btn map-btn1" style="display:none;">🗑 پاک کردن فیلتر</button>
+                            <button id="UserBtn" class="map-btn map-btn-user">👤 نمایش کاربران</button>
+                            <button id="drawPolygonBtn" class="map-btn map-btn-poly">✎ رسم چندضلعی</button>
+                            <button id="provinceChartsBtn" class="map-btn map-btn-charts">📊 نمایش نمودار استان‌ها</button>
+                            <button id="clearPolygonBtn" class="map-btn map-btn-poly" style="display:none;">🗑 پاک کردن فیلتر</button>
                         </div>
                         <div class="map-container">
                             <div id="map"></div>
@@ -187,6 +205,9 @@
                                 <div class="map-popup-title"></div>
                                 <div class="map-popup-text"></div>
                             </div>
+                        </div>
+                        <div class="map-info">
+                            <img src="~/images/map-info.png" alt="Map Infos" class="info"/>
                         </div>
                     </div>
                 </div>
@@ -250,6 +271,7 @@
                             <option value="">-- ابتدا استان را انتخاب کنید --</option>
                         </select>
                     </div>
+                    @* <img src="~/images/location Icon.bmp" alt="Alternate Text" /> *@
 
                     <!-- Dropdown نوع کاربر -->
                     <div class="form-group">
@@ -274,18 +296,20 @@
         <script src="~/js/core/province-city.js"></script>
         <script src="~/js/core/toast.js"></script>
         <script src="~/js/scripts/Chart.min.js"></script>
-        <script src="~/js/scripts/ol.js" ></script>
+        <script src="~/js/scripts/ol.js"></script>
+        <script src="~/js/scripts/ol-ext.min.js"></script>
         @* <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script> *@
 
         <!-- Features -->
-        <script src="~/js/features/filter.js"></script>
+        <script src="~/js/features/FilterBox/filter.js"></script>
         <script src="~/js/core/data-fetcher.js"></script>
-        <script src="~/js/features/table.js"></script>
-        <script src="~/js/features/map.js"></script>
-        <script src="~/js/features/charts.js"></script>
-        <script src="~/js/features/user-crud.js"></script>
-        <script src="~/js/features/tabs.js"></script>
+        <script src="~/js/features/Table/table.js"></script>
+        <script src="~/js/features/Map/map.js"></script>
+        <script src="~/js/features/Chart/charts.js"></script>
+        <script src="~/js/features/UserCrud/user-crud.js"></script>
+        <script src="~/js/features/TabManager/tabs.js"></script>
+        
 
         <!-- Page -->
         <script src="~/js/pages/adminPanel.js"></script>
