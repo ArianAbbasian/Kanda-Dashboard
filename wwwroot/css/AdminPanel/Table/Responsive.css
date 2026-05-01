@@ -1,0 +1,124 @@
+﻿@media (max-width: 992px) {
+    .table th,
+    .table td {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        min-width: 900px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .action-buttons {
+        margin-top: 30px;
+    }
+
+    .act-btn {
+        padding: 10px 25px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.3rem;
+        padding-bottom: 10px;
+    }
+
+    .pagination {
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .page-btn {
+        min-width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+        .page-btn.nav-btn {
+            min-width: 50px;
+        }
+
+    .act-btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .action-buttons {
+        width: 100%;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 992px) {
+    .modal-content {
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 20px auto;
+        padding: 25px;
+        max-width: 95%;
+    }
+
+        .modal-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+
+    #editForm {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+        #editForm .full-width,
+        #editForm .btn-primary {
+            grid-column: span 1;
+        }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        margin: 10px auto;
+        padding: 20px;
+    }
+
+        .modal-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+    #editForm .form-control,
+    #editForm select {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    .close {
+        font-size: 24px;
+        top: 10px;
+        left: 15px;
+    }
+}

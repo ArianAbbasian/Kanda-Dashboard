@@ -1,0 +1,53 @@
+﻿@media (max-width: 768px) {
+    .filter-section {
+        padding: 20px;
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .filter-buttons {
+        flex-direction: column;
+    }
+
+    .filter-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-section {
+        padding: 15px;
+    }
+
+    .filter-input,
+    .filter-select,
+    .filter-btn {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .admin-panel-header h2 {
+        font-size: 1.6rem;
+    }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px !important;
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+    .empty-state::before {
+        content: '🔍';
+        display: block;
+        font-size: 3rem;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
