@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="~/css/AdminPanel/InfoCard/InfoCard.css" />
     @* ----------------------------------- FilterBox ----------------------------------- *@
     <link rel="stylesheet" href="~/css/AdminPanel/FilterBox/FilterBox.css" />
-    <link rel="stylesheet" href="~/css/AdminPanel/FilterBox/Responsive.css" />
     @* ----------------------------------- Tabs ----------------------------------- *@
     <link rel="stylesheet" href="~/css/AdminPanel/Tabs/Tabs.css" />
     @* ----------------------------------- Table ----------------------------------- *@
@@ -43,7 +42,7 @@
             <input type="hidden" id="currentUsername" value="@ViewBag.CurrentUsername" />
             <div class="admin-panel-header">
             <h1 class="profile-main-title">پنل مدیریت</h1>
-
+            <!-- =============================== filter Section ============================== -->
             <div class="filter-section">
                 <div class="filter-row">
                     <div class="filter-group">
@@ -73,9 +72,6 @@
                         </select>
                     </div>
 
-                </div>
-
-                <div class="filter-row">
                     <div class="filter-group">
                         <label for="filterProvince">استان</label>
                         <select id="filterProvince" class="filter-select">
@@ -85,7 +81,7 @@
 
                     <div class="filter-group">
                         <label for="filterCity">شهر</label>
-                       <select id="filterCity" class="filter-select" disabled>
+                        <select id="filterCity" class="filter-select" disabled>
                             <option value="">ابتدا استان را انتخاب کنید</option>
                         </select>
                     </div>
@@ -93,17 +89,19 @@
                     <div class="filter-group filter-buttons">
                         <button id="applyFilterBtn" class="filter-btn apply-btn" onclick="applyFilters()">
                             <span class="filter-icon">🔍</span>
-                            اعمال فیلتر
+                            فیلتر کردن
                         </button>
                         <button id="resetFilterBtn" class="filter-btn reset-btn" onclick="resetFilters()">
                             <span class="filter-icon">🔄</span>
                             پاک کردن
                         </button>
                     </div>
-                </div>
-            </div>
 
-            
+                </div>
+
+               
+            </div>
+            <!-- =============================== Tabs Section ============================== -->
             <div class="tabs-container">
                 <div class="tabs-header">
                     <button class="tab-btn active" data-tab="users-tab">
@@ -128,6 +126,9 @@
                             <table class="table" id="usersTable">
                                 <thead>
                                     <tr>
+                                        <th>
+                                            <input type="checkbox" id="selectAllCheckbox">
+                                        </th>
                                         <th>ردیف</th>
                                         <th>نام</th>
                                         <th>نام خانوادگی</th>
@@ -193,9 +194,9 @@
                     <div class="tab-pane" id="map-tab">
                         <div class="map-toolbar">
                             <button id="UserBtn" class="map-btn map-btn-user">👤 نمایش کاربران</button>
-                            <button id="drawPolygonBtn" class="map-btn map-btn-poly">✎ رسم چندضلعی</button>
+                            <button id="drawPolygonBtn" class="map-btn map-btn-poly">✎ انتخاب با رسم چندضلعی</button>
                             <button id="provinceChartsBtn" class="map-btn map-btn-charts">📊 نمایش نمودار استان‌ها</button>
-                            <button id="clearPolygonBtn" class="map-btn map-btn-poly" style="display:none;">🗑 پاک کردن فیلتر</button>
+                            <button id="clearPolygonBtn" class="map-btn map-btn-poly active" style="display:none;">🗑 پاک کردن فیلتر</button>
                         </div>
                         <div class="map-container">
                             <div id="map"></div>
@@ -208,12 +209,12 @@
                         </div>
                         <div class="map-info">
                             <img src="~/images/map-info.png" alt="Map Infos" class="info"/>
+                            <p class="selectedUserBox">تعداد کاربران انتخاب شده  <span id="selectedUserCount"></span></p>
                         </div>
                     </div>
                 </div>
             </div>
-    
-
+   
             <div class="action-buttons">
                 <a asp-controller="User" asp-action="Profile" class="act-btn">بازگشت به پروفایل شخصی</a>
             </div>
