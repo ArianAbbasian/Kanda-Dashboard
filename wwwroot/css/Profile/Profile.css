@@ -137,6 +137,7 @@ body {
     .profile-main-title {
         font-size: 2.8rem;
         text-align: right;
+        margin-top: 2rem;
     }
 
         .profile-main-title::after {
@@ -231,6 +232,7 @@ body {
 
     .profile-main-title {
         font-size: 1.8rem;
+        margin-top: 1.5rem;
     }
 
         .profile-main-title::after {
@@ -347,6 +349,7 @@ html, body {
 @media (max-width: 768px) {
     .profile-main-content {
         padding: 20px 15px;
+
     }
 
     .action-buttons {

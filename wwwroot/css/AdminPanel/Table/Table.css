@@ -242,3 +242,16 @@
 }
 
 
+.selected-row {
+    background-color: #e0f7fa !important; 
+}
+
+
+.delete-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#selectAllCheckbox {
+    cursor: pointer;
+}

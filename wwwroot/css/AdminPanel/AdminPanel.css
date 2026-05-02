@@ -32,10 +32,8 @@ h2 {
     letter-spacing: -0.5px;
 }
 
-.info {
-    position: absolute;
-    width: 130px;
-    height: 130px;
-    top: -130px;
-    border-radius: 20%;
+@media (max-width: 769px) {
+    .profile-main-title {
+        margin-right: 3rem;
+    }
 }
