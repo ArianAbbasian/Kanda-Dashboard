@@ -15,6 +15,10 @@
             if (targetPane) {
                 targetPane.classList.add('active');
 
+                if (tabId === 'users-tab' && typeof loadTableUsers === 'function') {
+                    loadTableUsers();
+                }
+
                 if (tabId === 'info-tab' && typeof loadCharts === 'function') {
                     loadCharts();
                 }

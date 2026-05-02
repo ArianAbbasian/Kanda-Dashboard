@@ -10,12 +10,16 @@ let provinceChartInstances = [];
 let provinceCenters = null;
 let currentHoveredFeature = null;
 const popup = document.getElementById('custom-map-popup');
-
-
-
+// ==================== Markers Style ==================== 
 const originalMarkerStyle = new ol.style.Style({
     image: new ol.style.Icon({
         src: "/images/locationIcon.png",
+        scale: 0.2,
+    }),
+});
+const SelectedMarkerStyle = new ol.style.Style({
+    image: new ol.style.Icon({
+        src: "/images/locationIcon2.png",
         scale: 0.2,
     }),
 });
@@ -86,7 +90,7 @@ function showUserInfoPopup(user, pixel) {
     popup.style.display = 'block';
 }
 
-// ==================== Chart ToolTip Hover ==================== ✅
+// ==================== Provinces Chart ToolTip Hover ==================== ✅
 function chartToolTip(province, users, pixel) {
     if (!popup) {
         console.error("Element with id 'custom-map-popup' not found!");
@@ -126,27 +130,26 @@ function hideTooltip() {
         currentHoveredFeature = null; 
     }
 }
-// ==================== PolyGun Filltering ====================
+// ==================== PolyGun Filltering ==================== ✅
 function filterMarkersByPolygon(polygon) {
     const markers = vectorSource.getFeatures();
     const polygonGeometry = polygon.clone();
+    clearLocalStorageSelection();
 
     markers.forEach(marker => {
         const coord = marker.getGeometry().getCoordinates();
         if (polygonGeometry.intersectsCoordinate(coord)) {
-            marker.setStyle(originalMarkerStyle);
-        } else {
-            marker.setStyle(new ol.style.Style({
-                image: new ol.style.Circle({
-                    radius: 0,
-                    fill: new ol.style.Fill({ color: 'rgba(0,0,0,0)' })
-                })
-            }));
+            addUserIdToLocalStorage(String(marker.values_.user.id));
+            marker.setStyle(SelectedMarkerStyle);
+            //console.log(marker.values_.user.id);
         }
+
     });
+
+    loadMapUsers();
 }
 
-// ==================== Clear PolyGun Fillter ====================
+// ==================== Clear PolyGun Fillter ==================== ✅
 window.clearPolygonFilter = function () {
     if (drawnPolygonLayer) {
         drawnPolygonLayer.getSource().clear();
@@ -173,7 +176,7 @@ window.refreshProvinceChartsIfActive = function () {
     }
 };
 
-// ==================== Setuping Draw Tool ====================
+// ==================== Setuping Draw Tool ==================== ✅
 function setupDrawing() {
     const drawBtn = document.getElementById('drawPolygonBtn');
     const clearBtn = document.getElementById('clearPolygonBtn');
@@ -250,59 +253,57 @@ function initMap() {
             maxZoom: 18
         })
     });
-    // singleclick moveend pointermove
     map.on("singleclick", function (e) {
+        let clickedFeature = null;
         map.forEachFeatureAtPixel(e.pixel, function (feature) {
-            showUserInfoPopup(feature.values_.user, e.pixel);
+            clickedFeature = feature;
+            return true;
         });
+
+        if (clickedFeature) {
+            const user = clickedFeature.values_.user;
+            if (user) {
+                showUserInfoPopup(user, e.pixel);
+                userSelectToggle(user.id);
+            }
+        }
     });
-    //map.on("pointermove", function (e) {
-    //    map.forEachFeatureAtPixel(e.pixel, function (feature) {
-    //        chartToolTip(feature.values_.province, feature.values_.users ,e.pixel);
-    //    });
-    //});
+
     map.on("pointermove", function (e) {
         let currentFeature = null;
         map.forEachFeatureAtPixel(e.pixel, function (feature) {
-            // فقط اولین Feature پیدا شده را در نظر می‌گیریم
+            
             currentFeature = feature;
-            return true; // توقف جستجو پس از یافتن اولین Feature
+            return true; 
         });
 
         if (currentFeature) {
-            // اگر Feature جدیدی پیدا شد یا Feature قبلی متفاوت بود
+           
             if (currentFeature !== currentHoveredFeature) {
                 const province = currentFeature.values_.province;
                 const users = currentFeature.values_.users;
-                // فقط اگر اطلاعات لازم را داشتیم، Tooltip را نمایش بده
+               
                 if (province && users) {
                     chartToolTip(province, users, e.pixel);
-                    currentHoveredFeature = currentFeature; // به‌روزرسانی Feature فعلی
+                    currentHoveredFeature = currentFeature; 
                 } else {
-                    // اگر Feature پیدا شد ولی اطلاعات نداشت، Tooltip را مخفی کن
+                   
                     hideTooltip();
                     currentHoveredFeature = null;
                 }
             }
         } else {
-            // اگر هیچ Featureی پیدا نشد، Tooltip را مخفی کن
-            if (currentHoveredFeature) { // اگر قبلاً Tooltip نمایش داده شده بود
+           
+            if (currentHoveredFeature) { 
                 hideTooltip();
             }
         }
     })
-    map.getViewport().addEventListener('mouseout', function () {
-        if (currentHoveredFeature) {
-            hideTooltip();
-        }
-    });
+
     map.on("pointermove", function (e) {
         const hit = map.hasFeatureAtPixel(e.pixel);
         map.getTargetElement().style.cursor = hit ? "pointer" : "";
     });
-
-
-
     setupDrawing();
 
     if (markersIsActive) {
@@ -312,16 +313,35 @@ function initMap() {
     if (provinceChartsActive) {
         addPieChart(map, vectorSource);
     }
-
+    updateSelectedUserCount();
     initPopupEvents();
 }
+// ====================  Select User Toggle Handler ==================== ✅
+function userSelectToggle(userId) {
+    const selectedUserIds = getSelectedUserIdsFromLocalStorage();
+    const userIsSelected = selectedUserIds.includes(String(userId));
+
+    if (userIsSelected) {
+        removeUserIdFromLocalStorage(String(userId));
+        const marker = findMarkerByUserId(String(userId)); 
+        if (marker) {
+            marker.setStyle(originalMarkerStyle);
+        }
+    } else {
+        addUserIdToLocalStorage(String(userId));
+        const marker = findMarkerByUserId(String(userId));
+        if (marker) {
+            marker.setStyle(SelectedMarkerStyle);
+        }
+    }
+}
+
 
 // ====================  Markers ==================== ✅
 async function loadMapUsers() {
     try {
         const users = await fetchMapUsers();
         if (markersIsActive) !markersIsActive;
-        //if (vectorSource) vectorSource.clear();
 
         users.forEach(user => {
             if (user.lat && user.lon) {
@@ -330,10 +350,17 @@ async function loadMapUsers() {
                     name: `${user.firstName} ${user.lastName}`,
                     user: user
                 });
-                marker.setStyle(originalMarkerStyle);
+                const selectedUserIds = getSelectedUserIdsFromLocalStorage();
+                if (selectedUserIds.includes(String(user.id))) {
+                    marker.setStyle(SelectedMarkerStyle);
+                } else {
+                    marker.setStyle(originalMarkerStyle);
+                }
+                
                 vectorSource.addFeature(marker);
             }
         });
+        
         // For finding and zoom on a single User
         if (users.length > 0) {
             const extent = vectorSource.getExtent();
@@ -445,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ====================  Provinces Chart  ====================
+// ====================  Provinces Chart  ==================== ✅
 async function addPieChart(map, vectorSource) {
     if (!map) return;
 
@@ -524,6 +551,11 @@ async function addPieChart(map, vectorSource) {
 
 }
 
+// ====================  Update SelectedUser Count  ==================== ✅
+function updateSelectedUserCount() {
+    const users = getSelectedUserIdsFromLocalStorage();
+    document.getElementById('selectedUserCount').innerHTML = `: ${users.length}`;
+}
 
 window.loadMap = loadMap;
 window.clearPolygonFilter = clearPolygonFilter;

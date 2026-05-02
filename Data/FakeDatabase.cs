@@ -202,7 +202,7 @@ namespace Login.Data
 
         private static void InitializeUsers()
         {
-            Users.Add(new User { Id = 1, FirstName = "علی", LastName = "احمدی", Username = "ali", Password = "123456", Email = "ali@test.com", Phone = "09121111111", ProvinceId = 18, CityId = 141, Lon = 50.02, Lat = 36.32 , UserType = "admin", });
+            Users.Add(new User { Id = 1, FirstName = "علی", LastName = "احمدی", Username = "ali", Password = "123456", Email = "ali@test.com", Phone = "09121111111", ProvinceId = 18, CityId = 141, Lon = 50.02, Lat = 36.32 , UserType = "admin"});
             Users.Add(new User { Id = 2, FirstName = "زهرا", LastName = "کریمی", Username = "zahra", Password = "123456", Email = "zahra@test.com", Phone = "09122222222", ProvinceId = 1, CityId = 3, Lon = 46.16, Lat = 38.01 , UserType = "plus", });
             Users.Add(new User { Id = 3, FirstName = "محمد", LastName = "محمدی", Username = "mohammad", Password = "123456", Email = "mohammad@test.com", Phone = "09123333333", ProvinceId = 4, CityId = 19, Lon = 51.71, Lat = 32.54 , UserType = "special", });
             Users.Add(new User { Id = 4, FirstName = "فاطمه", LastName = "حسینی", Username = "fatemeh", Password = "123456", Email = "fatemeh@test.com", Phone = "09124444444", ProvinceId = 8, CityId = 47, Lon = 51.79, Lat = 35.15 , UserType = "user",});
