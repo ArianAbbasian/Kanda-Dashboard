@@ -39,6 +39,18 @@ public class UserController : Controller
         return View(users);
     }
 
+    public IActionResult Chat()
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+        ViewBag.CurrentUsername = username;
+        var users = FakeDatabase.Users.ToList();
+        return View(users);
+    }
+
     [HttpGet]
     public IActionResult GetUsers(int page = 1, int pageSize = 5)
     {

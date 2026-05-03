@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Login.Models.User>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "صفحه گفت و گو";
+}
+@{
+    var username = ViewBag.CurrentUsername;
+}
+
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدیریت</title>
+
+    <link rel="stylesheet" href="~/css/Fonts/fonts.css" />
+    <link rel="stylesheet" href="~/css/Main/main.css" />
+    @* ----------------------------------- Chat Page ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/Chat/Chat.css" />
+    @* ----------------------------------- InfoCard ----------------------------------- *@
+    <link rel="stylesheet" href="~/css/AdminPanel/InfoCard/InfoCard.css" />
+    
+
+
+    @* <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" /> *@
+</head>
+<body>
+    
+    <div class="profile-main-content">
+            <input type="hidden" id="currentUsername" value="@ViewBag.CurrentUsername" />
+            <div class="admin-panel-header">
+                
+                <h1 class="profile-main-title">ثبت تیکت</h1>
+
+            </div>
+
+            <div class="chat-container">
+            <!-- ToolBar Area -->
+            <div class="editor-toolbar" id="editorToolbar">
+                <button class="btn-bold" onclick="execCommand('bold')" title="بولد"><b>B</b></button>
+                <button class="btn-italic" onclick="execCommand('italic')" title="ایتالیک"><i>I</i></button>
+                <button class="btn-underline" onclick="execCommand('underline')" title="زیر خط دار"><u>U</u></button>
+                <!-- New Alignment Buttons -->
+                <button class="btn-align-right" onclick="execCommand('justifyRight')" title="تراز راست"><code>&#9654;</code></button> <!-- Right Arrow -->
+                <button class="btn-align-center" onclick="execCommand('justifyCenter')" title="وسط چین"><code>↔️</code></button> <!-- Centered Dot/Circle -->
+                <button class="btn-align-left" onclick="execCommand('justifyLeft')" title="تراز چپ"><code>&#9664;</code></button> <!-- Left Arrow -->
+                <button class="insert-image-btn" title="افزودن عکس">📎</button>
+                <input type="file" id="imageUpload" accept="image/*">
+            </div>
+
+            <!-- Editor Area -->
+            <p class="toolbar-title">متن خود را اینجا وارد کنید ⬇️ </p>
+                 <div id="TextEditor" contenteditable="true" spellcheck="false">
+                     
+                        <p></p>
+                 </div>
+
+            </div>
+
+    </div>
+
+
+    @section Scripts {
+        <!-- Core -->
+        <script src="~/js/core/toast.js"></script>
+
+        <!-- Features -->
+        <script src="~/js/core/data-fetcher.js"></script>
+        <script src="~/js/features/UserCrud/user-crud.js"></script>
+        
+        <!-- Page -->
+        <script src="~/js/pages/Chat.js"></script>
+    }
+</body>
+</html>
+
