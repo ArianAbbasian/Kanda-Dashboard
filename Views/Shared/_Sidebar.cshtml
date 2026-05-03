@@ -5,7 +5,6 @@
     var username = HttpContextAccessor.HttpContext?.Session.GetString("Username") ?? "کاربر";
     var currentUrl = Context.Request.Path.ToString().ToLower();
 
-    // دریافت نوع کاربر از دیتابیس
     var user = string.IsNullOrEmpty(username) ? null :
         Login.Data.FakeDatabase.Users.FirstOrDefault(u => u.Username == username);
 
@@ -53,11 +52,18 @@
             </a>
         </li>
         <li class="sidebar-menu-item">
+            <a href="/User/Chat" class="sidebar-menu-link @(currentUrl.Contains("/user/chat") ? "active" : "")">
+                <span class="sidebar-menu-icon">🗨️</span>
+                <span class="sidebar-menu-text">پشتیبانی</span>
+            </a>
+        </li>
+        <li class="sidebar-menu-item">
             <a href="/User/Profile" class="sidebar-menu-link @(currentUrl.Contains("/user/profile") ? "active" : "")">
                 <span class="sidebar-menu-icon">👤</span>
                 <span class="sidebar-menu-text">اطلاعات کاربری</span>
             </a>
         </li>
+        
     </ul>
 
     <div class="sidebar-footer">
