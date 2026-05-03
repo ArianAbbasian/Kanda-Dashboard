@@ -37,6 +37,7 @@ async function deleteHandler(event) {
                 toast.success(result.message, 'موفقیت');
                 if (window.refreshUsers) window.refreshUsers();
             }
+            loadTableUsers();
         } else {
             toast.error(result.message, 'خطا');
         }
@@ -148,6 +149,8 @@ async function submitEditForm(event) {
         } else {
             toast.error(result.message, 'خطا');
         }
+        loadTableUsers();
+
     } catch (error) {
         console.log("Error in Editing User => ", error);
         toast.error('خطا در ویرایش کاربر', 'خطا');

@@ -1,6 +1,4 @@
-﻿// Global Function for Provinces and Cities !!! (Specially For Drop Down Lists <SELECT>)
-
-// Provinces Func =>
+﻿// Provinces Func =>
 
 async function loadProvinces(selectElementId, selectedValue = '') {
     try {

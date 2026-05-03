@@ -41,12 +41,12 @@ function getVisiblePages(currentPage, totalPages) {
     const pages = [];
 
     if (totalPages <= 5) {
-        // Show all pages if its less than 5 pages
+
         for (let i = 1; i <= totalPages; i++) {
             pages.push(i);
         }
     } else {
-        // Always show the first Page
+        
         pages.push(1);
 
         if (currentPage <= 3) {
