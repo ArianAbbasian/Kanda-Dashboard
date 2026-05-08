@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Login.Data;
 using Login.Models;
-using Login.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System.Linq;
 
 public class UserController : Controller
@@ -40,6 +41,18 @@ public class UserController : Controller
     }
 
     public IActionResult Chat()
+    {
+        var username = HttpContext.Session.GetString("Username");
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
+        ViewBag.CurrentUsername = username;
+        var users = FakeDatabase.Users.ToList();
+        return View(users);
+    }
+
+    public IActionResult VideoPlayer()
     {
         var username = HttpContext.Session.GetString("Username");
         if (string.IsNullOrEmpty(username))
@@ -322,4 +335,60 @@ public class UserController : Controller
             return Json(new { error = ex.Message });
         }
     }
+
+
+    private const int BufferSize = 1024 * 1024; // 1MB chunk size
+
+    [HttpGet] // stream/testVideo.mp4
+    public async Task<IActionResult> Stream(string fileName)
+    {
+        var filePath = Path.Combine("wwwroot", "videos", "1", fileName);
+        if (!System.IO.File.Exists(filePath))
+            return NotFound();
+
+        var fileInfo = new FileInfo(filePath);
+        long totalSize = fileInfo.Length;
+
+        Request.Headers.TryGetValue("Range", out var rangeHeader);
+
+        if (string.IsNullOrEmpty(rangeHeader))
+        {
+            // Force video players to request chunks
+            rangeHeader = "bytes=0-";
+        }
+
+        var rangeStr = rangeHeader.ToString();
+        var range = rangeStr.Replace("bytes=", "").Split('-');
+        long start = long.Parse(range[0]);
+        long end = (range.Length > 1 && long.TryParse(range[1], out var parsedEnd))
+            ? parsedEnd
+            : Math.Min(start + BufferSize, totalSize - 1);
+
+        long chunkSize = end - start + 1;
+
+        Response.StatusCode = 206; // Partial Content
+        Response.Headers[HeaderNames.AcceptRanges] = "bytes";
+        Response.Headers[HeaderNames.ContentType] = "video/mp4";
+        Response.Headers[HeaderNames.ContentRange] = $"bytes {start}-{end}/{totalSize}";
+        Response.Headers[HeaderNames.ContentLength] = chunkSize.ToString();
+
+        var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        stream.Seek(start, SeekOrigin.Begin);
+
+        byte[] buffer = new byte[BufferSize];
+        int bytesRead;
+
+        long bytesRemaining = chunkSize;
+
+        while (bytesRemaining > 0 &&
+               (bytesRead = await stream.ReadAsync(buffer, 0, (int)Math.Min(BufferSize, bytesRemaining))) > 0)
+        {
+            await Response.Body.WriteAsync(buffer, 0, bytesRead);
+            await Response.Body.FlushAsync();  // flush so video starts immediately
+            bytesRemaining -= bytesRead;
+        }
+
+        return new EmptyResult();
+    }
+
 }

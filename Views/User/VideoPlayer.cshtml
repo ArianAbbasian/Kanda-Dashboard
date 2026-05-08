@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Login.Models.User>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "پخش کننده ویدیو";
+}
+@{
+    var username = ViewBag.CurrentUsername;
+}
+
+<!doctype html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدیریت</title>
+
+    <!-- Fonts and Main Styles -->
+    <link rel="stylesheet" href="/css/Fonts/fonts.css" />
+    <link rel="stylesheet" href="/css/Main/main.css" />
+
+    @* ----------------------------------- Video Player Styles ----------------------------------- *@
+    <link rel="stylesheet" href="/css/VideoPlayer/VideoPlayer.css" />
+    <link rel="stylesheet" href="/css/VideoPlayer/plyr.css" />
+
+    @* ----------------------------------- InfoCard ----------------------------------- *@
+    <link rel="stylesheet" href="/css/AdminPanel/InfoCard/InfoCard.css" />
+
+</head>
+<body>
+
+    <div class="profile-main-content">
+        <input type="hidden" id="currentUsername" value="@ViewBag.CurrentUsername" />
+        <div class="admin-panel-header">
+
+            <h1 class="profile-main-title">پخش کننده ویدیو</h1>
+            @* <i class="fa fa-user"></i>
+            <i class="fa fa-gear"></i>
+            <i class="fa fa-search"></i> *@
+
+        </div>
+
+        <div class="video-container">
+            <div class="player-container">
+                <div class="vid">
+                <video id="my-player" playsinline controls>
+                    <source src="/videos/testVideo.mp4" type="video/mp4" />
+
+                            <!-- SubTitle -->
+               
+                            <track kind="subtitles" srclang="fa" src="/videos/subtitle.vtt" label="Persian Subtitles" default /> 
+
+                            <!-- Chapters Track -->
+                            <track kind="chapters" srclang="fa" src="/videos/chapters.vtt" label="Chapters" />
+
+                            <!-- Fallback content -->
+                            <a href="/videos/testVideo.mp4">Download video</a>
+                    </video>
+                </div>
+                <div id="chapters-ui"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @section Scripts {
+        <!-- Core -->
+        @* <script src="/js/core/toast.js"></script>  *@
+        <script src="/js/scripts/plyr.js"></script>  
+
+        <!-- Features -->
+        <script src="/js/core/data-fetcher.js"></script>
+        <script src="/js/features/UserCrud/user-crud.js"></script>
+        <script src="/js/core/toast.js"></script>
+        
+
+        <!-- Page -->
+        <script src="/js/pages/VideoPlayer.js"></script>  
+
+    }
+</body>
+</html>
