@@ -17,9 +17,6 @@
     --border-radius-sm: 8px;
 }
 
-* {
-    font-family: 'IRANYekan' !important;
-}
 
 h2 {
     color: var(--text-dark);
