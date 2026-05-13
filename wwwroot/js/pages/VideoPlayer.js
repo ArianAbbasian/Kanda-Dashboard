@@ -1,320 +1,531 @@
-﻿// Video Request URL ====> User/stream?fileName=testVideo.mp4
-
+﻿let isChapterInfoAdded = false;
+const videoSrc = '';
+let playerElement = null;
 document.addEventListener("DOMContentLoaded", () => {
-    const playerElement = document.getElementById('my-player');
-    if (!playerElement) {
-        console.error("Player element with ID 'my-player' not found!");
-        return;
-    }
+    playerElement = document.getElementById('my-player');
+    if (!playerElement) return;
 
     const player = new Plyr('#my-player', {
         controls: [
             'play-large', 'play', 'progress', 'current-time', 'duration',
-            'mute', 'volume', 'captions' , 'settings', 'pip' ,'fullscreen'
+            'mute', 'volume', 'captions', 'settings', 'pip', 'fullscreen'
         ],
         captions: { active: true, language: 'fa', update: true },
-        settings: ['quality', 'speed' , 'captions']
+        settings: ['quality', 'speed'],
+        iconUrl: null,
+        svgPath: null,
+        clickToPlay: true,
+        tooltips: { controls: true, seek: true },
+        i18n: {
+            settings: 'تنظیمات',
+            menuBack: 'بازگشت',
+            speed: 'سرعت پخش',
+            normal: 'عادی',
+            quality: 'کیفیت تصویر',
+            qualityBadge: {
+                2160: '4K',
+                1440: '2K',
+                1080: 'Full HD',
+                720: 'HD',
+                576: 'SD',
+                480: 'SD',
+            },
+        },
     });
 
-    // ---- Load chapters ----
-    const videoElem = document.getElementById('my-player');
-    const chaptersTrack = Array.from(videoElem.textTracks).find(t => t.kind === 'chapters');
-    //console.log('chaptersTrack =>', chaptersTrack )
+    player.source = {
+        type: 'video',
+        sources: [
+            { src: "/User/stream?fileName=testVideo.mp4", type: 'video/mp4', size: 1080 },
+            { src: "/User/stream?fileName=testVideo.mp4", type: 'video/mp4', size: 720 },
+            { src: "/User/stream?fileName=testVideo.mp4", type: 'video/mp4', size: 480 },
+        ],
+        tracks: [
+            {
+                kind: 'chapters',
+                label: 'Chapters',
+                src: '/User/GetChapters?fileName=chapters.vtt',
+                default: true
+            },
+            {
+                kind: 'captions',
+                label: 'فارسی',
+                srcLang: 'fa',
+                src: '/User/GetSubtitles?fileName=subtitle.vtt',
+                default: true,
+            },
+        ],
+    };
 
+    player.on('loadedmetadata', async () => {
+        const video = player.media;
+        if (!video) return;
+        const chaptersTrack = Array.from(video.textTracks).find(t => t.kind === 'chapters');
+        playerInit(player, chaptersTrack);
+    });
+
+    player.on('ready', () => {
+        replaceAllIconsWithLocalSVG(player);
+    });
+
+    
+});
+
+// ---------- Replace Plyr default icons with local SVGs  ----------
+function replaceAllIconsWithLocalSVG(player) {
+    const setButtonIcon = (button) => {
+        if (!button) return;
+        const dataPlyr = button.getAttribute('data-plyr');
+        const isPressed = button.getAttribute('aria-pressed') === 'true';
+        let svgFile = '';
+        let tooltipText = '';
+
+        switch (dataPlyr) {
+            case 'play':
+                svgFile = isPressed ? 'plyr-pause.svg' : 'plyr-play.svg';
+                tooltipText = isPressed ? 'توقف' : 'پخش';
+                break;
+            case 'mute':
+                svgFile = isPressed ? 'plyr-muted.svg' : 'plyr-volume.svg';
+                tooltipText = isPressed ? 'با صدا' : 'بی صدا';
+                break;
+            case 'captions':
+                svgFile = isPressed ? 'plyr-captions-on.svg' : 'plyr-captions-off.svg';
+                tooltipText = isPressed ? 'غیرفعال کردن زیرنویس' : 'فعال کردن زیرنویس';
+                break;
+            case 'fullscreen':
+                svgFile = isPressed ? 'plyr-exit-fullscreen.svg' : 'plyr-enter-fullscreen.svg';
+                tooltipText = isPressed ? 'خروج از تمام صفحه' : 'تمام صفحه';
+                break;
+            case 'pip':
+                svgFile = 'plyr-pip.svg';
+                tooltipText = 'حالت تصویر در تصویر';
+                break;
+            case 'settings':
+                svgFile = 'plyr-settings.svg';
+                tooltipText = 'تنظیمات';
+                break;
+            case 'airplay':
+                svgFile = 'plyr-airplay.svg';
+                tooltipText = 'ایرپلی';
+                break;
+            default:
+                if (button.classList.contains('plyr__control--overlaid')) {
+                    svgFile = 'plyr-play.svg';
+                    tooltipText = 'پخش';
+                }
+                return;
+        }
+        if (!svgFile) return;
+
+        const img = document.createElement('img');
+        img.src = `/svg/${svgFile}`;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.display = 'block';
+        img.style.filter = 'brightness(0) invert(1)';
+
+        // Set tooltip on the button itself
+        button.title = tooltipText;
+
+        button.innerHTML = '';
+        button.appendChild(img);
+    };
+
+    const updateAllButtons = () => {
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="play"]'));
+        setButtonIcon(document.querySelector('button.plyr__control--overlaid[data-plyr="play"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="mute"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="captions"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="fullscreen"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="pip"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="settings"]'));
+        setButtonIcon(document.querySelector('button.plyr__control[data-plyr="airplay"]'));
+    };
+
+    updateAllButtons();
+    player.on('play', updateAllButtons);
+    player.on('pause', updateAllButtons);
+    player.on('volumechange', updateAllButtons);
+    player.on('captionsenabled', updateAllButtons);
+    player.on('captionsdisabled', updateAllButtons);
+    player.on('fullscreenchange', updateAllButtons);
+}
+// ---------- Chapter button visibility helpers ----------
+function removeChapterButton() {
+    const existingBtn = document.getElementById('CHBTN');
+    if (existingBtn) existingBtn.remove();
+}
+
+function updateChapterButton() {
+    const container = document.getElementById('chapters-ui');
+    const hasChapters = container && container.querySelectorAll('.chapter-box').length > 0;
+    if (hasChapters) {
+        if (!document.getElementById('CHBTN')) {
+            ChapterBtnInit();
+        }
+    } else {
+        removeChapterButton();
+    }
+}
+
+// ---------- Main player initialization (chapters, UI, events) ----------
+function playerInit(player, chaptersTrack) {
+    let currentChapterInfoElement = null;
+    let fullscreenBox = null;
+    let isFullscreen = false;
+    let hideTimeout = null;
+    let allChapterButtons = [];
+
+    if (Hls.isSupported()) {
+        // For browsers that need hls.js (Chrome, Firefox, Edge, etc.)
+        const hls = new Hls();
+        console.log(hls);
+        hls.loadSource(videoSrc);
+        hls.attachMedia(playerElement);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            // The manifest has been loaded and parsed. You can now initialize Plyr.
+            // This ensures the video is ready for playback controls.
+            const player = initializePlyr(videoSrc, playerOptions);
+
+            // You might also want to handle quality levels here.
+            // See the next section for an example.
+        });
+
+        // Optional: Handle errors
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            if (data.fatal) {
+                switch (data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.error("Fatal network error encountered, try to recover...");
+                        hls.startLoad();
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        console.error("Fatal media error encountered, try to recover...");
+                        hls.recoverMediaError();
+                        break;
+                    default:
+                        console.error("Fatal error, cannot recover");
+                        hls.destroy();
+                        break;
+                }
+            }
+        });
+    } else if (playerElement.canPlayType('application/vnd.apple.mpegurl')) {
+        // For browsers with native HLS support (Safari)
+        playerElement.src = videoSrc;
+        const player = initializePlyr(videoSrc, playerOptions);
+    } else {
+        // Fallback for browsers that support neither (unlikely for modern ones)
+        console.warn("This browser does not support HLS playback.");
+    }
+
+    // Highlight the active chapter button
+    function highlightCurrentChapter(currentTime, cues) {
+        if (!cues || cues.length === 0) return;
+        let activeIndex = -1;
+        for (let i = 0; i < cues.length; i++) {
+            const cue = cues[i];
+            if (cue.startTime <= currentTime && cue.endTime >= currentTime) {
+                activeIndex = i;
+                break;
+            }
+        }
+        allChapterButtons.forEach(btn => {
+            const idx = parseInt(btn.dataset.chapterIndex);
+            if (idx === activeIndex) {
+                btn.classList.add('active-chapter');
+            } else {
+                btn.classList.remove('active-chapter');
+            }
+        });
+    }
+
+    // Render normal chapter list (inside #chapters-ui)
     function renderChapters(chaptersTrack, player) {
         const container = document.getElementById('chapters-ui');
         if (!container) {
             console.error('Chapters UI container not found!');
             return;
         }
-        container.innerHTML = ""; 
-
-
+        container.innerHTML = "";
         const cues = chaptersTrack.cues;
         if (!cues || cues.length === 0) {
-            console.warn('No cues found in the chapters track.');
-
             container.textContent = 'No chapters available.';
+            updateChapterButton();
             return;
         }
-        let counter = 1;
-        let startTime = 0;
-        Array.from(cues).forEach(cue => {           
-            //console.log('startTime =>', startTime);
-            //console.log('endTime =>', cue.endTime);
-            startTime = cue.endTime;
-            const num = toPersianNumber(counter++);
+
+        Array.from(cues).forEach((cue, idx) => {
+            const num = toPersianNumber(idx + 1);
             const div = document.createElement('div');
             div.classList.add('chapter-box');
+
             const img = document.createElement('img');
             img.src = '../images/Chapter1.png';
             img.alt = cue.text + ' thumbnail';
             const div2 = document.createElement('div');
+            div2.appendChild(img);
+
             const btn = document.createElement('button');
             btn.className = 'chapter-btn';
-            btn.textContent =  num + `.`  + cue.text ;
+            btn.textContent = num + `. ` + cue.text;
+            btn.dataset.chapterIndex = idx;
             btn.onclick = () => {
-                player.currentTime = cue.startTime;
+                player.currentTime = cue.startTime + 0.5;
+                // Keep fullscreen box open if visible
+                if (fullscreenBox && isFullscreen && !fullscreenBox.classList.contains('fullscreen-chapterBoxHide')) {
+                    if (hideTimeout) clearTimeout(hideTimeout);
+                    fullscreenBox.classList.remove('fullscreen-chapterBoxHide');
+                }
             };
-            div2.appendChild(img);
+            allChapterButtons.push(btn);
             div.appendChild(div2);
-            container.appendChild(div);
             div.appendChild(btn);
+            container.appendChild(div);
+        });
 
+        buildFullscreenChapterBox(chaptersTrack, player);
+        highlightCurrentChapter(player.currentTime, cues);
+        updateChapterButton();   // Show/hide settings button based on chapters existence
+    }
 
+    // Build the fullscreen hover chapter box
+    function buildFullscreenChapterBox(chaptersTrack, player) {
+        const existingBox = document.querySelector('.fullscreen-chapterBox');
+        if (existingBox) existingBox.remove();
 
+        const cues = chaptersTrack.cues;
+        if (!cues || cues.length === 0) return;
+
+        const box = document.createElement('div');
+        box.classList.add('fullscreen-chapterBox', 'fullscreen-chapterBoxHide');
+        fullscreenBox = box;
+
+        Array.from(cues).forEach((cue, idx) => {
+            const num = toPersianNumber(idx + 1);
+            const btn = document.createElement('button');
+            btn.textContent = num + `. ` + cue.text;
+            btn.dataset.chapterIndex = idx;
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                player.currentTime = cue.startTime + 0.5;
+                if (isFullscreen) {
+                    if (hideTimeout) clearTimeout(hideTimeout);
+                    box.classList.remove('fullscreen-chapterBoxHide');
+                }
+            };
+            box.appendChild(btn);
+            allChapterButtons.push(btn);
+        });
+
+        const chapterInfo = document.getElementById('ChapterInfoText');
+        if (chapterInfo) {
+            chapterInfo.insertAdjacentElement('afterend', box);
+        } else {
+            document.querySelector('.player-container')?.appendChild(box);
+        }
+
+        // Helper functions for hover delay
+        const scheduleHide = () => {
+            if (hideTimeout) clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+                if (fullscreenBox && !fullscreenBox.matches(':hover')) {
+                    fullscreenBox.classList.add('fullscreen-chapterBoxHide');
+                }
+                hideTimeout = null;
+            }, 200);
+        };
+        const cancelHide = () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+                hideTimeout = null;
+            }
+        };
+        const showBoxIfFullscreen = () => {
+            if (isFullscreen) {
+                cancelHide();
+                fullscreenBox.classList.remove('fullscreen-chapterBoxHide');
+            }
+        };
+
+        if (chapterInfo) {
+            chapterInfo.addEventListener('mouseenter', showBoxIfFullscreen);
+            chapterInfo.addEventListener('mouseleave', () => { if (isFullscreen) scheduleHide(); });
+        }
+        if (box) {
+            box.addEventListener('mouseenter', () => { if (isFullscreen) cancelHide(); });
+            box.addEventListener('mouseleave', () => { if (isFullscreen) scheduleHide(); });
+        }
+
+        player.on('enterfullscreen', () => {
+            isFullscreen = true;
+            const chapterInfo = document.getElementById('ChapterInfoText');
+            if (chapterInfo && chapterInfo.matches(':hover')) {
+                showBoxIfFullscreen();
+            } else {
+                fullscreenBox.classList.add('fullscreen-chapterBoxHide');
+            }
+        });
+        player.on('exitfullscreen', () => {
+            isFullscreen = false;
+            cancelHide();
+            fullscreenBox.classList.add('fullscreen-chapterBoxHide');
         });
     }
 
+    // Update the small current-chapter text and button highlighting
+    function updateChapterDisplay(player, cues) {
+        const currentTime = player.currentTime;
+        let activeCue = null;
+        for (let i = 0; i < cues.length; i++) {
+            const cue = cues[i];
+            if (cue.startTime <= currentTime && cue.endTime >= currentTime) {
+                activeCue = cue;
+                break;
+            }
+        }
+        if (currentChapterInfoElement) {
+            currentChapterInfoElement.textContent = activeCue ? activeCue.text : '';
+        }
+        highlightCurrentChapter(currentTime, cues);
+    }
+
+    // Handle chapters track
     if (chaptersTrack) {
         chaptersTrack.mode = "hidden";
-
         chaptersTrack.addEventListener("cuechange", () => {
             if (chaptersTrack.cues && chaptersTrack.cues.length > 0) {
                 renderChapters(chaptersTrack, player);
+                updateChapterDisplay(player, chaptersTrack.cues);
             }
         });
-
-
         setTimeout(() => {
             if (chaptersTrack.cues && chaptersTrack.cues.length > 0) {
                 renderChapters(chaptersTrack, player);
+                updateChapterDisplay(player, chaptersTrack.cues);
+            } else {
+                updateChapterButton();
             }
         }, 300);
-
     } else {
-        console.warn('No chapters track found on the video element.');
+        console.warn('No chapters track found.');
         const container = document.getElementById('chapters-ui');
-        if (container) {
-            container.textContent = 'Chapters not supported for this video.';
-        }
+        if (container) container.textContent = 'Chapters not supported.';
+        updateChapterButton();
     }
 
-
-    function setInitialFaIcons() {
-
-        const playPauseButton = document.querySelector('button.plyr__control[data-plyr="play"]');
-        if (playPauseButton && !playPauseButton.querySelector('i.fa-play-circle') && !playPauseButton.querySelector('i.fa-pause')) {
-            playPauseButton.innerHTML = '<i class="fa fa-play-circle" aria-hidden="true"></i>';
-            playPauseButton.setAttribute('aria-label', 'Play');
-        }
-        const muteButton = document.querySelector('button.plyr__control[data-plyr="mute"]');
-        if (muteButton && !muteButton.querySelector('i.fa-volume-up') && !muteButton.querySelector('i.fa-volume-off')) {
-            muteButton.innerHTML = '<i class="fa fa-volume-up" aria-hidden="true"></i>'; 
-            muteButton.setAttribute('aria-label', 'Mute');
-        }
-        const captionsButton = document.querySelector('button.plyr__control[data-plyr="captions"]');
-        if (captionsButton && !captionsButton.querySelector('i.fa-cc')) {
-            const svgCaption = captionsButton.querySelector('svg');
-            if (svgCaption) svgCaption.remove();
-            captionsButton.innerHTML += '<i class="fa fa-cc" aria-hidden="true"></i>';
-            captionsButton.setAttribute('aria-label', 'Enable captions');
-        }
-        const settingsButton = document.querySelector('button.plyr__control[data-plyr="settings"]');
-        if (settingsButton && !settingsButton.querySelector('i.fa-cog')) {
-            const svgSetting = settingsButton.querySelector('svg');
-            if (svgSetting) svgSetting.remove();
-            settingsButton.innerHTML += '<i class="fa fa-cog" aria-hidden="true"></i>';
-            settingsButton.setAttribute('aria-label', 'Settings');
-        }
-
-        const fullscreenButton = document.querySelector('button.plyr__control[data-plyr="fullscreen"]');
-        if (fullscreenButton && !fullscreenButton.querySelector('i.fa-expand') && !fullscreenButton.querySelector('i.fa-compress')) {
-            const svgFullscreen = fullscreenButton.querySelector('svg');
-            if (svgFullscreen) svgFullscreen.remove();
-            fullscreenButton.innerHTML += '<i class="fa fa-expand" aria-hidden="true"></i>'; 
-            fullscreenButton.setAttribute('aria-label', 'Enter fullscreen');
-        }
-        const pipButton = document.querySelector('button.plyr__control[data-plyr="pip"]');
-        if (pipButton) {
-            const svgPip = pipButton.querySelector('svg');
-            if (svgPip) svgPip.remove();
-
-            if (!pipButton.querySelector('i.fa-window-restore')) {
-                pipButton.innerHTML += '<i class="fa fa-window-restore" aria-hidden="true"></i>';
-                pipButton.setAttribute('aria-label', 'PIP');
-            }
-        }
-
-        const overlayPlayPauseButton = document.querySelector('button.plyr__control--overlaid[data-plyr="play"]');
-        if (overlayPlayPauseButton) {
-            const svgOverlay = overlayPlayPauseButton.querySelector('svg');
-            if (svgOverlay) svgOverlay.remove();
-            overlayPlayPauseButton.classList.add('size-fixer');
-            if (!overlayPlayPauseButton.querySelector('i.fa-play')) {
-                overlayPlayPauseButton.innerHTML += '<i class="fa fa-play" aria-hidden="true"></i>';
-                overlayPlayPauseButton.setAttribute('aria-label', 'Play');
-            }
-        }
-
-    }
-    function updateIcons() {
-        const playPauseButton = document.querySelector('button.plyr__control[data-plyr="play"]');
-        const muteButton = document.querySelector('button.plyr__control[data-plyr="mute"]');
-        const captionsButton = document.querySelector('button.plyr__control[data-plyr="captions"]');
-        const settingsButton = document.querySelector('button.plyr__control[data-plyr="settings"]');
-        const fullscreenButton = document.querySelector('button.plyr__control[data-plyr="fullscreen"]');
-        const pipButton = document.querySelector('button.plyr__control[data-plyr="pip"]'); 
-
-        if (playPauseButton) {
-            if (player.playing) {
-                playPauseButton.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
-                playPauseButton.setAttribute('aria-label', 'Pause');
-            } else {
-                playPauseButton.innerHTML = '<i class="fa fa-play-circle" aria-hidden="true"></i>';
-                playPauseButton.setAttribute('aria-label', 'Play');
-            }
-            playPauseButton.setAttribute('aria-pressed', player.playing ? 'true' : 'false');
-        }
-
-        if (muteButton) {
-            if (player.muted) {
-                muteButton.innerHTML = '<i class="fa fa-volume-off" aria-hidden="true"></i>';
-                muteButton.setAttribute('aria-label', 'Unmute');
-            } else {
-                muteButton.innerHTML = '<i class="fa fa-volume-up" aria-hidden="true"></i>';
-                muteButton.setAttribute('aria-label', 'Mute');
-            }
-            muteButton.setAttribute('aria-pressed', player.muted ? 'true' : 'false');
-        }
-
-        if (captionsButton) {
-            if (player.captions.active) {
-                captionsButton.innerHTML = '<i class="fa fa-cc" aria-hidden="true"></i>';
-                captionsButton.setAttribute('aria-label', 'Disable captions');
-            } else {
-                captionsButton.innerHTML = '<i class="fa fa-cc" aria-hidden="true"></i>';
-                captionsButton.setAttribute('aria-label', 'Enable captions');
-            }
-            captionsButton.setAttribute('aria-pressed', player.captions.active ? 'true' : 'false');
-        }
-   
-        if (fullscreenButton) {
-            if (player.isFullScreen) {
-                fullscreenButton.innerHTML = '<i class="fa fa-compress" aria-hidden="true"></i>';
-                fullscreenButton.setAttribute('aria-label', 'Exit fullscreen');
-            } else {
-                fullscreenButton.innerHTML = '<i class="fa fa-expand" aria-hidden="true"></i>';
-                fullscreenButton.setAttribute('aria-label', 'Enter fullscreen');
-            }
-            fullscreenButton.setAttribute('aria-pressed', player.isFullScreen ? 'true' : 'false');
-        }
-    }
-
-    
-    setInitialFaIcons();
-
-    setTimeout(() => {
-        updateIcons();
-    }, 500);
-
-    // --- Event Listeners ---
-    player.on('play', updateIcons);
-    player.on('pause', updateIcons);
-    player.on('volumechange', updateIcons);
-    player.on('captionsenabled', updateIcons);
-    player.on('captionsdisabled', updateIcons);
-    player.on('ready', updateIcons);
-    player.on('fullscreenchange', updateIcons);
-
+    // Create ChapterInfoText element next to play button
     const playPauseButton = document.querySelector('button.plyr__control[data-plyr="play"]');
-    const muteButton = document.querySelector('button.plyr__control[data-plyr="mute"]');
-    const captionsButton = document.querySelector('button.plyr__control[data-plyr="captions"]');
-    const fullscreenButton = document.querySelector('button.plyr__control[data-plyr="fullscreen"]');
-    const pipButton = document.querySelector('button.plyr__control[data-plyr="pip"]'); 
+    const ChapterInfo = document.createElement('p');
+    ChapterInfo.id = 'ChapterInfoText';
+    ChapterInfo.textContent = '';
+    if (playPauseButton && !isChapterInfoAdded) {
+        playPauseButton.insertAdjacentElement('afterend', ChapterInfo);
+        isChapterInfoAdded = true;
+    }
+    currentChapterInfoElement = ChapterInfo;
 
-    const buttonsToListen = [playPauseButton, muteButton, captionsButton, fullscreenButton, pipButton];
-    buttonsToListen.forEach(button => {
-        if (button) {
-            button.addEventListener('click', () => {
-                setTimeout(updateIcons, 100); 
-            });
-        }
-    });
-
-    player.on('ready', () => {
-
-        const settingsMenu = document.querySelector('.plyr__menu__container [role="menu"]');
-        const speedMenuItem = settingsMenu.querySelector('[role="menuitem"][data-plyr="speed"]');
-        const qualityMenuItem = settingsMenu.querySelector('[role="menuitem"][data-plyr="quality"]');
-        const menuItems = settingsMenu.querySelectorAll('[role="menuitem"]');
-
-        menuItems.forEach(item => {
-            const textSpan = item.querySelector('span:not(.plyr__menu__value)');
-            let itemText = '';
-
-            if (textSpan) {
-                const firstNode = textSpan.firstChild;
-                if (firstNode && firstNode.nodeType === Node.TEXT_NODE) {
-                    itemText = firstNode.textContent.trim();
-                } else {
-                    console.warn("First child is not a text node:", firstNode);
-                }
+    // Update chapter info on timeupdate
+    if (chaptersTrack && chaptersTrack.cues) {
+        player.on('timeupdate', () => {
+            if (chaptersTrack.cues && chaptersTrack.cues.length > 0) {
+                updateChapterDisplay(player, chaptersTrack.cues);
             }
-
-
-            if (!item.getAttribute('data-my-custom-button')) {
-                let valueSpan;
-                switch (itemText) {
-                    case 'Quality':
-                        valueSpan = item.querySelector('.plyr__menu__value');
-                        if (valueSpan) valueSpan.textContent = 'HD';
-                        if (textSpan) textSpan.textContent = 'کیفیت تصویر';
-                        break;
-                    case 'Speed':
-                        valueSpan = item.querySelector('.plyr__menu__value');
-                        if (valueSpan) valueSpan.textContent = 'سرعت';
-                        if (textSpan) textSpan.textContent = 'سرعت پخش';
-                        break;
-                    case 'Captions':
-                        valueSpan = item.querySelector('.plyr__menu__value');
-                        if (valueSpan) valueSpan.textContent = 'فارسی';
-                        if (textSpan) textSpan.textContent = 'زیرنویس';
-                        break;
-                    default: console.error('Setting Menu Items Not Found !');
-                        break;
-                }
-            }
-        
-
         });
+    }
 
-        if (!settingsMenu) {
-            console.warn("Settings menu not found!");
+    // ========== Keyboard Shortcuts ==========
+    const handleKeyDown = (e) => {
+        // Ignore if typing in input/textarea
+        const tag = e.target.tagName.toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return;
+
+        // Handle space independently (works with ' ' and 'Space')
+        if (e.key === ' ' || e.key === 'Space' || e.code === 'Space') {
+            e.preventDefault();
+            e.stopImmediatePropagation();  // Stop Plyr and browser handlers
+            if (player.playing) {
+                player.pause();
+            } else {
+                player.play();
+            }
             return;
         }
 
-        const ChapterBtn = document.createElement('button');
-        ChapterBtn.type = 'button';
-        ChapterBtn.className = 'plyr__control';
-        ChapterBtn.setAttribute('role', 'menuitem');
-        ChapterBtn.textContent = 'نمایش فصل ها';
+        switch (e.key) {
+            case 'Enter':
+                e.preventDefault();
+                // Use native fullscreen API to avoid permissions error
+                const video = player.media;
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.warn(err));
+                } else {
+                    if (video && video.requestFullscreen) {
+                        video.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
+                    }
+                }
+                break;
+            case 'Escape':
+                if (document.fullscreenElement) {
+                    e.preventDefault();
+                    document.exitFullscreen().catch(err => console.warn(err));
+                }
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                player.volume = Math.min(1, player.volume + 0.1);
+                break;
+            case 'ArrowDown':
+                e.preventDefault();
+                player.volume = Math.max(0, player.volume - 0.1);
+                break;
+            case 'ArrowLeft':
+                e.preventDefault();
+                player.currentTime = Math.max(0, player.currentTime - 10);
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                player.currentTime = Math.min(player.duration, player.currentTime + 10);
+                break;
+            default:
+                break;
+        }
+    };
 
-        ChapterBtn.addEventListener('click', () => {
+    // Use window to capture events earlier, and ensure it's not passive
+    window.addEventListener('keydown', handleKeyDown, false);
+}
 
-            const chapterBox = document.getElementById('chapters-ui');
-            const vid = document.querySelector('.vid');
+// ---------- Add custom button to settings menu (نمایش فصل ها) ----------
+function ChapterBtnInit() {
+    const settingsMenu = document.querySelector('.plyr__menu__container [role="menu"]');
+    if (!settingsMenu) {
+        console.warn("Settings menu not found for Chapter button");
+        return;
+    }
+    if (document.getElementById('CHBTN')) return;
 
-            if (!chapterBox) {
-                console.error("Element #chapters-ui یافت نشد");
-                return;
-            }
+    const ChapterBtn = document.createElement('button');
+    ChapterBtn.type = 'button';
+    ChapterBtn.className = 'plyr__control';
+    ChapterBtn.id = 'CHBTN';
+    ChapterBtn.setAttribute('role', 'menuitem');
+    ChapterBtn.textContent = 'نمایش فصل ها';
 
-            const isHidden = chapterBox.style.display === 'none' || chapterBox.style.display === '';
-
-            if (isHidden) {
-                toast.info('منو سرفصل ها باز شد', '');
-                chapterBox.style.display = 'flex';
-
-                if (vid) vid.style.width = '100%';
-            } else {
-                toast.info('منو سرفصل ها بسته شد', '');
-                chapterBox.style.display = 'none';
-                if (vid) vid.style.width = '100%';
-            }
-
-        });
-
-        settingsMenu.appendChild(ChapterBtn);
+    ChapterBtn.addEventListener('click', () => {
+        const chapterBox = document.getElementById('chapters-ui');
+        if (!chapterBox) return;
+        const isHidden = chapterBox.style.display === 'none' || chapterBox.style.display === '';
+        if (isHidden) {
+            if (typeof toast !== 'undefined' && toast.info) toast.info('منو سرفصل ها باز شد', '');
+            chapterBox.style.display = 'flex';
+        } else {
+            if (typeof toast !== 'undefined' && toast.info) toast.info('منو سرفصل ها بسته شد', '');
+            chapterBox.style.display = 'none';
+        }
     });
-});
+
+    settingsMenu.appendChild(ChapterBtn);
+}
