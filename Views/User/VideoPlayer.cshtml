@@ -33,9 +33,6 @@
         <div class="admin-panel-header">
 
             <h1 class="profile-main-title">پخش کننده ویدیو</h1>
-            @* <i class="fa fa-user"></i>
-            <i class="fa fa-gear"></i>
-            <i class="fa fa-search"></i> *@
 
         </div>
 
@@ -43,18 +40,8 @@
             <div class="player-container">
                 <div class="vid">
                 <video id="my-player" playsinline controls>
-                    <source src="/videos/testVideo.mp4" type="video/mp4" />
 
-                            <!-- SubTitle -->
-               
-                            <track kind="subtitles" srclang="fa" src="/videos/subtitle.vtt" label="Persian Subtitles" default /> 
-
-                            <!-- Chapters Track -->
-                            <track kind="chapters" srclang="fa" src="/videos/chapters.vtt" label="Chapters" />
-
-                            <!-- Fallback content -->
-                            <a href="/videos/testVideo.mp4">Download video</a>
-                    </video>
+                </video>
                 </div>
                 <div id="chapters-ui"></div>
             </div>
@@ -68,6 +55,7 @@
         <!-- Core -->
         @* <script src="/js/core/toast.js"></script>  *@
         <script src="/js/scripts/plyr.js"></script>  
+        <script src="/js/scripts/hls.js"></script>
 
         <!-- Features -->
         <script src="/js/core/data-fetcher.js"></script>
@@ -76,7 +64,7 @@
         
 
         <!-- Page -->
-        <script src="/js/pages/VideoPlayer.js"></script>  
+        <script src="/js/pages/VideoPlayer.js"></script>
 
     }
 </body>
