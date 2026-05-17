@@ -25,18 +25,27 @@
     font-family: 'IRANYekan', sans-serif !important;
     margin: 0;
     display: flex;
-}
-
-
-#my-player{
+    background-color: #d1d2d2;
+    border-radius: 10px;
     width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
-.player-container {
-    overflow: hidden;
-    display: flex;
-    gap: 0.5rem;
+#my-player {
+    width: 100%;
+    height: auto;
 }
+
+.plyr {
+    height: auto !important;
+}
+
+.plyr--video {
+    overflow: hidden;
+    border-radius: 10px;
+}
+
 
 .icon-container {
     display: flex;
@@ -66,9 +75,9 @@
     }
 
     .icon-item i {
-        font-size: 2em; /* اندازه بزرگتر برای وضوح بهتر */
+        font-size: 2em;
         margin-bottom: 10px;
-        color: #007bff; /* رنگ آبی برای آیکون‌ها */
+        color: #007bff;
     }
 
 .icon-name {
@@ -80,15 +89,16 @@
     display: none !important;
 }
 
-/* نمایش آیکون‌های Font Awesome در دکمه‌ها */
 .plyr__control i {
     display: inline-block;
-    color: inherit; /* رنگ متن دکمه را بگیرد */
+    color: inherit;
 }
+
 .size-fixer {
     width: 4rem !important;
     height: 4rem !important;
 }
+
 .chapter-list {
     margin-top: 15px;
     display: flex;
@@ -96,44 +106,34 @@
     gap: 8px;
 }
 
-.chapter-btn {
-    background-color: #444;
-    color: #fff;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.chapter-btn:hover {
-        background-color: #666;
-}
-
 .vid {
     width: 100%;
-    height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #d1d2d2;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
     border-radius: 10px;
 }
 
-
 #chapters-ui {
-    width: 25%;
-    height: 100%;
+    flex: 0 0 25%;
     display: none;
+    flex-wrap: wrap;
     flex-direction: column;
     gap: 0.5rem;
-    background-color: #f4f7f6;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 1rem 1rem;
 }
 
-
 .chapter-box {
+    width: 150px;
+    height: 100vh !important;
+    flex-direction: column;
+    justify-content: right;
     background-color: #ffffff;
     border-radius: 10px;
     overflow: hidden;
@@ -142,29 +142,78 @@
     display: flex;
     align-items: center;
     text-align: center;
-    justify-content: space-between;
     direction: ltr;
 }
 
+.fullscreen-chapterBox {
+    position: absolute;
+    left: 20px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0,0,0,0.85);
+    padding: 12px;
+    border-radius: 8px;
+    z-index: 100;
+    transition: opacity 0.2s;
+    direction: rtl;
+}
 
-    .chapter-box:hover {
-        transform: translateY(-5px); 
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+.fullscreen-chapterBoxHide {
+    display: none !important;
+}
+
+.plyr__control img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.chapter-btn.active-chapter {
+    background-color: var(--text-light) !important;
+    transform: scale(1.02);
+    box-shadow: 0 0 8px #444;
+}
+
+.fullscreen-chapterBox button.active-chapter {
+    background-color: var(--text-light) !important;
+    border-left: 3px solid white;
+}
+
+.fullscreen-chapterBox button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+    .fullscreen-chapterBox button:hover {
+        background-color: #0056b3;
     }
 
+.chapter-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
-    .chapter-box img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        display: block;
-        border-bottom: 1px solid #e0e0e0;
-    }
+.chapter-box img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 10px;
+}
 
-    .chapter-box div {
-        width:60%;
-    }
-/* Button styling */
+.chapter-box div {
+    width: 100%;
+}
+
 .chapter-btn {
     background-color: #00b2ff;
     color: white;
@@ -177,54 +226,32 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     text-align: center;
     box-sizing: border-box;
-    width: 40%;
+    width: auto;
     font-family: "IRANYekan", sans-serif;
     direction: rtl !important;
 }
 
+.chapter-btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+}
+.chapter-btn:active {
+        background-color: #004085;
+        transform: translateY(0);
+}
 
-    .chapter-btn:hover {
-        background-color: #0056b3; 
-        transform: translateY(-2px); 
-    }
+.autoWidth {
+    width: auto !important;
+}
 
-
-    .chapter-btn:active {
-        background-color: #004085; 
-        transform: translateY(0); 
-    }
-
-    @media (max-width : 1300px) {
-        .player-container{
-            flex-direction: column;
-        }
-        .vid{
-            width:100%;
-            
-        }
-        #chapters-ui {
-            width: 100%;
-            flex-direction: row;
-        }
-        .chapter-box {
-            align-items: normal;
-            flex-direction: column;
-            justify-content: right;
-        }
-        .chapter-box div {
-            width: 100%;
-        }
-        .chapter-btn{
-            width: auto;
-        }
-
-    }
-@media (max-width : 1000px) {
-    .chapter-box{
-        width: 150px;
-    }
-    #chapters-ui {
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
+.plyr__tooltip {
+    font-family: 'IRANYekan', sans-serif;
+    font-size: 12px;
+    background-color: rgba(0,0,0,0.85);
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 10px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 200;
 }
