@@ -339,10 +339,11 @@ public class UserController : Controller
 
     private const int BufferSize = 1024 * 1024; // 1MB chunk size
 
-    [HttpGet] // stream/testVideo.mp4
+    [HttpGet] // stream/testVideo.mp4 // User/stream?fileName=testVideo.mp4
     public async Task<IActionResult> Stream(string fileName)
     {
-        var filePath = Path.Combine("wwwroot", "videos", "1", fileName);
+        var filePath = Path.Combine("wwwroot", "videos", fileName);
+        
         if (!System.IO.File.Exists(filePath))
             return NotFound();
 
@@ -384,11 +385,42 @@ public class UserController : Controller
                (bytesRead = await stream.ReadAsync(buffer, 0, (int)Math.Min(BufferSize, bytesRemaining))) > 0)
         {
             await Response.Body.WriteAsync(buffer, 0, bytesRead);
-            await Response.Body.FlushAsync();  // flush so video starts immediately
+            await Response.Body.FlushAsync();
             bytesRemaining -= bytesRead;
         }
 
         return new EmptyResult();
+    }
+    // GET: /User/GetChapters?fileName=chapters.vtt
+    [HttpGet]
+    public IActionResult GetChapters(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+            return BadRequest("fileName is required.");
+
+        var filePath = Path.Combine("wwwroot", "videos", fileName);
+
+        if (!System.IO.File.Exists(filePath))
+            return NotFound($"Chapters file not found: {fileName}");
+
+        var fileStream = System.IO.File.OpenRead(filePath);
+        return File(fileStream, "text/vtt", fileName);
+    }
+
+    // GET: /User/GetSubtitles?fileName=subtitle.vtt
+    [HttpGet]
+    public IActionResult GetSubtitles(string fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+            return BadRequest("fileName is required.");
+
+        var filePath = Path.Combine("wwwroot", "videos", fileName);
+
+        if (!System.IO.File.Exists(filePath))
+            return NotFound($"Subtitle file not found: {fileName}");
+
+        var fileStream = System.IO.File.OpenRead(filePath);
+        return File(fileStream, "text/vtt", fileName);
     }
 
 }
