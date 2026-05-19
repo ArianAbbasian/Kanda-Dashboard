@@ -2,8 +2,8 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
         typeof define === 'function' && define.amd ? define('Plyr', factory) :
             (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Plyr = factory());
-})(this, (function () {
-    'use strict';
+})(this, (function () {   
+    'use strict'  ;
 
     function _defineProperty$1(e, r, t) {
         return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
