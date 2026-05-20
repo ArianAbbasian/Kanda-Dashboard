@@ -219,50 +219,6 @@ function playerInit(player, chaptersTrack) {
   let hideTimeout = null;
   let allChapterButtons = [];
 
-  if (Hls.isSupported()) {
-    // For browsers that need hls.js (Chrome, Firefox, Edge, etc.)
-    const hls = new Hls();
-    console.log(hls);
-    hls.loadSource(videoSrc);
-    hls.attachMedia(playerElement);
-
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      // The manifest has been loaded and parsed. You can now initialize Plyr.
-      // This ensures the video is ready for playback controls.
-      const player = initializePlyr(videoSrc, playerOptions);
-
-      // You might also want to handle quality levels here.
-      // See the next section for an example.
-    });
-
-    // Optional: Handle errors
-    hls.on(Hls.Events.ERROR, function (event, data) {
-      if (data.fatal) {
-        switch (data.type) {
-          case Hls.ErrorTypes.NETWORK_ERROR:
-            console.error("Fatal network error encountered, try to recover...");
-            hls.startLoad();
-            break;
-          case Hls.ErrorTypes.MEDIA_ERROR:
-            console.error("Fatal media error encountered, try to recover...");
-            hls.recoverMediaError();
-            break;
-          default:
-            console.error("Fatal error, cannot recover");
-            hls.destroy();
-            break;
-        }
-      }
-    });
-  } else if (playerElement.canPlayType("application/vnd.apple.mpegurl")) {
-    // For browsers with native HLS support (Safari)
-    playerElement.src = videoSrc;
-    const player = initializePlyr(videoSrc, playerOptions);
-  } else {
-    // Fallback for browsers that support neither (unlikely for modern ones)
-    console.warn("This browser does not support HLS playback.");
-  }
-
   // Highlight the active chapter button
   function highlightCurrentChapter(currentTime, cues) {
     if (!cues || cues.length === 0) return;
@@ -299,6 +255,9 @@ function playerInit(player, chaptersTrack) {
       return;
     }
 
+    // Clear previous chapter buttons
+    allChapterButtons = [];
+
     Array.from(cues).forEach((cue, idx) => {
       const num = toPersianNumber(idx + 1);
       const div = document.createElement("div");
@@ -316,7 +275,6 @@ function playerInit(player, chaptersTrack) {
       btn.dataset.chapterIndex = idx;
       btn.onclick = () => {
         player.currentTime = cue.startTime + 0.5;
-        // Keep fullscreen box open if visible
         if (
           fullscreenBox &&
           isFullscreen &&
@@ -334,17 +292,15 @@ function playerInit(player, chaptersTrack) {
 
     buildFullscreenChapterBox(chaptersTrack, player);
     highlightCurrentChapter(player.currentTime, cues);
-    updateChapterButton(); // Show/hide settings button based on chapters existence
+    updateChapterButton();
   }
 
   // Build the fullscreen hover chapter box
   function buildFullscreenChapterBox(chaptersTrack, player) {
     const existingBox = document.querySelector(".fullscreen-chapterBox");
     if (existingBox) {
-      // Remove old event listeners by cloning (simple way)
       const newBox = existingBox.cloneNode(true);
       existingBox.parentNode.replaceChild(newBox, existingBox);
-      // After replace, set fullscreenBox to null so next steps will be fresh
       fullscreenBox = null;
     }
 
@@ -379,7 +335,6 @@ function playerInit(player, chaptersTrack) {
       document.querySelector(".player-container")?.appendChild(box);
     }
 
-    // Helper functions for hover delay
     const scheduleHide = () => {
       if (hideTimeout) clearTimeout(hideTimeout);
       hideTimeout = setTimeout(() => {
@@ -475,9 +430,7 @@ function playerInit(player, chaptersTrack) {
   }
 
   // Create ChapterInfoText element next to play button
-  const playPauseButton = document.querySelector(
-    'button.plyr__control[data-plyr="play"]',
-  );
+  const playPauseButton = document.querySelector('button.plyr__control[data-plyr="play"]');
   const ChapterInfo = document.createElement("p");
   ChapterInfo.id = "ChapterInfoText";
   ChapterInfo.textContent = "";
@@ -497,9 +450,7 @@ function playerInit(player, chaptersTrack) {
   }
 
   // ========== Keyboard Shortcuts ==========
-  // ========== Keyboard Shortcuts ==========
-const handleKeyDown = (e) => {
-    // Ignore if typing in input/textarea
+  const handleKeyDown = (e) => {
     const tag = e.target.tagName.toLowerCase();
     if (tag === 'input' || tag === 'textarea') return;
 
@@ -507,81 +458,77 @@ const handleKeyDown = (e) => {
     if (e.repeat) return;
 
     if (e.key === ' ' || e.key === 'Space' || e.code === 'Space') {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        if (player.playing) {
-            player.pause();
-        } else {
-            player.play();
-        }
-        return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (player.playing) {
+        player.pause();
+      } else {
+        player.play();
+      }
+      return;
     }
 
     switch (e.key) {
-        case 'Enter':
-            e.preventDefault();
-            const video = player.media;
-            if (document.fullscreenElement) {
-                document.exitFullscreen().catch(err => console.warn(err));
-            } else {
-                if (video && video.requestFullscreen) {
-                    video.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
-                }
-            }
-            break;
-        case 'Escape':
-            // Only handle if we are in fullscreen to avoid interfering with browser
-            if (document.fullscreenElement) {
-                e.preventDefault();
-                document.exitFullscreen().catch(err => console.warn(err));
-            }
-            break;
-        case 'ArrowUp':
-            e.preventDefault();
-            player.volume = Math.min(1, player.volume + 0.1);
-            break;
-        case 'ArrowDown':
-            e.preventDefault();
-            player.volume = Math.max(0, player.volume - 0.1);
-            break;
-        case 'ArrowLeft':
-            e.preventDefault();
-            player.currentTime = Math.max(0, player.currentTime - 10);
-            break;
-        case 'ArrowRight':
-            e.preventDefault();
-            player.currentTime = Math.min(player.duration, player.currentTime + 10);
-            break;
-        case 'f':
-        case 'F':
-            e.preventDefault();
-            if (document.fullscreenElement) {
-                document.exitFullscreen().catch(err => console.warn(err));
-            } else {
-                if (player.media && player.media.requestFullscreen) {
-                    player.media.requestFullscreen().catch(err => console.warn(err));
-                }
-            }
-            break;
-        case 'm':
-        case 'M':
-            e.preventDefault();
-            player.muted = !player.muted;
-            break;
-        default:
-            break;
+      case 'Enter':
+        e.preventDefault();
+        const video = player.media;
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(err => console.warn(err));
+        } else {
+          if (video && video.requestFullscreen) {
+            video.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
+          }
+        }
+        break;
+      case 'Escape':
+        if (document.fullscreenElement) {
+          e.preventDefault();
+          document.exitFullscreen().catch(err => console.warn(err));
+        }
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        player.volume = Math.min(1, player.volume + 0.1);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        player.volume = Math.max(0, player.volume - 0.1);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        player.currentTime = Math.max(0, player.currentTime - 10);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        player.currentTime = Math.min(player.duration, player.currentTime + 10);
+        break;
+      case 'f':
+      case 'F':
+        e.preventDefault();
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(err => console.warn(err));
+        } else {
+          if (player.media && player.media.requestFullscreen) {
+            player.media.requestFullscreen().catch(err => console.warn(err));
+          }
+        }
+        break;
+      case 'm':
+      case 'M':
+        e.preventDefault();
+        player.muted = !player.muted;
+        break;
+      default:
+        break;
     }
-};
+  };
 
-window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keydown', handleKeyDown);
 
-// Cleanup on player destroy
-player.on('destroy', () => {
+  // Cleanup on player destroy
+  player.on('destroy', () => {
     window.removeEventListener('keydown', handleKeyDown);
-});
-
-  // Use window to capture events earlier, and ensure it's not passive
-  window.addEventListener("keydown", handleKeyDown, false);
+  });
 }
 
 // ---------- Add custom button to settings menu (نمایش فصل ها) ----------
