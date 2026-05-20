@@ -1,5 +1,5 @@
 ﻿let isChapterInfoAdded = false;
-const videoSrc = '';
+const videoSrc = '/User/stream?fileName=testVideo.mp4';
 let playerElement = null;
 document.addEventListener("DOMContentLoaded", () => {
     playerElement = document.getElementById('my-player');
