@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  player.on("loadedmetadata", async () => {
+  player.on("loadedmetadata", () => {
     const video = player.media;
     if (!video) return;
     const chaptersTrack = Array.from(video.textTracks).find(
