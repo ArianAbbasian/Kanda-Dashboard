@@ -521,7 +521,7 @@ function playerInit(player, chaptersTrack) {
     }
   };
 
-  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keydown', handleKeyDown, false);
 
   // Cleanup on player destroy
   player.on('destroy', () => {
