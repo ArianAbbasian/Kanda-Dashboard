@@ -458,7 +458,6 @@ function playerInit(player, chaptersTrack) {
 
     if (e.code === 'Space') {
       e.preventDefault();
-      e.stopImmediatePropagation();
       if (player.playing) {
         player.pause();
       } else {
