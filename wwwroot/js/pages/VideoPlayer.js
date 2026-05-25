@@ -456,7 +456,7 @@ function playerInit(player, chaptersTrack) {
     // Prevent repeated events for space
     if (e.repeat) return;
 
-    if (e.key === ' ' || e.key === 'Space' || e.code === 'Space') {
+    if (e.code === 'Space') {
       e.preventDefault();
       e.stopImmediatePropagation();
       if (player.playing) {
