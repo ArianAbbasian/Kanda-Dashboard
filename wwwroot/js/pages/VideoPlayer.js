@@ -299,7 +299,7 @@ function playerInit(player, chaptersTrack) {
     const existingBox = document.querySelector(".fullscreen-chapterBox");
     if (existingBox) {
       const newBox = existingBox.cloneNode(true);
-      existingBox.parentNode.replaceChild(newBox, existingBox);
+      existingBox.replaceWith(newBox);
       fullscreenBox = null;
     }
 
