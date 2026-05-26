@@ -375,14 +375,7 @@ function playerInit(player, chaptersTrack) {
   // Update the small current-chapter text and button highlighting
   function updateChapterDisplay(player, cues) {
     const currentTime = player.currentTime;
-    let activeCue = null;
-    for (let i = 0; i < cues.length; i++) {
-      const cue = cues[i];
-      if (cue.startTime <= currentTime && cue.endTime >= currentTime) {
-        activeCue = cue;
-        break;
-      }
-    }
+    const activeCue = [...cues].find(cue => cue.startTime <= currentTime && cue.endTime >= currentTime) ?? null;
     if (currentChapterInfoElement) {
       currentChapterInfoElement.textContent = activeCue ? activeCue.text : "";
     }
