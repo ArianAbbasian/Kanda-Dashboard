@@ -136,7 +136,7 @@ function replaceAllIconsWithLocalSVG(player) {
           svgFile = "plyr-play.svg";
           tooltipText = "پخش";
         }
-        return;
+        break;
     }
     if (!svgFile) return;
 
@@ -156,16 +156,16 @@ function replaceAllIconsWithLocalSVG(player) {
 
   const updateAllButtons = () => {
     const selectors = [
-    'button.plyr__control[data-plyr="play"]',
-    'button.plyr__control--overlaid[data-plyr="play"]',
-    'button.plyr__control[data-plyr="mute"]',
-    'button.plyr__control[data-plyr="captions"]',
-    'button.plyr__control[data-plyr="fullscreen"]',
-    'button.plyr__control[data-plyr="pip"]',
-    'button.plyr__control[data-plyr="settings"]',
-    'button.plyr__control[data-plyr="airplay"]'
-];
-selectors.forEach(sel => setButtonIcon(document.querySelector(sel)));
+      'button.plyr__control[data-plyr="play"]',
+      'button.plyr__control--overlaid[data-plyr="play"]',
+      'button.plyr__control[data-plyr="mute"]',
+      'button.plyr__control[data-plyr="captions"]',
+      'button.plyr__control[data-plyr="fullscreen"]',
+      'button.plyr__control[data-plyr="pip"]',
+      'button.plyr__control[data-plyr="settings"]',
+      'button.plyr__control[data-plyr="airplay"]',
+    ];
+    selectors.forEach((sel) => setButtonIcon(document.querySelector(sel)));
   };
 
   updateAllButtons();
@@ -414,7 +414,9 @@ function playerInit(player, chaptersTrack) {
   }
 
   // Create ChapterInfoText element next to play button
-  const playPauseButton = document.querySelector('button.plyr__control[data-plyr="play"]');
+  const playPauseButton = document.querySelector(
+    'button.plyr__control[data-plyr="play"]',
+  );
   const ChapterInfo = document.createElement("p");
   ChapterInfo.id = "ChapterInfoText";
   ChapterInfo.textContent = "";
@@ -436,12 +438,12 @@ function playerInit(player, chaptersTrack) {
   // ========== Keyboard Shortcuts ==========
   const handleKeyDown = (e) => {
     const tag = e.target.tagName.toLowerCase();
-    if (tag === 'input' || tag === 'textarea') return;
+    if (tag === "input" || tag === "textarea") return;
 
     // Prevent repeated events for space
     if (e.repeat) return;
 
-    if (e.code === 'Space') {
+    if (e.code === "Space") {
       e.preventDefault();
       if (player.playing) {
         player.pause();
@@ -452,52 +454,54 @@ function playerInit(player, chaptersTrack) {
     }
 
     switch (e.key) {
-      case 'Enter':
+      case "Enter":
         e.preventDefault();
         const video = player.media;
         if (document.fullscreenElement) {
-          document.exitFullscreen().catch(err => console.warn(err));
+          document.exitFullscreen().catch((err) => console.warn(err));
         } else {
           if (video && video.requestFullscreen) {
-            video.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
+            video
+              .requestFullscreen()
+              .catch((err) => console.warn("Fullscreen error:", err));
           }
         }
         break;
-      case 'Escape':
+      case "Escape":
         if (document.fullscreenElement) {
           e.preventDefault();
-          document.exitFullscreen().catch(err => console.warn(err));
+          document.exitFullscreen().catch((err) => console.warn(err));
         }
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         player.volume = Math.min(1, player.volume + 0.1);
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         player.volume = Math.max(0, player.volume - 0.1);
         break;
-      case 'ArrowLeft':
+      case "ArrowLeft":
         e.preventDefault();
         player.currentTime = Math.max(0, player.currentTime - 10);
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         e.preventDefault();
         player.currentTime = Math.min(player.duration, player.currentTime + 10);
         break;
-      case 'f':
-      case 'F':
+      case "f":
+      case "F":
         e.preventDefault();
         if (document.fullscreenElement) {
-          document.exitFullscreen().catch(err => console.warn(err));
+          document.exitFullscreen().catch((err) => console.warn(err));
         } else {
           if (player.media && player.media.requestFullscreen) {
-            player.media.requestFullscreen().catch(err => console.warn(err));
+            player.media.requestFullscreen().catch((err) => console.warn(err));
           }
         }
         break;
-      case 'm':
-      case 'M':
+      case "m":
+      case "M":
         e.preventDefault();
         player.muted = !player.muted;
         break;
@@ -506,11 +510,11 @@ function playerInit(player, chaptersTrack) {
     }
   };
 
-  window.addEventListener('keydown', handleKeyDown, false);
+  window.addEventListener("keydown", handleKeyDown, false);
 
   // Cleanup on player destroy
-  player.on('destroy', () => {
-    window.removeEventListener('keydown', handleKeyDown);
+  player.on("destroy", () => {
+    window.removeEventListener("keydown", handleKeyDown);
   });
 }
 
@@ -530,7 +534,7 @@ function ChapterBtnInit() {
   ChapterBtn.className = "plyr__control";
   ChapterBtn.id = "CHBTN";
   ChapterBtn.setAttribute("role", "menuitem");
-  ChapterBtn.innerText = 'نمایش فصل ها';
+  ChapterBtn.innerText = "نمایش فصل ها";
 
   ChapterBtn.addEventListener("click", () => {
     const chapterBox = document.getElementById("chapters-ui");
