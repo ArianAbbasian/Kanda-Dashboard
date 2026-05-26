@@ -155,32 +155,17 @@ function replaceAllIconsWithLocalSVG(player) {
   };
 
   const updateAllButtons = () => {
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="play"]'),
-    );
-    setButtonIcon(
-      document.querySelector(
-        'button.plyr__control--overlaid[data-plyr="play"]',
-      ),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="mute"]'),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="captions"]'),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="fullscreen"]'),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="pip"]'),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="settings"]'),
-    );
-    setButtonIcon(
-      document.querySelector('button.plyr__control[data-plyr="airplay"]'),
-    );
+    const selectors = [
+    'button.plyr__control[data-plyr="play"]',
+    'button.plyr__control--overlaid[data-plyr="play"]',
+    'button.plyr__control[data-plyr="mute"]',
+    'button.plyr__control[data-plyr="captions"]',
+    'button.plyr__control[data-plyr="fullscreen"]',
+    'button.plyr__control[data-plyr="pip"]',
+    'button.plyr__control[data-plyr="settings"]',
+    'button.plyr__control[data-plyr="airplay"]'
+];
+selectors.forEach(sel => setButtonIcon(document.querySelector(sel)));
   };
 
   updateAllButtons();
