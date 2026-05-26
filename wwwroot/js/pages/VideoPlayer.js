@@ -545,7 +545,7 @@ function ChapterBtnInit() {
   ChapterBtn.className = "plyr__control";
   ChapterBtn.id = "CHBTN";
   ChapterBtn.setAttribute("role", "menuitem");
-  ChapterBtn.textContent = "نمایش فصل ها";
+  ChapterBtn.innerText = 'نمایش فصل ها';
 
   ChapterBtn.addEventListener("click", () => {
     const chapterBox = document.getElementById("chapters-ui");
