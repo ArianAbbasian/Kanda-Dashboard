@@ -242,7 +242,7 @@ function playerInit(player, chaptersTrack) {
     // Clear previous chapter buttons
     allChapterButtons = [];
 
-    Array.from(cues).forEach((cue, idx) => {
+    [...cues].forEach((cue, idx) => {
       const num = toPersianNumber(idx + 1);
       const div = document.createElement("div");
       div.classList.add("chapter-box");
