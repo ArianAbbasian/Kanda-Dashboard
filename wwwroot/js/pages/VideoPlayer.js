@@ -375,7 +375,10 @@ function playerInit(player, chaptersTrack) {
   // Update the small current-chapter text and button highlighting
   function updateChapterDisplay(player, cues) {
     const currentTime = player.currentTime;
-    const activeCue = [...cues].find(cue => cue.startTime <= currentTime && cue.endTime >= currentTime) ?? null;
+    const activeCue =
+      [...cues].find(
+        (cue) => cue.startTime <= currentTime && cue.endTime >= currentTime,
+      ) ?? null;
     if (currentChapterInfoElement) {
       currentChapterInfoElement.textContent = activeCue ? activeCue.text : "";
     }
@@ -449,16 +452,7 @@ function playerInit(player, chaptersTrack) {
     switch (e.key) {
       case "Enter":
         e.preventDefault();
-        const video = player.media;
-        if (document.fullscreenElement) {
-          document.exitFullscreen().catch((err) => console.warn(err));
-        } else {
-          if (video && video.requestFullscreen) {
-            video
-              .requestFullscreen()
-              .catch((err) => console.warn("Fullscreen error:", err));
-          }
-        }
+        player.fullscreen.toggle();
         break;
       case "Escape":
         if (document.fullscreenElement) {
