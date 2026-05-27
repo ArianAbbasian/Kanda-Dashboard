@@ -479,13 +479,7 @@ function playerInit(player, chaptersTrack) {
       case "f":
       case "F":
         e.preventDefault();
-        if (document.fullscreenElement) {
-          document.exitFullscreen().catch((err) => console.warn(err));
-        } else {
-          if (player.media && player.media.requestFullscreen) {
-            player.media.requestFullscreen().catch((err) => console.warn(err));
-          }
-        }
+        player.fullscreen.toggle();
         break;
       case "m":
       case "M":
