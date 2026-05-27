@@ -81,13 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
   Object.freeze(player.source);
 
   player.on("loadedmetadata", () => {
-    const video = player.media;
-    if (!video) return;
-    const chaptersTrack = Array.from(video.textTracks).find(
-      (t) => t.kind === "chapters",
-    );
-    playerInit(player, chaptersTrack);
-  });
+    const chaptersTrack = player.media?.textTracks ? Array.from(player.media.textTracks).find(t => t.kind === 'chapters') : null;
+    if (chaptersTrack) playerInit(player, chaptersTrack);
+});
 
   player.on("ready", () => {
     replaceAllIconsWithLocalSVG(player);
