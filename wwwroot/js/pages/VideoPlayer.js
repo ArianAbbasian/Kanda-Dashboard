@@ -201,7 +201,7 @@ function playerInit(player, chaptersTrack) {
   let fullscreenBox = null;
   let isFullscreen = false;
   let hideTimeout = null;
-  let allChapterButtons = [];
+  const allChapterButtons = [];
 
   // Highlight the active chapter button
   function highlightCurrentChapter(currentTime, cues) {
