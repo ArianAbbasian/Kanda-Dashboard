@@ -78,6 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
+  Object.freeze(player.source);
+
   player.on("loadedmetadata", () => {
     const video = player.media;
     if (!video) return;
