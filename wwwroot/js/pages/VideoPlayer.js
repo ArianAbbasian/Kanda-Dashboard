@@ -1,5 +1,4 @@
 ﻿let isChapterInfoAdded = false;
-const playerElement = document.getElementById("my-player");
 document.addEventListener("DOMContentLoaded", () => {
   playerElement = document.getElementById("my-player");
   if (!playerElement) return;
