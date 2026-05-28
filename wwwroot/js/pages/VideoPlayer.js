@@ -429,7 +429,6 @@ function playerInit(player, chaptersTrack) {
     });
   }
 
-  // ========== Keyboard Shortcuts ==========
   const handleKeyDown = (e) => {
     const tag = e.target.tagName.toLowerCase();
     if (tag === "input" || tag === "textarea") return;
