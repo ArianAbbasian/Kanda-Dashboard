@@ -182,13 +182,9 @@ function updateChapterButton() {
   const container = document.getElementById("chapters-ui");
   const hasChapters =
     container && container.querySelectorAll(".chapter-box").length > 0;
-  if (hasChapters) {
-    if (!document.getElementById("CHBTN")) {
-      ChapterBtnInit();
-    }
-  } else {
-    removeChapterButton();
-  }
+  if (hasChapters && !document.getElementById("CHBTN")) {
+    ChapterBtnInit();
+}
 }
 
 // ---------- Main player initialization (chapters, UI, events) ----------
