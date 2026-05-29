@@ -226,19 +226,6 @@ function updateSelectAllCheckboxState() {
     selectAllCheckbox.checked = allChecked;
 }
 
-function updateSelectAllCheckboxState() {
-    const rowCheckboxes = document.querySelectorAll('.row-select-checkbox');
-    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    if (!selectAllCheckbox) return;
-
-    let allChecked = true;
-    rowCheckboxes.forEach(checkbox => {
-        if (!checkbox.checked) {
-            allChecked = false;
-        }
-    });
-    selectAllCheckbox.checked = allChecked;
-}
 
 function addUserIdToSelection(userId) {
     if (!selectedUserIds.includes(userId)) {
