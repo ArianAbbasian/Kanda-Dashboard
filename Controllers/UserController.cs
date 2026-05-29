@@ -350,15 +350,9 @@ public class UserController : Controller
         var fileInfo = new FileInfo(filePath);
         long totalSize = fileInfo.Length;
 
-        Request.Headers.TryGetValue("Range", out var rangeHeader);
-
-        if (string.IsNullOrEmpty(rangeHeader))
-        {
-            // Force video players to request chunks
-            rangeHeader = "bytes=0-";
-        }
-
-        var rangeStr = rangeHeader.ToString();
+        var rangeHeader = Request.Headers["Range"].FirstOrDefault();
+        if (string.IsNullOrEmpty(rangeHeader)) { ... }
+        var rangeStr = rangeHeader;
         var range = rangeStr.Replace("bytes=", "").Split('-');
         long start = long.Parse(range[0]);
         long end = (range.Length > 1 && long.TryParse(range[1], out var parsedEnd))
