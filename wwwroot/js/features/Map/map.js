@@ -341,7 +341,6 @@ function userSelectToggle(userId) {
 async function loadMapUsers() {
     try {
         const users = await fetchMapUsers();
-        if (markersIsActive) !markersIsActive;
 
         users.forEach(user => {
             if (user.lat && user.lon) {
