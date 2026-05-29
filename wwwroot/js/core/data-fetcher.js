@@ -14,6 +14,13 @@
 
     const url = `/User/GetFilteredUsers?${params.toString()}`;
 
-    const response = await fetch(url);
-    return await response.json();
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        toast?.error?.('خطا در دریافت اطلاعات کاربران', 'خطا');
+        return { users: [], totalPages: 0, currentPage: page };
+    }
 }
