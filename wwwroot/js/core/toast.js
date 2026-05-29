@@ -1,6 +1,6 @@
 ﻿const toastConfig = {
-    duration: 5000,        
-    position: 'top-left' 
+    duration: 5000,
+    position: window.toastPosition || 'top-left'
 };
 
 function initToastStyles() {
