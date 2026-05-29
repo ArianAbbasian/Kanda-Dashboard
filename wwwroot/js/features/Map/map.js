@@ -525,7 +525,7 @@ async function addPieChart(map, vectorSource) {
         const pieChartStyle = new ol.style.Chart({
             type: 'pie',
             radius: 30,
-            data: [1, 2, 2.5, 4],
+            data: dataValues,
             colors: ['#FF304F', '#FF9F1C', '#2A9D8F', '#8338EC'],
             stroke: new ol.style.Stroke({
                 color: 'white',
