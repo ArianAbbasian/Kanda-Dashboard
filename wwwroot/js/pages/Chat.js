@@ -18,9 +18,7 @@ function updateToolbarState() {
 
 function toggleButtonState(buttonId, isActive) {
     const btn = document.getElementById(buttonId);
-    if (!btn) return;
-    if (isActive) btn.classList.add("active");
-    else btn.classList.remove("active");
+    btn?.classList.toggle("active", isActive);
 }
 
 
