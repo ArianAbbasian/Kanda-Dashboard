@@ -343,6 +343,9 @@ public class UserController : Controller
     public async Task<IActionResult> Stream(string fileName)
     {
         var filePath = Path.Combine("wwwroot", "videos", fileName);
+
+        if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/"))
+        return BadRequest("Invalid file name.");
         
         if (!System.IO.File.Exists(filePath))
             return NotFound();
