@@ -94,7 +94,8 @@ function replaceAllIconsWithLocalSVG(player) {
     if (!button) return;
     const dataPlyr = button.getAttribute("data-plyr");
     const isPressed = button.getAttribute("aria-pressed") === "true";
-    const { svgFile, tooltipText } = getButtonIcon(dataPlyr, isPressed, button);
+    let svgFile = '';
+    let tooltipText = '';
 
     switch (dataPlyr) {
       case "play":
@@ -195,8 +196,7 @@ function playerInit(player, chaptersTrack) {
   let hideTimeout = null;
   const allChapterButtons = [];
 
-  // Highlight the active chapter button
-  function highlightCurrentChapter(currentTime, cues) {
+  // Highlight the active chapter buttonfunction highlightCurrentChapter(currentTime, cues) {
     if (!cues || cues.length === 0) return;
     let activeIndex = -1;
     for (let i = 0; i < cues.length; i++) {
