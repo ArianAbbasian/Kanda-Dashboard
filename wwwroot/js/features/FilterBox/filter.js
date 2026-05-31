@@ -27,7 +27,6 @@ function applyFilters(callback) {
     const filters = updateFilterState();
 
     if (typeof updatePieChart === 'function') updatePieChart();
-    if (typeof updateBarChart === 'function') updateBarChart();
     if (typeof loadMap === 'function') {
         loadMap();
     }

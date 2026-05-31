@@ -64,7 +64,6 @@ function resetFilters(callback) {
 
 
     if (typeof updatePieChart === 'function') updatePieChart();
-    if (typeof updateBarChart === 'function') updateBarChart();
     if (typeof loadMap === 'function') loadMap();
     if (typeof UpdateAdminUsersPieChart === 'function') UpdateAdminUsersPieChart();
     if (typeof window.refreshProvinceChartsIfActive === 'function') {
