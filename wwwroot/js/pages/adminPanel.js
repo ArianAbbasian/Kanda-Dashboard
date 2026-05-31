@@ -18,4 +18,6 @@
 
     // Initialize tabs
     if (typeof initTabs === 'function') initTabs();
+
+    if (typeof updateSelectedUserCount === 'function') updateSelectedUserCount();
 });
