@@ -64,7 +64,8 @@ public class UserController : Controller
         return View(users);
     }
 
-    [HttpGet]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [HttpGet] 
     public IActionResult GetUsers(int page = 1, int pageSize = 5)
     {
         var users = FakeDatabase.Users
@@ -96,7 +97,7 @@ public class UserController : Controller
 
         return Json(new { users, totalPages, currentPage = page });
     }
-
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetUser(int id)
     {
@@ -126,7 +127,7 @@ public class UserController : Controller
             }
         });
     }
-
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpPost]
     public IActionResult UpdateUser([FromBody] User updatedUser)
     {
@@ -148,7 +149,7 @@ public class UserController : Controller
 
         return Json(new { success = true, message = "کاربر با موفقیت ویرایش شد" });
     }
-
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpPost]
     public IActionResult DeleteUser(int id)
     {
@@ -170,6 +171,7 @@ public class UserController : Controller
         return Json(new { success = true, selfDeleted = false, message = "کاربر با موفقیت حذف شد" });
     }
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetProvinces()
     {
@@ -180,6 +182,7 @@ public class UserController : Controller
         return Json(provinces);
     }
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetCities(int provinceId)
     {
@@ -191,6 +194,7 @@ public class UserController : Controller
         return Json(cities);
     }
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetFilteredUsers(string name = "", string username = "", string email = "", string userType = "", int? provinceId = null, int? cityId = null, int page = 1, int pageSize = 5)
     {
@@ -298,6 +302,7 @@ public class UserController : Controller
         }
     }
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetAllUsers()
     {
@@ -339,6 +344,7 @@ public class UserController : Controller
 
     private const int BufferSize = 1024 * 1024; // 1MB chunk size
 
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet] // stream/testVideo.mp4 // User/stream?fileName=testVideo.mp4
     public async Task<IActionResult> Stream(string fileName)
     {
@@ -388,6 +394,8 @@ public class UserController : Controller
 
         return new EmptyResult();
     }
+
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     // GET: /User/GetChapters?fileName=chapters.vtt
     [HttpGet]
     public IActionResult GetChapters(string fileName)
@@ -405,6 +413,7 @@ public class UserController : Controller
     }
 
     // GET: /User/GetSubtitles?fileName=subtitle.vtt
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     [HttpGet]
     public IActionResult GetSubtitles(string fileName)
     {
