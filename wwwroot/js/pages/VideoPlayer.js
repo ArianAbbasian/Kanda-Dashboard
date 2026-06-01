@@ -196,7 +196,8 @@ function playerInit(player, chaptersTrack) {
   let hideTimeout = null;
   const allChapterButtons = [];
 
-  // Highlight the active chapter buttonfunction highlightCurrentChapter(currentTime, cues) {
+  // Highlight the active chapter button
+  function highlightCurrentChapter(currentTime, cues) {
     if (!cues || cues.length === 0) return;
     let activeIndex = -1;
     for (let i = 0; i < cues.length; i++) {
