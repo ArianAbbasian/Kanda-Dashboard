@@ -112,7 +112,7 @@
 
         if (registerBtn) {
             registerBtn.disabled = true;
-            registerBtn.textContent = 'در حال ثبت‌نام...';
+            registerBtn.textContent = 'لطفا منتظر بمانید ...';
         }
 
         const formData = new FormData(registerForm);
