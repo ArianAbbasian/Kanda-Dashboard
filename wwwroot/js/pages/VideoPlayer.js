@@ -1,4 +1,9 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿function toPersianNumber(num) {
+    const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    return num.toString().replace(/\d/g, d => persianDigits[d]);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
   playerElement = document.getElementById("my-player");
   if (!playerElement) return;
 
