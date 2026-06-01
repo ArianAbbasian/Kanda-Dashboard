@@ -374,7 +374,7 @@ public class UserController : Controller
         Response.Headers[HeaderNames.AcceptRanges] = "bytes";
         Response.Headers[HeaderNames.ContentType] = "video/mp4";
         Response.Headers[HeaderNames.ContentRange] = $"bytes {start}-{end}/{totalSize}";
-        Response.Headers[HeaderNames.ContentLength] = chunkSize.ToString();
+        Response.ContentLength = chunkSize;
 
         var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
         stream.Seek(start, SeekOrigin.Begin);

@@ -168,7 +168,7 @@ function handleSelectAll(event) {
     const userIdsToUpdate = [];
 
     rowCheckboxes.forEach(checkbox => {
-        if (checkbox.checked !== isChecked) { // Only process if state needs changing
+        if (checkbox.checked !== isChecked) {
             checkbox.checked = isChecked;
             const userId = checkbox.getAttribute('data-user-id');
             const row = checkbox.closest('tr');
@@ -178,8 +178,6 @@ function handleSelectAll(event) {
             } else {
                 row.classList.remove('selected-row');
             }
-            // Manually trigger change event if needed for other listeners, though handleRowSelection is called per row.
-            // For selectAll, we directly manipulate DOM and then update localStorage once.
         }
     });
 
