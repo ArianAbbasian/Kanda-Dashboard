@@ -1,5 +1,4 @@
-﻿let isChapterInfoAdded = false;
-document.addEventListener("DOMContentLoaded", () => {
+﻿document.addEventListener("DOMContentLoaded", () => {
   playerElement = document.getElementById("my-player");
   if (!playerElement) return;
 
@@ -190,6 +189,7 @@ function updateChapterButton() {
 
 // ---------- Main player initialization (chapters, UI, events) ----------
 function playerInit(player, chaptersTrack) {
+  let isChapterInfoAdded = false;
   let currentChapterInfoElement = null;
   let fullscreenBox = null;
   let isFullscreen = false;
