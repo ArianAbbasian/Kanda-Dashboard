@@ -4,8 +4,8 @@
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  playerElement = document.getElementById("my-player");
-  if (!playerElement) return;
+  const videoElement = document.getElementById("my-player");
+if (!videoElement) return;
 
   const player = new Plyr("#my-player", {
     controls: [
