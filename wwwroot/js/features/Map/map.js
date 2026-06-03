@@ -6,7 +6,6 @@ let drawInteraction = null;
 let drawnPolygonLayer = null;
 let provinceChartsActive = false;
 let markersIsActive = false;
-let provinceChartInstances = [];
 let provinceCenters = null;
 let currentHoveredFeature = null;
 const popup = document.getElementById("custom-map-popup");
@@ -468,6 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ====================  Provinces Chart  ==================== ✅
 async function addPieChart(map, vectorSource) {
+  let provinceChartInstances = [];
   if (!map) return;
 
   const centers = await loadProvinceCenters();
