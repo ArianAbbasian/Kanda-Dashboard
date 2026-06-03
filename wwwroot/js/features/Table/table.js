@@ -290,6 +290,7 @@ function updateMarkerStyle(marker, userId) {
     }
 }
 function findMarkerByUserId(userId) {
+    if (typeof vectorSource === 'undefined' || !vectorSource) return null;
     let foundMarker = null;
     vectorSource.forEachFeature((feature) => {
         if (feature.values_.user && String(feature.values_.user.id) === String(userId)) {
