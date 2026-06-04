@@ -200,7 +200,6 @@ public class UserController : Controller
     {
         try
         {
-            Console.WriteLine($"=== دریافت درخواست با userType: '{userType}' ===");
 
             var allUsers = FakeDatabase.Users.ToList();
             var filteredUsers = allUsers.AsEnumerable();
@@ -230,14 +229,12 @@ public class UserController : Controller
             // ===== فیلتر نوع کاربر (تصحیح شده) =====
             if (!string.IsNullOrEmpty(userType))
             {
-                Console.WriteLine($"🎯 اعمال فیلتر userType: '{userType}'");
 
                 // اینجا رو چک کن ببین چند کاربر از این نوع داریم
                 var usersOfThisType = allUsers.Where(u =>
                     !string.IsNullOrEmpty(u.UserType) &&
                     u.UserType.Equals(userType, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                Console.WriteLine($"📊 تعداد کاربران با نوع '{userType}': {usersOfThisType.Count}");
 
                 filteredUsers = filteredUsers.Where(u =>
                     !string.IsNullOrEmpty(u.UserType) &&
@@ -258,7 +255,6 @@ public class UserController : Controller
             var totalFilteredUsers = filteredList.Count;
             var totalPages = (int)Math.Ceiling((double)totalFilteredUsers / pageSize);
 
-            Console.WriteLine($"✅ تعداد کل کاربران بعد از فیلتر: {totalFilteredUsers}");
 
             var users = filteredList
                 .Skip((page - 1) * pageSize)
@@ -297,7 +293,6 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"❌ خطا: {ex.Message}");
             return Json(new { error = ex.Message });
         }
     }
