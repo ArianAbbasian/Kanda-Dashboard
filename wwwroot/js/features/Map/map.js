@@ -256,12 +256,19 @@ function initMap() {
     });
 
     if (clickedFeature) {
-      const user = clickedFeature.values_.user;
-      if (user) {
+    const user = clickedFeature.values_.user;
+    if (user) {
         showUserInfoPopup(user, e.pixel);
         userSelectToggle(user.id);
-      }
+    } else {
+        const province = clickedFeature.values_.province;
+        const users = clickedFeature.values_.users;
+        if (province && users) {
+            chartToolTip(province, users, e.pixel);
+            
+        }
     }
+}
   });
 
   map.on("pointermove", function (e) {
@@ -360,13 +367,11 @@ async function loadMapUsers() {
             map.getView().setZoom(7);
           }
         } else {
-          map
-            .getView()
-            .fit(extent, {
-              padding: [50, 50, 50, 50],
-              duration: 500,
-              maxZoom: 15,
-            });
+          map.getView().fit(extent, {
+            padding: [50, 50, 50, 50],
+            duration: 500,
+            maxZoom: 15,
+          });
         }
       }
     }
