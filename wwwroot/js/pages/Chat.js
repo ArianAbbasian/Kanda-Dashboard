@@ -136,9 +136,10 @@ function handleDrop(e) {
     e.preventDefault();
     editor.classList.remove("drag-drop-active");
     editor.classList.add("drag-drop-inactive");
-
-    const file = e.dataTransfer.files[0];
-    handleImageFile(file);
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+        handleImageFile(files[i]);
+    }
 }
 
 
