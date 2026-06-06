@@ -1,7 +1,6 @@
 ﻿let currentPage = 1;
 let totalPages = 1;
 const pageSize = 5;
-let selectedUserIds = [];
 const SELECTED_USERS_LS_KEY = 'selectedUserIds';
 // Getting UserName For preventing Self Delete
 function getCurrentUsername() {
@@ -222,33 +221,6 @@ function updateSelectAllCheckboxState() {
         }
     });
     selectAllCheckbox.checked = allChecked;
-}
-
-
-function addUserIdToSelection(userId) {
-    if (!selectedUserIds.includes(userId)) {
-        selectedUserIds.push(userId);
-    }
-}
-
-function removeUserIdFromSelection(userId) {
-    selectedUserIds = selectedUserIds.filter(id => id !== userId);
-}
-
-function getSelectedUserIds() {
-    // If you want to get IDs directly from checkboxes:
-    const selectedCheckboxes = document.querySelectorAll('.row-select-checkbox:checked');
-    return Array.from(selectedCheckboxes).map(cb => cb.getAttribute('data-user-id'));
-    // Or return the managed array:
-    // return selectedUserIds;
-}
-
-// You might want to clear the selection when loading new data or navigating pages
-function clearSelection() {
-    selectedUserIds = [];
-    document.querySelectorAll('.row-select-checkbox').forEach(cb => cb.checked = false);
-    document.querySelectorAll('tr.selected-row').forEach(row => row.classList.remove('selected-row'));
-    updateSelectAllCheckboxState();
 }
 
 // ------------------------------------------------ Local Storage ------------------------------------------------
