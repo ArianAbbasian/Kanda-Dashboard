@@ -35,6 +35,7 @@ async function deleteHandler(event) {
                 }, 2000);
             } else {
                 toast.success(result.message, 'موفقیت');
+                if (typeof loadTableUsers === 'function') loadTableUsers();
                 if (window.refreshUsers) window.refreshUsers();
             }
         } else {
@@ -143,6 +144,7 @@ async function submitEditForm(event) {
 
         if (result.success) {
             toast.success(result.message, 'موفقیت');
+            if (typeof loadTableUsers === 'function') loadTableUsers();
             document.getElementById('editModal').style.display = 'none';
             if (window.refreshUsers) window.refreshUsers();
         } else {
