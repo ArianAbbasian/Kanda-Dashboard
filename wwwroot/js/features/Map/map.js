@@ -8,6 +8,7 @@ let provinceChartsActive = false;
 let markersIsActive = false;
 let provinceCenters = null;
 let currentHoveredFeature = null;
+let popupEventsInitialized = false;
 const popup = document.getElementById("custom-map-popup");
 // ==================== Markers Style ====================
 const originalMarkerStyle = new ol.style.Style({
@@ -256,19 +257,18 @@ function initMap() {
     });
 
     if (clickedFeature) {
-    const user = clickedFeature.values_.user;
-    if (user) {
+      const user = clickedFeature.values_.user;
+      if (user) {
         showUserInfoPopup(user, e.pixel);
         userSelectToggle(user.id);
-    } else {
+      } else {
         const province = clickedFeature.values_.province;
         const users = clickedFeature.values_.users;
         if (province && users) {
-            chartToolTip(province, users, e.pixel);
-            
+          chartToolTip(province, users, e.pixel);
         }
+      }
     }
-}
   });
 
   map.on("pointermove", function (e) {
@@ -382,6 +382,7 @@ async function loadMapUsers() {
 
 // ==================== Setuping PopUp ACtion ==================== ✅
 function initPopupEvents() {
+  if (popupEventsInitialized) return;
   const popup = document.getElementById("custom-map-popup");
   if (!popup) return;
 
