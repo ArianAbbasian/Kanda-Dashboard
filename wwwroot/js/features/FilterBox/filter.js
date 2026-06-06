@@ -109,6 +109,5 @@ function buildFilteredUrl(baseUrl, page, pageSize) {
     if (f.userType) url += `&userType=${encodeURIComponent(f.userType)}`;
     if (f.provinceId) url += `&provinceId=${f.provinceId}`;
     if (f.cityId) url += `&cityId=${f.cityId}`;
-    console.log('URLLLLLL',url);
     return url;
 }
