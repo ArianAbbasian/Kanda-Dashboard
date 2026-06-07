@@ -334,6 +334,11 @@ function userSelectToggle(userId) {
 // ====================  Markers ==================== ✅
 async function loadMapUsers() {
   try {
+    vectorSource.getFeatures().forEach((feature) => {
+      if (feature.get("user")) {
+        vectorSource.removeFeature(feature);
+      }
+    });
     const users = await fetchMapUsers();
 
     users.forEach((user) => {
