@@ -163,7 +163,6 @@ function replaceAllIconsWithLocalSVG(player) {
       'button.plyr__control[data-plyr="fullscreen"]',
       'button.plyr__control[data-plyr="pip"]',
       'button.plyr__control[data-plyr="settings"]',
-      'button.plyr__control[data-plyr="airplay"]',
     ];
     selectors.forEach((sel) => setButtonIcon(document.querySelector(sel)));
   };
