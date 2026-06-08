@@ -343,6 +343,9 @@ public class UserController : Controller
     [HttpGet] // stream/testVideo.mp4 // User/stream?fileName=testVideo.mp4
     public async Task<IActionResult> Stream(string fileName)
     {
+
+        if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
+        return BadRequest("Invalid file name.");
         var filePath = Path.Combine("wwwroot", "videos", fileName);
 
         if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/"))
