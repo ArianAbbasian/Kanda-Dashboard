@@ -293,8 +293,8 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            return Json(new { error = ex.Message });
-        }
+        return Json(new { error = "An error occurred while filtering users." });
+        }       
     }
 
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
@@ -332,7 +332,7 @@ public class UserController : Controller
         }
         catch (Exception ex)
         {
-            return Json(new { error = ex.Message });
+        return Json(new { error = "An error occurred while filtering users." });
         }
     }
 
