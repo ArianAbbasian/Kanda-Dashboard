@@ -347,20 +347,18 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
         return BadRequest("Invalid file name.");
         var filePath = Path.Combine("wwwroot", "videos", fileName);
-
-        if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/"))
-        return BadRequest("Invalid file name.");
         
         if (!System.IO.File.Exists(filePath))
-            return NotFound();
+        return NotFound();
 
         var fileInfo = new FileInfo(filePath);
         long totalSize = fileInfo.Length;
 
         var rangeHeader = Request.Headers["Range"].FirstOrDefault();
-        if (string.IsNullOrEmpty(rangeHeader)) { ... }
-        var rangeStr = rangeHeader;
-        var range = rangeStr.Replace("bytes=", "").Split('-');
+        if (string.IsNullOrEmpty(rangeHeader))
+        rangeHeader = "bytes=0-";
+
+        var range = rangeHeader.Replace("bytes=", "").Split('-');
         long start = long.Parse(range[0]);
         long end = (range.Length > 1 && long.TryParse(range[1], out var parsedEnd))
             ? parsedEnd
