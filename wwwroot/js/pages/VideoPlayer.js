@@ -98,7 +98,8 @@ function replaceAllIconsWithLocalSVG(player) {
     if (!button) return;
     const dataPlyr = button.getAttribute("data-plyr");
     const isPressed = button.getAttribute("aria-pressed") === "true";
-    const { svgFile, tooltipText } = getButtonIcon(dataPlyr, isPressed, button);
+    let svgFile = '';
+    let tooltipText = '';
 
     switch (dataPlyr) {
       case "play":
