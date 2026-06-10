@@ -387,6 +387,7 @@ async function loadMapUsers() {
 // ==================== Setuping PopUp ACtion ==================== ✅
 function initPopupEvents() {
   if (popupEventsInitialized) return;
+  popupEventsInitialized = true;
   const popup = document.getElementById("custom-map-popup");
   if (!popup) return;
 
