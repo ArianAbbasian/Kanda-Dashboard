@@ -27,9 +27,6 @@ function applyFilters(callback) {
     const filters = updateFilterState();
 
     if (typeof updatePieChart === 'function') updatePieChart();
-    if (typeof loadMap === 'function') {
-        loadMap();
-    }
     if (typeof loadMap === 'function') loadMap();
     if (typeof UpdateAdminUsersPieChart === 'function') UpdateAdminUsersPieChart();
     if (typeof window.refreshProvinceChartsIfActive === 'function') {
