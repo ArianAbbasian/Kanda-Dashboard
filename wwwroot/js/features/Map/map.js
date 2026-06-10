@@ -298,7 +298,6 @@ function initMap() {
     }
   });
 
-  map.on("pointermove", function (e) {});
   setupDrawing();
 
   if (markersIsActive) {
