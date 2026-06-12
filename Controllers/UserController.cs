@@ -12,7 +12,8 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(username))
             return RedirectToAction("Login", "Auth");
 
-        var user = FakeDatabase.Users.FirstOrDefault(u => u.Username == username);
+        var duplicateUser = FakeDatabase.Users.FirstOrDefault(u => u.Id != updatedUser.Id && u.Username == updatedUser.Username);
+
         if (user == null)
         {
             HttpContext.Session.Clear();
