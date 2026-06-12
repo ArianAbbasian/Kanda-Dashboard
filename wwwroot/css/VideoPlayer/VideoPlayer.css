@@ -131,7 +131,7 @@
 
 .chapter-box {
     width: 150px;
-    height: 100vh !important;
+    height: auto;
     flex-direction: column;
     justify-content: right;
     background-color: #ffffff;
