@@ -478,7 +478,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ====================  Provinces Chart  ==================== ✅
 async function addPieChart(map, vectorSource) {
-  let provinceChartInstances = [];
   if (!map) return;
 
   const centers = await loadProvinceCenters();
@@ -544,7 +543,6 @@ async function addPieChart(map, vectorSource) {
       province: `${province}`,
       users: counts,
     });
-    provinceChartInstances.push(pieChartStyle);
     pieChartFeature.setStyle(featureStyle);
     vectorSource.addFeature(pieChartFeature);
   }
