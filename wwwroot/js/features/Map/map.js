@@ -388,7 +388,7 @@ async function loadMapUsers() {
 function initPopupEvents() {
   if (popupEventsInitialized) return;
   popupEventsInitialized = true;
-  const popup = document.getElementById("custom-map-popup");
+  let popup = document.getElementById("custom-map-popup");
   if (!popup) return;
 
   const closeBtn = popup.querySelector(".map-popup-close");
