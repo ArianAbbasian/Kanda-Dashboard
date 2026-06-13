@@ -480,6 +480,12 @@ document.addEventListener("DOMContentLoaded", () => {
 async function addPieChart(map, vectorSource) {
   if (!map) return;
 
+    vectorSource.getFeatures().forEach(feature => {
+    if (feature.get('province')) {
+      vectorSource.removeFeature(feature);
+    }
+  });
+
   const centers = await loadProvinceCenters();
   if (!centers || Object.keys(centers).length === 0) return;
 
