@@ -358,6 +358,7 @@ public class UserController : Controller
         var rangeHeader = Request.Headers["Range"].FirstOrDefault();
         if (string.IsNullOrEmpty(rangeHeader))
         rangeHeader = "bytes=0-";
+        var rangeStr = rangeHeader;
 
         var range = rangeHeader.Replace("bytes=", "").Split('-');
         long start = long.Parse(range[0]);
