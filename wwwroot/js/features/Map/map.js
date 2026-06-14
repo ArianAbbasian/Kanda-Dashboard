@@ -297,7 +297,6 @@ function initMap() {
       }
     }
   });
-
   setupDrawing();
 
   if (markersIsActive) {
