@@ -1,11 +1,11 @@
 ﻿function toPersianNumber(num) {
-    const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
-    return num.toString().replace(/\d/g, d => persianDigits[d]);
+  const persianDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+  return num.toString().replace(/\d/g, (d) => persianDigits[d]);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const videoElement = document.getElementById("my-player");
-if (!videoElement) return;
+  if (!videoElement) return;
 
   const player = new Plyr("#my-player", {
     controls: [
@@ -83,9 +83,11 @@ if (!videoElement) return;
   Object.freeze(player.source);
 
   player.on("loadedmetadata", () => {
-    const chaptersTrack = player.media?.textTracks ? Array.from(player.media.textTracks).find(t => t.kind === 'chapters') : null;
+    const chaptersTrack = player.media?.textTracks
+      ? Array.from(player.media.textTracks).find((t) => t.kind === "chapters")
+      : null;
     if (chaptersTrack) playerInit(player, chaptersTrack);
-});
+  });
 
   player.on("ready", () => {
     replaceAllIconsWithLocalSVG(player);
@@ -98,8 +100,8 @@ function replaceAllIconsWithLocalSVG(player) {
     if (!button) return;
     const dataPlyr = button.getAttribute("data-plyr");
     const isPressed = button.getAttribute("aria-pressed") === "true";
-    let svgFile = '';
-    let tooltipText = '';
+    let svgFile = "";
+    let tooltipText = "";
 
     switch (dataPlyr) {
       case "play":
@@ -188,7 +190,7 @@ function updateChapterButton() {
     container && container.querySelectorAll(".chapter-box").length > 0;
   if (hasChapters && !document.getElementById("CHBTN")) {
     ChapterBtnInit();
-}
+  }
 }
 
 // ---------- Main player initialization (chapters, UI, events) ----------
@@ -522,10 +524,12 @@ function ChapterBtnInit() {
       if (typeof toast !== "undefined" && toast.info)
         toast.info("منو سرفصل ها باز شد", "");
       chapterBox.style.display = "flex";
+      ChapterBtn.innerHTML = "🔽 مخفی کردن فصل‌ها";
     } else {
       if (typeof toast !== "undefined" && toast.info)
         toast.info("منو سرفصل ها بسته شد", "");
       chapterBox.style.display = "none";
+      ChapterBtn.innerHTML = "📖 نمایش فصل‌ها";
     }
   });
 
