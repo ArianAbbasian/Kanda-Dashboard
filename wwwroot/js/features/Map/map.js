@@ -9,7 +9,6 @@ let markersIsActive = false;
 let provinceCenters = null;
 let currentHoveredFeature = null;
 let popupEventsInitialized = false;
-const popup = document.getElementById("custom-map-popup");
 // ==================== Markers Style ====================
 const originalMarkerStyle = new ol.style.Style({
   image: new ol.style.Icon({
@@ -93,6 +92,7 @@ function showUserInfoPopup(user, pixel) {
 
 // ==================== Provinces Chart ToolTip Hover ==================== ✅
 function chartToolTip(province, users, pixel) {
+  const popup = document.getElementById("custom-map-popup");
   if (!popup) {
     console.error("Element with id 'custom-map-popup' not found!");
     return;
