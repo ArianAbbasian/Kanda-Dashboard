@@ -382,6 +382,14 @@ function playerInit(player, chaptersTrack) {
       currentChapterInfoElement.textContent = activeCue ? activeCue.text : "";
     }
     highlightCurrentChapter(currentTime, cues);
+    // Scroll to active chapter button
+    if (activeCue) {
+        const idx = [...cues].indexOf(activeCue);
+        const activeBtn = allChapterButtons.find(btn => parseInt(btn.dataset.chapterIndex) === idx);
+        if (activeBtn) {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
   }
 
   // Handle chapters track
