@@ -202,12 +202,15 @@ function setupDrawing() {
       filterMarkersByPolygon(polygon);
       drawBtn.style.display = "none";
       clearBtn.style.display = "inline-block";
+      map.getTargetElement().style.cursor = "";
       map.removeInteraction(drawInteraction);
       drawInteraction = null;
     });
   });
 
   clearBtn.addEventListener("click", window.clearPolygonFilter);
+
+  map.getTargetElement().style.cursor = "crosshair";
 }
 
 // ==================== Initilazing Map ==================== ✅
@@ -479,8 +482,8 @@ document.addEventListener("DOMContentLoaded", () => {
 async function addPieChart(map, vectorSource) {
   if (!map) return;
 
-    vectorSource.getFeatures().forEach(feature => {
-    if (feature.get('province')) {
+  vectorSource.getFeatures().forEach((feature) => {
+    if (feature.get("province")) {
       vectorSource.removeFeature(feature);
     }
   });
