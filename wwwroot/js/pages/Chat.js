@@ -91,19 +91,21 @@ function insertImage(event) {
 
 // ------------------   COPY / PASTE IMAGE   ------------------
 function handlePaste(e) {
+    e.preventDefault();
+    // Get plain text from clipboard
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    // Insert as plain text
+    document.execCommand('insertText', false, text);
+    // If image paste, we already handle separately, but this will prevent HTML injection
     const items = e.clipboardData.items;
-
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
-
         if (item.type.indexOf("image") !== -1) {
-            e.preventDefault();
+            e.preventDefault(); // already prevented
             const file = item.getAsFile();
-
             const reader = new FileReader();
             reader.onload = (ev) => insertImageWithWrapper(ev.target.result);
             reader.readAsDataURL(file);
-
             return;
         }
     }
