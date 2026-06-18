@@ -5,6 +5,13 @@ using Login.Data;
 public class AuthController : Controller
 {
 
+    private static string HashPassword(string password)
+{
+    using var sha256 = System.Security.Cryptography.SHA256.Create();
+    var bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+    return Convert.ToBase64String(bytes);
+}
+
     public IActionResult Login()
     {
         return View();
