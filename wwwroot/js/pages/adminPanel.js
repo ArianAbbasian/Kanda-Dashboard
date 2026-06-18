@@ -121,4 +121,21 @@
   } else {
     document.querySelector(".users-section")?.appendChild(exportBtn);
   }
+
+  // Auto logout after 20 minutes of inactivity
+  let logoutTimer;
+  const LOGOUT_TIME = 20 * 60 * 1000; // 20 minutes
+  function resetLogoutTimer() {
+    clearTimeout(logoutTimer);
+    logoutTimer = setTimeout(() => {
+      toast.warning("به دلیل عدم فعالیت از سیستم خارج شدید", "خروج");
+      setTimeout(() => {
+        window.location.href = "/Auth/Logout";
+      }, 2000);
+    }, LOGOUT_TIME);
+  }
+  ["mousemove", "keydown", "click", "scroll", "touchstart"].forEach((evt) =>
+    document.addEventListener(evt, resetLogoutTimer, true),
+  );
+  resetLogoutTimer();
 });
