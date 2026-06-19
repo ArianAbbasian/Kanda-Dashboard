@@ -338,60 +338,56 @@ public class UserController : Controller
     }
 
 
-    private const int BufferSize = 1024 * 1024; // 1MB chunk size
+    private const int BufferSize = 1024 * 1024; // 1MB
 
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    [HttpGet] // stream/testVideo.mp4 // User/stream?fileName=testVideo.mp4
-    public async Task<IActionResult> Stream(string fileName)
-    {
-
-        if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+[HttpGet]
+public async Task<IActionResult> Stream(string fileName)
+{
+    if (string.IsNullOrEmpty(fileName) || fileName.Contains("..") || fileName.Contains("/") || fileName.Contains("\\"))
         return BadRequest("Invalid file name.");
-        var filePath = Path.Combine("wwwroot", "videos", fileName);
-        
-        if (!System.IO.File.Exists(filePath))
+
+    var filePath = Path.Combine("wwwroot", "videos", fileName);
+    if (!System.IO.File.Exists(filePath))
         return NotFound();
 
-        var fileInfo = new FileInfo(filePath);
-        long totalSize = fileInfo.Length;
+    var fileInfo = new FileInfo(filePath);
+    long totalSize = fileInfo.Length;
 
-        var rangeHeader = Request.Headers["Range"].FirstOrDefault();
-        if (string.IsNullOrEmpty(rangeHeader))
+    var rangeHeader = Request.Headers["Range"].FirstOrDefault();
+    if (string.IsNullOrEmpty(rangeHeader))
         rangeHeader = "bytes=0-";
-        var rangeStr = rangeHeader;
 
-        var range = rangeHeader.Replace("bytes=", "").Split('-');
-        long start = long.Parse(range[0]);
-        long end = (range.Length > 1 && long.TryParse(range[1], out var parsedEnd))
-            ? parsedEnd
-            : Math.Min(start + BufferSize, totalSize - 1);
+    var range = rangeHeader.Replace("bytes=", "").Split('-');
+    long start = long.Parse(range[0]);
+    long end = (range.Length > 1 && long.TryParse(range[1], out var parsedEnd))
+        ? parsedEnd
+        : Math.Min(start + BufferSize, totalSize - 1);
 
-        long chunkSize = end - start + 1;
+    long chunkSize = end - start + 1;
 
-        Response.StatusCode = 206; // Partial Content
-        Response.Headers[HeaderNames.AcceptRanges] = "bytes";
-        Response.Headers[HeaderNames.ContentType] = "video/mp4";
-        Response.Headers[HeaderNames.ContentRange] = $"bytes {start}-{end}/{totalSize}";
-        Response.ContentLength = chunkSize;
+    Response.StatusCode = 206;
+    Response.Headers[HeaderNames.AcceptRanges] = "bytes";
+    Response.Headers[HeaderNames.ContentType] = "video/mp4";
+    Response.Headers[HeaderNames.ContentRange] = $"bytes {start}-{end}/{totalSize}";
+    Response.ContentLength = chunkSize;
 
-        var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        stream.Seek(start, SeekOrigin.Begin);
+    var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+    stream.Seek(start, SeekOrigin.Begin);
 
-        byte[] buffer = new byte[BufferSize];
-        int bytesRead;
+    byte[] buffer = new byte[BufferSize];
+    long bytesRemaining = chunkSize;
 
-        long bytesRemaining = chunkSize;
-
-        while (bytesRemaining > 0 &&
-               (bytesRead = await stream.ReadAsync(buffer, 0, (int)Math.Min(BufferSize, bytesRemaining))) > 0)
-        {
-            await Response.Body.WriteAsync(buffer, 0, bytesRead);
-            await Response.Body.FlushAsync();
-            bytesRemaining -= bytesRead;
-        }
-
-        return new EmptyResult();
+    while (bytesRemaining > 0 &&
+           (int bytesRead = await stream.ReadAsync(buffer, 0, (int)Math.Min(BufferSize, bytesRemaining))) > 0)
+    {
+        await Response.Body.WriteAsync(buffer, 0, bytesRead);
+        await Response.Body.FlushAsync();
+        bytesRemaining -= bytesRead;
     }
+
+    return new EmptyResult();
+}
 
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     // GET: /User/GetChapters?fileName=chapters.vtt
