@@ -479,6 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ====================  Provinces Chart  ==================== ✅
+let provinceChartInstances = []; 
 async function addPieChart(map, vectorSource) {
   if (!map) return;
 
@@ -503,6 +504,7 @@ async function addPieChart(map, vectorSource) {
       provinceGroups[province] = { admin: 0, special: 0, plus: 0, user: 0 };
     }
     const type = u.userType || "user";
+    provinceChartInstances.push(pieChartStyle); 
     provinceGroups[province][type] += 1;
   });
 
