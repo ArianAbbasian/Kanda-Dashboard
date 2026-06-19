@@ -494,6 +494,40 @@ function playerInit(player, chaptersTrack) {
         e.preventDefault();
         player.muted = !player.muted;
         break;
+      case "n":
+      case "N":
+        e.preventDefault();
+        // Go to next chapter
+        if (
+          chaptersTrack &&
+          chaptersTrack.cues &&
+          chaptersTrack.cues.length > 0
+        ) {
+          const currentTime = player.currentTime;
+          const cues = [...chaptersTrack.cues];
+          const nextCue = cues.find((cue) => cue.startTime > currentTime + 0.5);
+          if (nextCue) {
+            player.currentTime = nextCue.startTime + 0.5;
+          }
+        }
+        break;
+      case "p":
+      case "P":
+        e.preventDefault();
+        // Go to previous chapter
+        if (
+          chaptersTrack &&
+          chaptersTrack.cues &&
+          chaptersTrack.cues.length > 0
+        ) {
+          const currentTime = player.currentTime;
+          const cues = [...chaptersTrack.cues].reverse();
+          const prevCue = cues.find((cue) => cue.endTime < currentTime - 0.5);
+          if (prevCue) {
+            player.currentTime = prevCue.startTime + 0.5;
+          }
+        }
+        break;
       default:
         break;
     }
