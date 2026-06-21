@@ -274,6 +274,17 @@ function initMap() {
     }
   });
 
+  map.on("dblclick", function (e) {
+    const feature = map.forEachFeatureAtPixel(e.pixel, (f) => f);
+    if (feature) {
+      const province = feature.get("province");
+      if (province && provinceCenters && provinceCenters[province]) {
+        const center = ol.proj.fromLonLat(provinceCenters[province]);
+        map.getView().animate({ center, zoom: 10, duration: 600 });
+      }
+    }
+  });
+
   map.on("pointermove", function (e) {
     let currentFeature = null;
     map.forEachFeatureAtPixel(e.pixel, function (feature) {
@@ -479,7 +490,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ====================  Provinces Chart  ==================== ✅
-let provinceChartInstances = []; 
+let provinceChartInstances = [];
 async function addPieChart(map, vectorSource) {
   if (!map) return;
 
@@ -504,7 +515,7 @@ async function addPieChart(map, vectorSource) {
       provinceGroups[province] = { admin: 0, special: 0, plus: 0, user: 0 };
     }
     const type = u.userType || "user";
-    provinceChartInstances.push(pieChartStyle); 
+    provinceChartInstances.push(pieChartStyle);
     provinceGroups[province][type] += 1;
   });
 
