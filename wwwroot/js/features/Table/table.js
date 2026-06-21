@@ -105,6 +105,15 @@ function renderTable(users, page) {
 // Load users from data-fetcher
 async function loadTableUsers(page = 1) {
   try {
+    const tbody = document.getElementById("tableBody");
+    if (tbody) {
+      tbody.innerHTML =
+        '<tr><td colspan="12" style="text-align:center; padding:40px;"><div class="loading-spinner"></div></td></tr>';
+    }
+
+    const data = await getFilteredUsers(page, pageSize);
+    totalPages = data.totalPages;
+    currentPage = data.currentPage;
     const data = await getFilteredUsers(page, pageSize);
     totalPages = data.totalPages;
     currentPage = data.currentPage;
@@ -266,13 +275,13 @@ function clearLocalStorageSelection() {
   updateSelectedUserCount();
 }
 function updateMarkerStyle(marker, userId) {
-    if (!marker) return;
-    const selectedUserIds = getSelectedUserIdsFromLocalStorage();
-    if (selectedUserIds.includes(String(userId))) {
-        marker.setStyle(SelectedMarkerStyle);
-    } else {
-        marker.setStyle(originalMarkerStyle);
-    }
+  if (!marker) return;
+  const selectedUserIds = getSelectedUserIdsFromLocalStorage();
+  if (selectedUserIds.includes(String(userId))) {
+    marker.setStyle(SelectedMarkerStyle);
+  } else {
+    marker.setStyle(originalMarkerStyle);
+  }
 }
 function findMarkerByUserId(userId) {
   if (typeof vectorSource === "undefined" || !vectorSource) return null;
