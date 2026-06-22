@@ -138,4 +138,33 @@
     document.addEventListener(evt, resetLogoutTimer, true),
   );
   resetLogoutTimer();
+
+  // Clear all selections button
+  const clearSelBtn = document.createElement("button");
+  clearSelBtn.textContent = "❌ لغو انتخاب همه";
+  clearSelBtn.className = "clear-selection-btn";
+  clearSelBtn.style.margin = "10px";
+  clearSelBtn.addEventListener("click", () => {
+    clearLocalStorageSelection();
+    // Uncheck all row checkboxes and remove selected-row class
+    document.querySelectorAll(".row-select-checkbox").forEach((cb) => {
+      cb.checked = false;
+      const row = cb.closest("tr");
+      if (row) row.classList.remove("selected-row");
+    });
+    const selectAll = document.getElementById("selectAllCheckbox");
+    if (selectAll) selectAll.checked = false;
+    updateSelectedUserCount();
+    toast.info("انتخاب همه کاربران لغو شد", "");
+  });
+
+  const paginationDiv = document.getElementById("pagination");
+  if (paginationDiv) {
+    paginationDiv.parentNode.insertBefore(
+      clearSelBtn,
+      paginationDiv.nextSibling,
+    );
+  } else {
+    document.querySelector(".users-section")?.appendChild(clearSelBtn);
+  }
 });
