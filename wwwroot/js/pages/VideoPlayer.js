@@ -92,6 +92,13 @@ document.addEventListener("DOMContentLoaded", () => {
   player.on("ready", () => {
     replaceAllIconsWithLocalSVG(player);
   });
+
+  // Prevent default drag-and-drop on the video player area
+  const playerContainer = document.querySelector(".plyr");
+  if (playerContainer) {
+    playerContainer.addEventListener("dragover", (e) => e.preventDefault());
+    playerContainer.addEventListener("drop", (e) => e.preventDefault());
+  }
 });
 
 // ---------- Replace Plyr default icons with local SVGs  ----------
