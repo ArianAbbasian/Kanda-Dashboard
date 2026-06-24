@@ -304,6 +304,8 @@ public class UserController : Controller
     {
         try
         {
+            var provinceDict = FakeDatabase.Provinces.ToDictionary(p => p.Id, p => p.Name);
+            var cityDict = FakeDatabase.Cities.ToDictionary(c => c.Id, c => c.Name);
             var users = FakeDatabase.Users
                 .Select(u => new
                 {
