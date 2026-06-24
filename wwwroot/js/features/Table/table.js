@@ -28,6 +28,12 @@ function getUserTypeDisplay(userType) {
   }
   return { text, cssClass };
 }
+function escapeHtml(text) {
+  if (!text) return "";
+  const div = document.createElement("div");
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
 
 // Render the table rows
 function renderTable(users, page) {
@@ -47,13 +53,13 @@ function renderTable(users, page) {
     const isSelf = user.username === currentUsername;
     const isSelected = selectedUserIdsInStorage.includes(user.id.toString()); // Check if this user is selected
 
-    const firstName = user.firstName || "---";
-    const lastName = user.lastName || "---";
-    const username = user.username || "---";
-    const email = user.email || "---";
-    const phone = user.phone || "---";
-    const provinceName = user.provinceName || "---";
-    const cityName = user.cityName || "---";
+    const firstName = escapeHtml(user.firstName || "---");
+    const lastName = escapeHtml(user.lastName || "---");
+    const username = escapeHtml(user.username || "---");
+    const email = escapeHtml(user.email || "---");
+    const phone = escapeHtml(user.phone || "---");
+    const provinceName = escapeHtml(user.provinceName || "---");
+    const cityName = escapeHtml(user.cityName || "---");
 
     const userType = user.userType || "user";
     const { text: userTypeText, cssClass: userTypeClass } =
