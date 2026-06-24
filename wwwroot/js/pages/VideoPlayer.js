@@ -99,6 +99,35 @@ document.addEventListener("DOMContentLoaded", () => {
     playerContainer.addEventListener("dragover", (e) => e.preventDefault());
     playerContainer.addEventListener("drop", (e) => e.preventDefault());
   }
+
+  // Resume playback position from localStorage
+  const videoKey = "video_resume_time";
+  const savedTime = localStorage.getItem(videoKey);
+  player.on("canplay", () => {
+    if (savedTime) {
+      const time = parseFloat(savedTime);
+      if (time > 0 && time < player.duration) {
+        player.currentTime = time;
+        toast?.info?.("ادامه پخش از آخرین موقعیت", "");
+      }
+      localStorage.removeItem(videoKey);
+    }
+  });
+
+  // Save current time periodically
+  let saveInterval = setInterval(() => {
+    if (!player.ended && player.currentTime > 0) {
+      localStorage.setItem(videoKey, player.currentTime);
+    }
+  }, 5000);
+
+  player.on("ended", () => {
+    localStorage.removeItem(videoKey);
+    clearInterval(saveInterval);
+  });
+
+  // Cleanup interval on destroy
+  player.on("destroy", () => clearInterval(saveInterval));
 });
 
 // ---------- Replace Plyr default icons with local SVGs  ----------
