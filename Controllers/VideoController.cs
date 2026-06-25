@@ -13,6 +13,10 @@ public class VideoController : Controller
             .ToList();
         return Json(videos);
     }
+    var videosDir = Path.Combine("wwwroot", "videos");
+if (!Directory.Exists(videosDir))
+    Directory.CreateDirectory(videosDir);
+var filePath = Path.Combine(videosDir, fileName);
 
     [HttpPost]
     public async Task<IActionResult> Upload(IFormFile file, string title)
