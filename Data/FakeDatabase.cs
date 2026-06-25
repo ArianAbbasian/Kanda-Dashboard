@@ -7,6 +7,7 @@ namespace Login.Data
     {
         public static List<User> Users { get; } = new List<User>();
         public static List<Province> Provinces { get; } = new List<Province>();
+        public static List<VideoInfo> Videos { get; } = new List<VideoInfo>();
         public static List<City> Cities { get; } = new List<City>();
 
         static FakeDatabase()
