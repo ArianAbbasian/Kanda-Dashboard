@@ -128,6 +128,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Cleanup interval on destroy
   player.on("destroy", () => clearInterval(saveInterval));
+
+  // بارگذاری لیست ویدیوها
+  fetch("/Video/GetVideos")
+    .then((res) => res.json())
+    .then((videos) => {
+      const select = document.getElementById("videoSelect");
+      if (!select) return;
+      select.innerHTML = "";
+      if (videos.length === 0) {
+        select.innerHTML = "<option>ویدیویی موجود نیست</option>";
+        return;
+      }
+      videos.forEach((video) => {
+        const opt = document.createElement("option");
+        opt.value = video.fileName;
+        opt.textContent = video.title;
+        select.appendChild(opt);
+      });
+      // انتخاب اولین ویدیو به‌صورت پیش‌فرض
+      if (videos.length > 0) {
+        select.value = videos[0].fileName;
+        setPlayerSource(videos[0].fileName);
+      }
+    })
+    .catch((err) => console.error("خطا در بارگذاری ویدیوها:", err));
+
+  // تغییر ویدیو با انتخاب از dropdown
+  const videoSelect = document.getElementById("videoSelect");
+  if (videoSelect) {
+    videoSelect.addEventListener("change", function () {
+      if (this.value) {
+        setPlayerSource(this.value);
+      }
+    });
+  }
 });
 
 // ---------- Replace Plyr default icons with local SVGs  ----------
