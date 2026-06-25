@@ -167,4 +167,94 @@
   } else {
     document.querySelector(".users-section")?.appendChild(clearSelBtn);
   }
+
+  // مدیریت ویدیوها
+function loadVideoList() {
+    fetch('/Video/GetVideos')
+        .then(res => res.json())
+        .then(videos => {
+            const container = document.getElementById('videoListContainer');
+            if (!container) return;
+            if (videos.length === 0) {
+                container.innerHTML = '<p>هیچ ویدیویی آپلود نشده است.</p>';
+                return;
+            }
+            container.innerHTML = videos.map(v => `
+                <div style="display:flex; align-items:center; gap:10px; padding:8px; border-bottom:1px solid #ddd;">
+                    <span>${v.title}</span>
+                    <span style="color:#888; font-size:0.9em;">(${v.fileName})</span>
+                    <button class="delete-video-btn" data-id="${v.id}" style="margin-left:auto; background:red; color:white; border:none; padding:5px 10px; border-radius:5px;">حذف</button>
+                </div>
+            `).join('');
+            // Attach delete events
+            document.querySelectorAll('.delete-video-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const id = btn.getAttribute('data-id');
+                    if (!confirm('آیا از حذف ویدیو اطمینان دارید؟')) return;
+                    const res = await fetch('/Video/DeleteVideo', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `id=${id}`
+                    });
+                    const result = await res.json();
+                    if (result.success) {
+                        toast.success(result.message, 'موفقیت');
+                        loadVideoList();
+                    } else {
+                        toast.error(result.message, 'خطا');
+                    }
+                });
+            });
+        });
+}
+
+document.getElementById('uploadVideoBtn')?.addEventListener('click', async () => {
+    const title = document.getElementById('videoTitle').value.trim();
+    const fileInput = document.getElementById('videoFile');
+    const file = fileInput.files[0];
+    if (!title || !file) {
+        toast.warning('عنوان و فایل ویدیو را وارد کنید', 'هشدار');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('file', file);
+    const progress = document.getElementById('uploadProgress');
+    progress.style.display = 'block';
+    try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Video/Upload');
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+                progress.value = (e.loaded / e.total) * 100;
+            }
+        };
+        xhr.onload = () => {
+            progress.style.display = 'none';
+            const resp = JSON.parse(xhr.responseText);
+            if (resp.success) {
+                toast.success(resp.message, 'موفقیت');
+                fileInput.value = '';
+                document.getElementById('videoTitle').value = '';
+                progress.value = 0;
+                loadVideoList();
+            } else {
+                toast.error(resp.message, 'خطا');
+            }
+        };
+        xhr.onerror = () => {
+            progress.style.display = 'none';
+            toast.error('خطا در آپلود فایل', 'خطا');
+        };
+        xhr.send(formData);
+    } catch (err) {
+        console.error(err);
+        toast.error('خطای غیرمنتظره', 'خطا');
+    }
+});
+
+// لود اولیه لیست
+if (document.getElementById('videoListContainer')) {
+    loadVideoList();
+}
 });

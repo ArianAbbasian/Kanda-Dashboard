@@ -115,6 +115,25 @@
                         <span class="tab-icon">📌</span>
                         <span class="tab-text"> نقشه </span>
                     </button>
+                    <button class="tab-btn" data-tab="videos-tab">ویدیوها</button>
+...
+<div id="videos-tab" class="tab-pane">
+    <!-- فرم آپلود -->
+    <div style="margin:20px; padding:20px; background:#f8f9fa; border-radius:10px;">
+        <h3>آپلود ویدیوی جدید</h3>
+        <input type="text" id="videoTitle" placeholder="عنوان ویدیو" style="padding:8px; width:300px; margin:5px;" />
+        <input type="file" id="videoFile" accept=".mp4,.webm,.ogg" style="margin:5px;" />
+        <button id="uploadVideoBtn" class="btn-primary" style="padding:10px;">آپلود</button>
+        <progress id="uploadProgress" value="0" max="100" style="width:300px; display:none;"></progress>
+        <div id="uploadStatus" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- لیست ویدیوها -->
+    <div style="margin:20px;">
+        <h3>ویدیوهای موجود</h3>
+        <div id="videoListContainer"></div>
+    </div>
+</div>
                 </div>
 
                 <div class="tabs-content">
