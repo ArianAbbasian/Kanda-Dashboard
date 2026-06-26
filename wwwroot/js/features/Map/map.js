@@ -92,7 +92,7 @@ function showUserInfoPopup(user, pixel) {
 
 // ==================== Provinces Chart ToolTip Hover ==================== ✅
 function chartToolTip(province, users, pixel) {
-  const popup = document.getElementById('custom-map-popup');
+  const popup = document.getElementById("custom-map-popup");
   if (!popup) return;
 
   if (!province || !users) {
@@ -497,6 +497,9 @@ async function addPieChart(map, vectorSource) {
     }
   });
 
+  vectorSource.getFeatures().forEach((f) => {
+    if (f.get("province")) vectorSource.removeFeature(f);
+  });
   const centers = await loadProvinceCenters();
   if (!centers || Object.keys(centers).length === 0) return;
 
