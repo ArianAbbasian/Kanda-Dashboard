@@ -92,11 +92,8 @@ function showUserInfoPopup(user, pixel) {
 
 // ==================== Provinces Chart ToolTip Hover ==================== ✅
 function chartToolTip(province, users, pixel) {
-  const popup = document.getElementById("custom-map-popup");
-  if (!popup) {
-    console.error("Element with id 'custom-map-popup' not found!");
-    return;
-  }
+  const popup = document.getElementById('custom-map-popup');
+  if (!popup) return;
 
   if (!province || !users) {
     hideTooltip();
