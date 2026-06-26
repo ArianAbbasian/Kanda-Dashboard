@@ -79,6 +79,9 @@ function initFilter(onFilterChange) {
         if (typeof updateBarChart === 'function') updateBarChart();
     });
 
+    document.querySelectorAll('.filter-input').forEach(input => input.setAttribute('autocomplete', 'off'));
+
+
     document.getElementById('applyFilterBtn').addEventListener('click', function () {
         applyFilters(onFilterChange);
     });
