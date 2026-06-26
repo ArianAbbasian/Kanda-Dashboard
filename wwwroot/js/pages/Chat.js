@@ -35,7 +35,7 @@ function insertImageWithWrapper(src) {
 
     const removeBtn = document.createElement("span");
     removeBtn.className = "remove-image-btn";
-    removeBtn.innerHTML = "&times;";
+    removeBtn.textContent = "\u00D7";
 
     removeBtn.onclick = function (event) {
         event.stopPropagation();
