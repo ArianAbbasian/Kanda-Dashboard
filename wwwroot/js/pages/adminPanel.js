@@ -1,6 +1,10 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
   // Load initial table data
   if (typeof loadTableUsers === "function") {
+    const tbody = document.getElementById("tableBody");
+    if (tbody)
+      tbody.innerHTML =
+        '<tr><td colspan="12" class="loading-msg">در حال بارگذاری...</td></tr>';
     loadTableUsers(1);
   }
   // Initialize modal
