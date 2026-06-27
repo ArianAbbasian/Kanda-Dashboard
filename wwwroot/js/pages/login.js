@@ -72,4 +72,5 @@
             })
             .catch(error => console.error('Error:', error));
     });
+     document.getElementById('username')?.focus();
 });
