@@ -9,9 +9,9 @@
 
 function getFilterValues() {
     return {
-        name: document.getElementById('filterName')?.value || '',
-        username: document.getElementById('filterUsername')?.value || '',
-        email: document.getElementById('filterEmail')?.value || '',
+        name: document.getElementById('filterName')?.value.trim() || '',
+        username: document.getElementById('filterUsername')?.value.trim() || '',
+        email: document.getElementById('filterEmail')?.value.trim() || '',
         userType: document.getElementById('filterUserType')?.value || '',
         provinceId: document.getElementById('filterProvince')?.value || '',
         cityId: document.getElementById('filterCity')?.value || ''
