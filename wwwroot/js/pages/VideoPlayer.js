@@ -163,6 +163,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+      const playerElement = document.querySelector('.plyr');
+    if (playerElement) {
+        playerElement.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
 });
 
 // ---------- Replace Plyr default icons with local SVGs  ----------
