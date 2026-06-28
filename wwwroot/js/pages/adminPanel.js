@@ -47,6 +47,19 @@
           emails.push(emailCell.textContent.trim());
         }
       }
+          // Back to top button
+    const topBtn = document.createElement('button');
+    topBtn.textContent = '⬆️';
+    topBtn.style.cssText = 'position:fixed;bottom:30px;right:30px;z-index:9999;width:40px;height:40px;border-radius:50%;background:#3498db;color:white;border:none;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3);';
+    topBtn.title = 'بازگشت به بالا';
+    document.body.appendChild(topBtn);
+
+    window.addEventListener('scroll', () => {
+        topBtn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+    topBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     });
     if (emails.length > 0) {
       navigator.clipboard
