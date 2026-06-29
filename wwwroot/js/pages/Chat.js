@@ -149,6 +149,8 @@ function handleDrop(e) {
 function initializeEditor(toolbarId) {
     const toolbar = document.getElementById(toolbarId);
     const imageUploadInput = toolbar.querySelector("#imageUpload");
+    if (imageUploadInput) imageUploadInput.setAttribute('accept', 'image/*');
+
 
     editor.contentEditable = true;
     editor.setAttribute("spellcheck", "false");
