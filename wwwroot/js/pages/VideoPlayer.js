@@ -159,14 +159,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (videoSelect) {
     videoSelect.addEventListener("change", function () {
       if (this.value) {
+        localStorage.removeItem("video_resume_time");
         setPlayerSource(this.value);
       }
     });
   }
-      const playerElement = document.querySelector('.plyr');
-    if (playerElement) {
-        playerElement.addEventListener('contextmenu', (e) => e.preventDefault());
-    }
+  const playerElement = document.querySelector(".plyr");
+  if (playerElement) {
+    playerElement.addEventListener("contextmenu", (e) => e.preventDefault());
+  }
 });
 
 // ---------- Replace Plyr default icons with local SVGs  ----------
