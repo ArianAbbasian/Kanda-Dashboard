@@ -50,6 +50,7 @@
           // Back to top button
     const topBtn = document.createElement('button');
     topBtn.textContent = '⬆️';
+    topBtn.type = 'button';
     topBtn.style.cssText = 'position:fixed;bottom:30px;right:30px;z-index:9999;width:40px;height:40px;border-radius:50%;background:#3498db;color:white;border:none;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.3);';
     topBtn.title = 'بازگشت به بالا';
     document.body.appendChild(topBtn);
