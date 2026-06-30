@@ -40,6 +40,20 @@
     }
   });
 
+  const togglePwdBtn = document.createElement("button");
+  togglePwdBtn.type = "button";
+  togglePwdBtn.textContent = "👁️";
+  togglePwdBtn.style.cssText =
+    "background:none;border:none;cursor:pointer;position:absolute;margin-left:-30px;";
+  togglePwdBtn.addEventListener("click", () => {
+    const type =
+      passwordInput.getAttribute("type") === "password" ? "text" : "password";
+    passwordInput.setAttribute("type", type);
+    togglePwdBtn.textContent = type === "password" ? "👁️" : "🙈";
+  });
+  passwordInput.parentNode.style.position = "relative";
+  passwordInput.parentNode.appendChild(togglePwdBtn);
+
   loginForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
