@@ -1,9 +1,9 @@
 ﻿function initConfirmModalStyles() {
-    if (document.getElementById('confirm-modal-styles')) return;
+  if (document.getElementById("confirm-modal-styles")) return;
 
-    const style = document.createElement('style');
-    style.id = 'confirm-modal-styles';
-    style.textContent = `
+  const style = document.createElement("style");
+  style.id = "confirm-modal-styles";
+  style.textContent = `
         .confirm-modal-overlay {
             position: fixed;
             top: 0;
@@ -139,144 +139,149 @@
             }
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 }
 
 // Showing Modal
 function showConfirmModal(options) {
-    initConfirmModalStyles();
+  initConfirmModalStyles();
 
-    return new Promise((resolve) => {
-        
-        const overlay = document.createElement('div');
-        overlay.className = 'confirm-modal-overlay';
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "confirm-modal-overlay";
 
-        const modal = document.createElement('div');
-        modal.className = 'confirm-modal';
+    const modal = document.createElement("div");
+    modal.className = "confirm-modal";
 
-        
-        const header = document.createElement('div');
-        header.className = 'confirm-modal-header';
+    const header = document.createElement("div");
+    header.className = "confirm-modal-header";
 
-        const iconType = options.type || 'warning';
-        let icon = '⚠️';
-        if (iconType === 'danger') icon = '❗';
-        if (iconType === 'info') icon = 'ℹ️';
+    const iconType = options.type || "warning";
+    let icon = "⚠️";
+    if (iconType === "danger") icon = "❗";
+    if (iconType === "info") icon = "ℹ️";
 
-        const iconDiv = document.createElement('div');
-        iconDiv.className = `confirm-modal-icon ${iconType}`;
-        iconDiv.textContent = icon;
+    const iconDiv = document.createElement("div");
+    iconDiv.className = `confirm-modal-icon ${iconType}`;
+    iconDiv.textContent = icon;
 
-        const title = document.createElement('div');
-        title.className = 'confirm-modal-title';
-        title.textContent = options.title || 'تأیید';
+    const title = document.createElement("div");
+    title.className = "confirm-modal-title";
+    title.textContent = options.title || "تأیید";
 
-        const message = document.createElement('div');
-        message.className = 'confirm-modal-message';
-        message.textContent = options.message || 'آیا اطمینان دارید؟';
+    const message = document.createElement("div");
+    message.className = "confirm-modal-message";
+    message.textContent = options.message || "آیا اطمینان دارید؟";
 
-        header.appendChild(iconDiv);
-        header.appendChild(title);
-        header.appendChild(message);
+    const enterHandler = (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        confirmBtn.click();
+        document.removeEventListener("keydown", enterHandler);
+      }
+    };
+    document.addEventListener("keydown", enterHandler);
 
-        
-        const actions = document.createElement('div');
-        actions.className = 'confirm-modal-actions';
+    header.appendChild(iconDiv);
+    header.appendChild(title);
+    header.appendChild(message);
 
-        const cancelBtn = document.createElement('button');
-        cancelBtn.className = 'confirm-modal-btn cancel';
-        cancelBtn.textContent = options.cancelText || 'انصراف';
+    const actions = document.createElement("div");
+    actions.className = "confirm-modal-actions";
 
-        const confirmBtn = document.createElement('button');
-        confirmBtn.className = `confirm-modal-btn ${options.confirmClass || 'confirm'}`;
-        confirmBtn.textContent = options.confirmText || 'تأیید';
+    const cancelBtn = document.createElement("button");
+    cancelBtn.className = "confirm-modal-btn cancel";
+    cancelBtn.textContent = options.cancelText || "انصراف";
 
-        actions.appendChild(cancelBtn);
-        actions.appendChild(confirmBtn);
+    const confirmBtn = document.createElement("button");
+    confirmBtn.className = `confirm-modal-btn ${options.confirmClass || "confirm"}`;
+    confirmBtn.textContent = options.confirmText || "تأیید";
 
-        
-        modal.appendChild(header);
-        modal.appendChild(actions);
-        overlay.appendChild(modal);
+    actions.appendChild(cancelBtn);
+    actions.appendChild(confirmBtn);
 
-      
-        document.body.appendChild(overlay);
+    modal.appendChild(header);
+    modal.appendChild(actions);
+    overlay.appendChild(modal);
 
-        cancelBtn.addEventListener('click', () => {
-            if (document.body.contains(overlay)) {
-                document.body.removeChild(overlay);
-            }
-            resolve(false);
-        });
+    document.body.appendChild(overlay);
 
-        confirmBtn.addEventListener('click', () => {
-            if (document.body.contains(overlay)) {
-                document.body.removeChild(overlay);
-            }
-            resolve(true);
-        });
-
-        
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
-                if (document.body.contains(overlay)) {
-                    document.body.removeChild(overlay);
-                }
-                resolve(false);
-            }
-        });
-
-        
-        const escHandler = (e) => {
-            if (e.key === 'Escape') {
-                if (document.body.contains(overlay)) {
-                    document.body.removeChild(overlay);
-                }
-                document.removeEventListener('keydown', escHandler);
-                resolve(false);
-            }
-        };
-        document.addEventListener('keydown', escHandler);
+    cancelBtn.addEventListener("click", () => {
+      if (document.body.contains(overlay)) {
+        document.body.removeChild(overlay);
+      }
+      resolve(false);
     });
+
+    confirmBtn.addEventListener("click", () => {
+      if (document.body.contains(overlay)) {
+        document.body.removeChild(overlay);
+      }
+      resolve(true);
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        if (document.body.contains(overlay)) {
+          document.body.removeChild(overlay);
+        }
+        resolve(false);
+      }
+    });
+
+    const escHandler = (e) => {
+      if (e.key === "Escape") {
+        if (document.body.contains(overlay)) {
+          document.body.removeChild(overlay);
+        }
+        document.removeEventListener("keydown", escHandler);
+        resolve(false);
+      }
+    };
+    document.addEventListener("keydown", escHandler);
+  });
 }
 
-
 const confirm = {
-    warning: (message, title = 'هشدار') => showConfirmModal({
-        type: 'warning',
-        title,
-        message,
-        confirmClass: 'confirm',
-        confirmText: 'بله، ادامه بده',
-        cancelText: 'خیر'
+  warning: (message, title = "هشدار") =>
+    showConfirmModal({
+      type: "warning",
+      title,
+      message,
+      confirmClass: "confirm",
+      confirmText: "بله، ادامه بده",
+      cancelText: "خیر",
     }),
 
-    danger: (message, title = 'اخطار') => showConfirmModal({
-        type: 'danger',
-        title,
-        message,
-        confirmClass: 'delete',
-        confirmText: 'بله، حذف کن',
-        cancelText: 'انصراف'
+  danger: (message, title = "اخطار") =>
+    showConfirmModal({
+      type: "danger",
+      title,
+      message,
+      confirmClass: "delete",
+      confirmText: "بله، حذف کن",
+      cancelText: "انصراف",
     }),
 
-    delete: (message, title = 'حذف کاربر') => showConfirmModal({
-        type: 'danger',
-        title,
-        message,
-        confirmClass: 'delete',
-        confirmText: 'بله، حذف کن',
-        cancelText: 'انصراف'
+  delete: (message, title = "حذف کاربر") =>
+    showConfirmModal({
+      type: "danger",
+      title,
+      message,
+      confirmClass: "delete",
+      confirmText: "بله، حذف کن",
+      cancelText: "انصراف",
     }),
 
-    info: (message, title = 'اطلاعیه') => showConfirmModal({
-        type: 'info',
-        title,
-        message,
-        confirmClass: 'confirm',
-        confirmText: 'باشه',
-        cancelText: 'بستن'
+  info: (message, title = "اطلاعیه") =>
+    showConfirmModal({
+      type: "info",
+      title,
+      message,
+      confirmClass: "confirm",
+      confirmText: "باشه",
+      cancelText: "بستن",
     }),
 
-    custom: (options) => showConfirmModal(options)
+  custom: (options) => showConfirmModal(options),
 };
