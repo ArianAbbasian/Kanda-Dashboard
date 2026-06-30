@@ -215,6 +215,7 @@
 }
 
 .chapter-btn {
+    user-select: none;
     background-color: #00b2ff;
     color: white;
     border: none;
