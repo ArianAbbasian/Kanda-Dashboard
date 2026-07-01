@@ -1,14 +1,14 @@
 ﻿const toastConfig = {
-    duration: 5000,
-    position: window.toastPosition || 'top-left'
+  duration: 5000,
+  position: window.toastPosition || "top-left",
 };
 
 function initToastStyles() {
-    if (document.getElementById('toast-styles')) return;
+  if (document.getElementById("toast-styles")) return;
 
-    const style = document.createElement('style');
-    style.id = 'toast-styles';
-    style.textContent = `
+  const style = document.createElement("style");
+  style.id = "toast-styles";
+  style.textContent = `
         .toast-container {
             position: fixed;
             z-index: 9999;
@@ -159,67 +159,73 @@ function initToastStyles() {
             }
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 }
 
 function getToastContainer() {
-    let container = document.getElementById('toast-container');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'toast-container';
-        container.className = `toast-container ${toastConfig.position}`;
-        document.body.appendChild(container);
-    }
-    return container;
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = `toast-container ${toastConfig.position}`;
+    document.body.appendChild(container);
+  }
+  return container;
 }
 
+function showToast(
+  message,
+  type = "info",
+  title = "",
+  duration = toastConfig.duration,
+) {
+  initToastStyles();
 
-function showToast(message, type = 'info', title = '', duration = toastConfig.duration) {
-    initToastStyles();
+  const container = getToastContainer();
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
 
-    const container = getToastContainer();
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
+  let icon = "ℹ️";
+  if (type === "success") icon = "✓";
+  if (type === "error") icon = "✗";
+  if (type === "warning") icon = "⚠️";
 
-    
-    let icon = 'ℹ️';
-    if (type === 'success') icon = '✓';
-    if (type === 'error') icon = '✗';
-    if (type === 'warning') icon = '⚠️';
-
-    toast.innerHTML = `
+  toast.innerHTML = `
         <div class="toast-icon">${icon}</div>
         <div class="toast-content">
-            ${title ? `<div class="toast-title">${title}</div>` : ''}
+            ${title ? `<div class="toast-title">${title}</div>` : ""}
             <div class="toast-message">${message}</div>
         </div>
         <div class="toast-close">✕</div>
     `;
 
-    container.appendChild(toast);
+  container.appendChild(toast);
 
-   
-    toast.querySelector('.toast-close').addEventListener('click', () => {
-        toast.style.animation = 'toastSlideOut 0.2s ease';
-        setTimeout(() => toast.remove(), 200);
-    });
+  toast.querySelector(".toast-close").addEventListener("click", () => {
+    toast.style.animation = "toastSlideOut 0.2s ease";
+    setTimeout(() => {
+      if (toast && toast.parentNode) toast.remove();
+    }, 200);
+  });
 
-    if (duration > 0) {
+  if (duration > 0) {
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.style.animation = "toastSlideOut 0.2s ease";
         setTimeout(() => {
-            if (toast.parentNode) {
-                toast.style.animation = 'toastSlideOut 0.2s ease';
-                setTimeout(() => toast.remove(), 200);
-            }
-        }, duration);
-    }
+          if (toast && toast.parentNode) toast.remove();
+        }, 200);
+      }
+    }, duration);
+  }
 
-    return toast;
+  return toast;
 }
 
 const toast = {
-    success: (message, title = '') => showToast(message, 'success', title),
-    error: (message, title = 'خطا') => showToast(message, 'error', title),
-    warning: (message, title = 'هشدار') => showToast(message, 'warning', title),
-    info: (message, title = 'اطلاعیه') => showToast(message, 'info', title),
-    show: showToast
+  success: (message, title = "") => showToast(message, "success", title),
+  error: (message, title = "خطا") => showToast(message, "error", title),
+  warning: (message, title = "هشدار") => showToast(message, "warning", title),
+  info: (message, title = "اطلاعیه") => showToast(message, "info", title),
+  show: showToast,
 };
